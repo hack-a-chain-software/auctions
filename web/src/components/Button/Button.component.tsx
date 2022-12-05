@@ -1,8 +1,16 @@
 import { PropsWithChildren } from "react";
 
-function Button({ children }: PropsWithChildren) {
+type ButtonProps = PropsWithChildren & {
+  isWon: boolean;
+};
+
+function Button({ children, isWon }: ButtonProps) {
   return (
-    <button className="w-[270px] h-10 rounded-[15px] font-semibold text-sm leading-[14px] tracking-[-4%] text-white bg-[#474EFF]">
+    <button
+      className={`w-[270px] h-10 rounded-[15px] font-semibold text-sm leading-[14px] tracking-[-4%] text-white ${
+        isWon ? "bg-gradient" : "bg-[#474EFF]"
+      }`}
+    >
       {children}
     </button>
   );
