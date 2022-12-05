@@ -1,0 +1,23 @@
+{
+    "name": "microproducts.template",
+    "version": "1.0.0",
+    "description": "Near Contract and React Monorepo",
+    "private": true,
+    "scripts": {},
+    "workspaces": {
+      "packages": [
+        "web/*",
+        "contracts/*"
+      ],
+      "nohoist": [
+        "**/tailwindcss",
+        "**/tailwindcss/**",
+        "**/postcss",
+        "**/postcss/**",
+        "**/autoprefixer",
+        "**/autoprefixer/**"
+      ]
+    }
+  }
+
+  
