@@ -14,9 +14,9 @@ export default defineConfig({
   ],
   esbuild: {},
   define: {
-    global: "window",
-    "process.env": {},
+    global: "window"
   },
+  envPrefix: 'AUCTION_',
   resolve: {
     alias: {
       util: "util",
