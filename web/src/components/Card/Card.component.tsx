@@ -3,15 +3,17 @@ import Image from "../Image";
 
 function Card() {
   const isClose = false;
-  const isWon = false;
-  const isOwner = true;
+  const isWon = true;
+  const isOwner = false;
 
   return (
     <li className="list-none w-[302px] p-4 bg-white border-solid border-[#DEDEDE] border-[1px] rounded-[30px] flex flex-col justify-around relative">
       {isWon && (
-        <span className="flex bg-white text-purple-400 items-center justify-around font-semibold text-sm absolute w-[107px] h-[38px] border-solid border-[1px] border-purple-500 rounded-[15px] z-[1] top-7 right-7">
-          👑 Winner
-        </span>
+        <div className="w-[107px] h-[38px] flex justify-center items-center absolute bg-white border-solid border-[1px] border-purple-500 rounded-[15px] z-[1] top-7 right-7">
+          <span className="text-transparent bg-clip-text bg-gradient items-center justify-around font-semibold text-sm">
+            👑 Winner
+          </span>
+        </div>
       )}
       <Image src="https://s2.glbimg.com/EPCclUpcD8MwJ3gqsD5Nw1FsOgw=/0x0:595x599/924x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2021/c/8/vwEnBlQTOR5JMPV1qigw/captura-de-tela-2021-12-14-114837.jpg" />
       <div className="flex flex-col w-full gap-[0.8rem] mt-3">
@@ -65,7 +67,7 @@ function Card() {
             <span className="text-black font-bold text-lg">01/12/2022</span>
           </div>
         )}
-        <Button>
+        <Button isWon={isWon}>
           {isWon
             ? "Claim rewards"
             : isOwner
