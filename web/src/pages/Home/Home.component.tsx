@@ -1,15 +1,16 @@
-
+import PageContainer from "../../components/PageContainer";
 
 /**
  * @route - '/'
  * @description - This is the landing page for the near application
  * @name Home
  */
+
 function Home() {
-
-
   return (
-    <p>Penis</p>
+    <PageContainer>
+      <p>Hello!</p>
+    </PageContainer>
   );
 }
 
