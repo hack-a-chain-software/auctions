@@ -5,19 +5,17 @@
     "private": true,
     "scripts": {},
     "workspaces": {
-      "packages": [
-        "web/*",
-        "contracts/*"
-      ],
-      "nohoist": [
-        "**/tailwindcss",
-        "**/tailwindcss/**",
-        "**/postcss",
-        "**/postcss/**",
-        "**/autoprefixer",
-        "**/autoprefixer/**"
-      ]
+        "packages": [
+            "web/*",
+            "contracts/*"
+        ],
+        "nohoist": [
+            "**/tailwindcss",
+            "**/tailwindcss/**",
+            "**/postcss",
+            "**/postcss/**",
+            "**/autoprefixer",
+            "**/autoprefixer/**"
+        ]
     }
-  }
-
-  
+}

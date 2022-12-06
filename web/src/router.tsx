@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home } from "./pages/home";
 import { routes } from "./routes";
+import Home from './pages/Home';
 
 /**
  * @name Router
