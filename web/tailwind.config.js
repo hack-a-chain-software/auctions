@@ -5,16 +5,57 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        tab: envColor('AUCTION_COLOR_TAB'),
+        button: envColor('AUCTION_COLOR_BUTTON'),
+        highlight: envColor('AUCTION_COLOR_HIGHLIGHT'),
+        success: envColor('AUCTION_COLOR_SUCCESS'),
+        error: envColor('AUCTION_COLOR_ERROR'),
+        paragraph: envColor('AUCTION_COLOR_PARAGRAPH'),
+        title: envColor('AUCTION_COLOR_TITLE'),
+        text: envColor('AUCTION_COLOR_TEXT'),
+        caption: envColor('AUCTION_COLOR_CAPTION'),
+        outline: envColor('AUCTION_COLOR_OUTLINE'),
+        skeleton: envColor('AUCTION_COLOR_SKELETON'),
+        bid: envColor('AUCTION_COLOR_BID'),
+        input: envColor('AUCTION_COLOR_INPUT'),
+        placeholder: envColor('AUCTION_COLOR_PLACEHOLDER'),
+        'search-token': envColor('AUCTION_COLOR_SEARCH_TOKEN'),
       },
       backgroundColor: {
-        color: envColor('AUCTION_STYLE_BACKGROUND_COLOR'),
-        shield: envColor('AUCTION_STYLE_BACKGROUND_COVER')
+        color: envColor('AUCTION_BACKGROUND_COLOR'),
+        shield: envColor('AUCTION_BACKGROUND_COVER')
       },
       backgroundImage: {
-        image: useEnv('AUCTION_STYLE_BACKGROUND_IMAGE')
+        image: useEnv('AUCTION_BACKGROUND_IMAGE'),
+        space: useEnv('AUCTION_COLOR_GRADIENT')
       },
       backdropBlur: {
-        cover: useEnv('AUCTION_STYLE_BACKGROUND_BLUR')
+        cover: useEnv('AUCTION_BACKGROUND_BLUR')
+      },
+      fontSize: {
+        title: ['1.25rem', {
+          lineHeight: '1em',
+          letterSpacing: '.2em',
+          fontWeight: '700',
+          fontFamily: ['Poppins', 'sans-serif'],
+          fontcolor: envColor('AUCTION_COLOR_TITLE'),
+        }],
+      },
+      borderRadius: {
+        none: 0,
+        sm: '.625rem',     // 10px
+        DEFAULT: '.75rem', // 12px
+        md: '.9375rem',    // 15px
+        lg: '1.25rem',     // 20px
+        large: '1.5rem'    // 24px
+      },
+      dropShadow: {
+        navbar: `0px 4px 15px ${envColor('AUCTION_COLOR_SHADOW_NAVBAR')}`,
+        tab: `0px 2px 10px ${envColor('AUCTION_COLOR_SHADOW_TAB')}`,
+        sm: `0px 4px 10px ${envColor('AUCTION_COLOR_SHADOW_SMALLER')}`,
+        md: `0px 4px 20px ${envColor('AUCTION_COLOR_SHADOW_SMALL')}`,
+        DEFAULT: `0px 4px 20px ${envColor('AUCTION_COLOR_SHADOW_MEDIUM')}`,
+        lg: `0px 4px 30px ${envColor('AUCTION_COLOR_SHADOW_LARGE')}`,
       }
     },
   },
