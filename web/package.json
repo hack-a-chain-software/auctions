@@ -3,15 +3,17 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "local:env": "cpy --no-overwrite --rename=.env --dot .env-exemple . > /dev/null 2>&1 && echo \"Created .env file\" || true",
+    "dev": "yarn local:env; vite",
+    "build": "yarn local:env; tsc && vite build",
+    "preview": "yarn local:env; vite preview"
   },
   "dependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@fontsource/inter": "^4.5.14",
     "@headlessui/react": "^1.7.4",
     "autoprefixer": "^10.4.13",
+    "cpy-cli": "^4.2.0",
     "dotenv": "^16.0.3",
     "postcss": "^8.4.19",
     "postcss-env-function": "^4.0.6",
