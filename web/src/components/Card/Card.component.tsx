@@ -1,3 +1,4 @@
+import CrownIcon from "../../assets/svg/CrownIcon";
 import Button from "../Button";
 import Image from "../Image";
 
@@ -9,9 +10,10 @@ function Card() {
   return (
     <li className="list-none w-[302px] p-4 bg-white border-solid border-[#DEDEDE] border-[1px] rounded-[30px] flex flex-col justify-around relative">
       {isWon && (
-        <div className="w-[107px] h-[38px] flex justify-center items-center absolute bg-white border-solid border-[1px] border-purple-500 rounded-[15px] z-[1] top-7 right-7">
+        <div className="w-[107px] h-[38px] flex justify-center items-center absolute gap-2 bg-white border-solid border-[1px] border-purple-500 rounded-[15px] z-[1] top-7 right-7">
+          <CrownIcon />
           <span className="text-transparent bg-clip-text bg-gradient items-center justify-around font-semibold text-sm">
-            👑 Winner
+            Winner
           </span>
         </div>
       )}
