@@ -1,9 +1,8 @@
 import { PropsWithChildren } from "react";
-import "react-loading-skeleton/dist/skeleton.css";
 
-export const PageContainer = (props: PropsWithChildren<PropsWithChildren>) => {
+const PageContainer = (props: PropsWithChildren) => {
   return (
-    <div className="flex p-5 flex-col w-full overflow-y-hidden mx-auto max-w-[1512px]">
+    <div className="flex pt-7.5 pb-10 flex-col w-full overflow-y-hidden mx-auto max-w-[1280px]">
       {props.children}
     </div>
   );
