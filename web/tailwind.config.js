@@ -1,4 +1,4 @@
-const env = require('dotenv').config({ path: `./.env` }).parsed;
+const env = require("dotenv").config({ path: `./.env` }).parsed;
 
 module.exports = {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
@@ -29,8 +29,8 @@ module.exports = {
         'search-token': envColor('AUCTION_COLOR_SEARCH_TOKEN'),
       },
       backgroundColor: {
-        color: envColor('AUCTION_BACKGROUND_COLOR'),
-        shield: envColor('AUCTION_BACKGROUND_COVER')
+        color: envColor("AUCTION_BACKGROUND_COLOR"),
+        shield: envColor("AUCTION_BACKGROUND_COVER"),
       },
       backgroundImage: {
         image: useEnv('AUCTION_BACKGROUND_IMAGE'),
@@ -38,7 +38,7 @@ module.exports = {
         'gd-button': useEnv('AUCTION_COLOR_BUTTON_GRADIENT')
       },
       backdropBlur: {
-        cover: useEnv('AUCTION_BACKGROUND_BLUR')
+        cover: useEnv("AUCTION_BACKGROUND_BLUR"),
       },
       lineHeight: {
         3.5: ".875rem",
@@ -76,11 +76,11 @@ module.exports = {
       },
       borderRadius: {
         none: 0,
-        sm: '.625rem',     // 10px
-        DEFAULT: '.75rem', // 12px
-        md: '.9375rem',    // 15px
-        lg: '1.25rem',     // 20px
-        large: '1.5rem'    // 24px
+        sm: ".625rem", // 10px
+        DEFAULT: ".75rem", // 12px
+        md: ".9375rem", // 15px
+        lg: "1.25rem", // 20px
+        large: "1.5rem", // 24px
       },
       boxShadow: {
         navbar: `0px 4px 15px #000`,
@@ -116,13 +116,15 @@ module.exports = {
 };
 
 function hexToRgb(hex) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i.exec(hex);
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i.exec(
+    hex
+  );
 
   return {
     r: parseInt(result[1], 16),
     g: parseInt(result[2], 16),
     b: parseInt(result[3], 16),
-    a: result[4] ? parseInt(result[4], 16) : null
+    a: result[4] ? parseInt(result[4], 16) : null,
   };
 }
 
@@ -139,18 +141,16 @@ function colorParse(color) {
       color = hexToRgb(color);
       return `rgba(${color.r},${color.g},${color.b},${color.a ? color.a/255 : opacity ? opacity : 1})`;
     }
-    return 'transparent';
+    return "transparent";
   };
 }
 
 function envColor(name) {
-    return colorParse(useEnv(name));
+  return colorParse(useEnv(name));
 }
 
 function useEnv(name) {
-  if(process.env[name])
-    return process.env[name];
-  if(env[name])
-    return env[name];
+  if (process.env[name]) return process.env[name];
+  if (env[name]) return env[name];
   throw new Error(`Environment variable ${name} is not defined.`);
 }
