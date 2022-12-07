@@ -3,7 +3,7 @@ function CrownIcon() {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="21"
+      width="16.5"
       height="22"
       fill="none"
       viewBox="0 0 21 22"
