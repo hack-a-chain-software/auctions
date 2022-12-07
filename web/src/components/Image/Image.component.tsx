@@ -1,13 +1,14 @@
 type ImageProps = {
   src: string;
+  className: string
 };
 
-function Image({ src }: ImageProps) {
+function Image({ src, className }: ImageProps) {
   return (
     <img
       src={src}
       alt="Nft Image"
-      className="w-[271px] h-[271px] object-cover rounded-[15px]"
+      className={className}
     />
   );
 }

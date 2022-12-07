@@ -4,80 +4,137 @@ import Image from "../Image";
 
 function Card() {
   const isClose = false;
+  const firstPlace = false;
   const isWon = true;
   const isOwner = false;
+  const offered = false;
+  const outbid = false;
 
   return (
-    <li className="list-none w-[302px] p-4 bg-white border-solid border-[#DEDEDE] border-[1px] rounded-[30px] flex flex-col justify-around relative">
+    <li
+      className={`list-none w-[302px] ${
+        isOwner || offered ? "h-[537px]" : "h-[472px]"
+      } p-4 bg-white border-solid border-outline border-[1px] rounded-large flex flex-col items-center relative`}
+    >
       {isWon && (
-        <div className="w-[107px] h-[38px] flex justify-center items-center absolute gap-2 bg-white border-solid border-[1px] border-purple-500 rounded-[15px] z-[1] top-7 right-7">
+        <div className="w-[105px] h-[34px] flex justify-center items-center absolute gap-2 bg-white border-solid border-[1px] border-purple-500 rounded-sm z-[1] top-[1.93rem] right-[1.79rem]">
           <CrownIcon />
-          <span className="text-transparent bg-clip-text bg-gradient items-center justify-around font-semibold text-sm">
+          <span className="text-transparent bg-clip-text bg-space items-center justify-around font-semibold text-sm tracking-tight">
             Winner
           </span>
         </div>
       )}
-      <Image src="https://s2.glbimg.com/EPCclUpcD8MwJ3gqsD5Nw1FsOgw=/0x0:595x599/924x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2021/c/8/vwEnBlQTOR5JMPV1qigw/captura-de-tela-2021-12-14-114837.jpg" />
-      <div className="flex flex-col w-full gap-[0.8rem] mt-3">
-        <div className="flex flex-col">
-          <h3 className="text-black font-semibold text-lg">Cyber cube</h3>
-          <span className="text-black font-bold text-lg">#3333</span>
+      {firstPlace && offered && (
+        <div className="w-[103px] h-[30px] flex justify-center items-center absolute gap-2 bg-space rounded-[30px] z-[1] top-[1.93rem] right-[1.79rem]">
+          <span className="text-white justify-around font-medium text-sm pr-1 tracking-tight">
+            Highest bid
+          </span>
+        </div>
+      )}
+      {outbid && offered && (
+        <div className="w-[76px] h-[30px] flex justify-center items-center absolute gap-2 bg-red-500 rounded-[30px] z-[1] top-[1.93rem] right-[1.79rem]">
+          <span className="text-white justify-around font-semibold text-sm pr-1 tracking-tight">
+            Outbid
+          </span>
+        </div>
+      )}
+      <Image
+        src="https://s2.glbimg.com/EPCclUpcD8MwJ3gqsD5Nw1FsOgw=/0x0:595x599/924x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2021/c/8/vwEnBlQTOR5JMPV1qigw/captura-de-tela-2021-12-14-114837.jpg"
+        className="w-[280px] h-[270px] object-cover rounded-md"
+      />
+      <div className="flex flex-col w-full gap-[0.8rem]">
+        <div className="flex flex-col mt-[0.7rem]">
+          <h3 className="text-black font-bold text-md h-[17px] tracking-tight">
+            Bored Ape Yatch Club
+          </h3>
+          <span className="text-black font-bold text-md h-[15px] tracking-tight">
+            #3040
+          </span>
         </div>
         {isWon ? (
-          <h3 className="text-[#24B817] text-center font-bold text-xl p-[0.875rem]">
-            You Won!
+          <h3 className="text-success text-center mt-5 font-bold text-md  tracking-tight">
+            You won!
           </h3>
         ) : (
-          <div className="flex justify-between">
-            <div>
-              <h3 className="text-black font-semibold text-[15px]">
-                {isOwner ? "Auction end date:" : " Auction ends in:"}
+          <div className="flex justify-between mb-[-4px]">
+            <div className="mt-[0.2rem]">
+              <h3 className="text-black font-semibold text-md tracking-tight">
+                {isOwner && isClose
+                  ? "Auction ends in:"
+                  : isOwner
+                  ? "Auction end date:"
+                  : "Auction ends in:"}
               </h3>
               <span
                 className={`${
-                  isClose ? "text-red-600" : "text-black"
-                } font-bold text-lg`}
+                  isClose ? "text-error" : "text-black tracking-tight"
+                } font-bold text-md tracking-tight`}
               >
-                {isOwner
+                {isClose && isOwner
+                  ? "Closed auction"
+                  : isOwner
                   ? "30/12/2022"
                   : isClose
-                  ? "Close auction"
+                  ? "Closed auction"
                   : "2d 3h 10m 03s"}
               </span>
             </div>
-            <div>
-              <h3 className="text-black font-semibold text-[15px] text-end">
-                {isOwner
-                  ? "Minimum hid:"
+            <div className="mt-[0.2rem]">
+              <h3 className="text-black font-semibold text-md text-end tracking-tight">
+                {isOwner && isClose
+                  ? "Winner:"
                   : isClose
                   ? "Winner:"
+                  : isOwner
+                  ? "Minimum hid:"
                   : "Highest bid:"}
               </h3>
               <span
                 className={`${
                   isClose ? "text-[#474EFF]" : "text-black"
-                } font-bold text-lg block text-end mr-1 truncate w-28`}
+                } font-bold text-md block text-end truncate w-28 tracking-tight`}
               >
-                {isOwner ? "0.6 BTH" : isClose ? "wallet123g454545" : "0.6 BTH"}
+                {isOwner && isClose
+                  ? "wallet123g454545"
+                  : isClose
+                  ? "wallet123g454545"
+                  : "0.6 BTH"}
               </span>
             </div>
           </div>
         )}
         {isOwner && (
-          <div>
-            <h3 className="text-black font-semibold text-[15px]">Created:</h3>
-            <span className="text-black font-bold text-lg">01/12/2022</span>
+          <div className="mb-5">
+            <h3 className="text-black font-semibold text-md tracking-tight">
+              Created:
+            </h3>
+            <span className="text-black font-extrabold text-md tracking-tight">
+              01/12/2022
+            </span>
           </div>
         )}
-        <Button isWon={isWon}>
-          {isWon
-            ? "Claim rewards"
-            : isOwner
-            ? "See offers"
-            : isClose
-            ? "View details"
-            : "Make offers"}
-        </Button>
+        {offered && (
+          <div className="mb-[6px] mt-[6px]">
+            <h3 className="text-black font-extrabold text-md tracking-tight">
+              Your offer:
+            </h3>
+            <span
+              className={`${
+                outbid ? "text-error" : "text-[#474EFF]"
+              } font-extrabold text-md tracking-tight`}
+            >
+              0,54 BTH
+            </span>
+          </div>
+        )}
+        <Button
+          firstPlace={firstPlace}
+          isClose={isClose}
+          isOwner={isOwner}
+          isWon={isWon}
+          offered={offered}
+          outbid={outbid}
+        />
       </div>
     </li>
   );

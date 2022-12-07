@@ -1,17 +1,104 @@
-import { PropsWithChildren } from "react";
-
-type ButtonProps = PropsWithChildren & {
+type ButtonProps = {
   isWon: boolean;
+  isClose: boolean;
+  firstPlace: boolean;
+  isOwner: boolean;
+  offered: boolean;
+  outbid: boolean;
 };
 
-function Button({ children, isWon }: ButtonProps) {
+function MakeOfferButton() {
   return (
     <button
-      className={`w-[270px] h-10 rounded-[15px] font-semibold text-sm leading-[14px] tracking-[-4%] text-white ${
-        isWon ? "bg-gradient" : "bg-[#474EFF]"
-      }`}
+      className={`w-[265px] h-10 ml-[1px] rounded font-semibold text-sm leading-[14px] tracking-tight text-white bg-button
+  `}
     >
-      {children}
+      Make offer
+    </button>
+  );
+}
+
+function ViewDetailsButton() {
+  return (
+    <button
+      className={`w-[265px] h-10 ml-[1px] mt-3 rounded font-semibold text-sm leading-[14px] tracking-tight text-white bg-button`}
+    >
+      View details
+    </button>
+  );
+}
+
+function ViewAuctionButton() {
+  return (
+    <button
+      className={`w-[265px] h-10 ml-[1px] mt-[2px] rounded font-semibold text-sm leading-[10px] tracking-tight text-white  bg-button`}
+    >
+      View auctions
+    </button>
+  );
+}
+
+function SeeOfferButton() {
+  return (
+    <button
+      className={`w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-semibold text-sm leading-[14px] tracking-tight text-white bg-button`}
+    >
+      See offers
+    </button>
+  );
+}
+
+function ClaimRewardsButton() {
+  return (
+    <button
+      className={`w-[265px] h-10 ml-[1px] mt-4 rounded font-semibold text-sm leading-[14px] tracking-tight text-white  bg-space`}
+    >
+      Claim rewards
+    </button>
+  );
+}
+
+function Button({
+  isWon,
+  isClose,
+  firstPlace,
+  isOwner,
+  offered,
+  outbid,
+}: ButtonProps) {
+  if (offered && firstPlace) {
+    return <MakeOfferButton />;
+  }
+  if (offered && outbid) {
+    return <MakeOfferButton />;
+  }
+
+  if (offered) {
+    return <ViewAuctionButton />;
+  }
+
+  if (isOwner && isClose) {
+    return <SeeOfferButton />;
+  }
+
+  if (isOwner) {
+    return <SeeOfferButton />;
+  }
+
+  if (isClose) {
+    return <ViewDetailsButton />;
+  }
+
+  if (isWon) {
+    return <ClaimRewardsButton />;
+  }
+
+  return (
+    <button
+      className={`w-[265px] h-10 ml-[1px] mt-[10px] rounded font-semibold text-sm leading-[14px] tracking-tight text-white bg-button
+      `}
+    >
+      Make offer
     </button>
   );
 }
