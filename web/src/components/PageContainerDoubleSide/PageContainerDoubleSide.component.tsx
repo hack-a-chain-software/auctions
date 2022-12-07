@@ -4,7 +4,7 @@ import PageContainerDoubleSideRight from "./PageContainerDoubleSideRight.compone
 
 function PageContainerDoubleSide(props: PropsWithChildren) {
   return (
-    <div className="flex pt-7.5 pb-10 flex-col lg:flex-row max-w-full mx-auto max-w-[1280px] gap-6">
+    <div className="flex pt-7.5 pb-10 flex-col lg:flex-row max-w-full mx-auto max-w-[1280px] gap-26">
       {props.children}
     </div>
   );
