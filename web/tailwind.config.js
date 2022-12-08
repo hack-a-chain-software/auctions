@@ -9,6 +9,7 @@ module.exports = {
         button: envColor('AUCTION_COLOR_BUTTON'),
         highlight: envColor('AUCTION_COLOR_HIGHLIGHT'),
         success: envColor('AUCTION_COLOR_SUCCESS'),
+        line: envColor('AUCTION_COLOR_LINE'),
         error: envColor('AUCTION_COLOR_ERROR'),
         paragraph: envColor('AUCTION_COLOR_PARAGRAPH'),
         title: envColor('AUCTION_COLOR_TITLE'),
@@ -32,6 +33,16 @@ module.exports = {
       backdropBlur: {
         cover: useEnv('AUCTION_BACKGROUND_BLUR')
       },
+      lineHeight: {
+        3.5: ".875rem",
+        4.5: "1.125rem",
+      },
+      letterSpacing: {
+        tighter: "-.06rem",
+        tight: "-.04rem",
+        DEFAULT: "-.027rem",
+        normal: "0",
+      },
       fontSize: {
         title: ['1.25rem', {
           lineHeight: '1em',
@@ -40,6 +51,16 @@ module.exports = {
           fontFamily: ['Poppins', 'sans-serif'],
           fontcolor: envColor('AUCTION_COLOR_TITLE'),
         }],
+        3: ".75rem",
+        3.5: ".875rem",
+        4: "1rem",
+        4.5: "1.125rem",
+        5: "1.25rem",
+        6: "1.5rem",
+      },
+      spacing: {
+        4.5: "1.125rem",
+        17: "4.25rem",
       },
       borderRadius: {
         none: 0,
@@ -56,6 +77,21 @@ module.exports = {
         md: `0px 4px 20px ${envColor('AUCTION_COLOR_SHADOW_SMALL')}`,
         DEFAULT: `0px 4px 20px ${envColor('AUCTION_COLOR_SHADOW_MEDIUM')}`,
         lg: `0px 4px 30px ${envColor('AUCTION_COLOR_SHADOW_LARGE')}`,
+      },
+      animation: {
+        'skeleton-body': 'shimmer 5s infinite linear',
+        'skeleton-img': 'shimmer 2s infinite linear',
+        'skeleton-text': 'shimmer 1.5s infinite linear',
+      },
+      keyframes: {
+        shimmer: {
+          '0%': {
+            mask: 'linear-gradient(-60deg,#000 30%,#0009,#000 70%) right/600% 100%',
+          },
+          '100%': {
+            mask: 'linear-gradient(-60deg,#000 30%,#0009,#000 70%) left/600% 100%',
+          },
+        }
       }
     },
   },
@@ -75,6 +111,8 @@ function hexToRgb(hex) {
 
 function colorParse(color) {
   return ({ opacity }) => {
+    if(typeof color === 'object')
+      return `rgba(${color.r},${color.g},${color.b},${color.a ? color.a/100 : opacity ? opacity : 1})`;
     if(color.startsWith('rgba'))
       return color;
     else if(color.startsWith('rgb'))
@@ -89,7 +127,7 @@ function colorParse(color) {
 }
 
 function envColor(name) {
-    return colorParse(useEnv(name));
+  return colorParse(useEnv(name));
 }
 
 function useEnv(name) {
