@@ -15,5 +15,13 @@ export const routes = [
   {
     path: "my-auctions",
     component: <MyAuctions/>
+  },
+  {
+    path: "my-auctions/offers",
+    component: <MyAuctions filter="offer-live"/>
+  },
+  {
+    path: "my-auctions/created",
+    component: <MyAuctions filter="your-live"/>
   }
 ] as Route[];
