@@ -12,7 +12,7 @@ function Card() {
 
   return (
     <li
-      className={`rounded-[29px] w-[180px] h-[275px] drop-shadow-[0_4px_10px_rgba(151,71,255,0.15)] p-2 md:drop-shadow-none list-none md:w-[302px] ${
+      className={`rounded-[29px] w-[180px] h-[275px] drop-shadow-navbar p-2 md:drop-shadow-none list-none md:w-[302px] ${
         isOwner || offered ? "md:h-[537px]" : "md:h-[472px]"
       } md:p-4 bg-white border-solid border-outline border-[1px] rounded-large flex flex-col items-center relative`}
     >
@@ -91,7 +91,7 @@ function Card() {
               </h3>
               <span
                 className={`${
-                  isClose ? "text-[#474EFF]" : "text-black"
+                  isClose ? "text-button" : "text-black"
                 } font-bold text-md block text-end truncate w-28 tracking-tight`}
               >
                 {isOwner && isClose
@@ -120,7 +120,7 @@ function Card() {
             </h3>
             <span
               className={`${
-                outbid ? "text-error" : "text-[#474EFF]"
+                outbid ? "text-error" : "text-button"
               } font-extrabold text-md tracking-tight`}
             >
               0,54 BTH
