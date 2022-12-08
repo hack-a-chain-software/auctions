@@ -120,7 +120,7 @@ function Card() {
             </h3>
             <span
               className={`${
-                outbid ? "text-error" : "text-button"
+                outbid ? "text-error" : "text-success"
               } font-extrabold text-md tracking-tight`}
             >
               0,54 BTH
