@@ -1,6 +1,7 @@
 import { Dialog } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { RadioGroup } from "@headlessui/react";
+import { useState } from "react";
 
 type ModalProps = {
   open: boolean;
@@ -8,12 +9,15 @@ type ModalProps = {
 };
 
 function Modal({ open, onClose }: ModalProps) {
+  const [opem, setOpem] = useState(true);
+
+  const handle = () => setOpem(true);
 
   return (
     <Dialog
-      open={open}
+      open={opem}
       className="fixed inset-0 z-[55] flex justify-center items-center"
-      onClose={onClose}
+      onClose={handle}
     >
       <Dialog.Backdrop className="fixed inset-0 bg-black/50 z-50" />
       <Dialog.Panel className="relative bg-white rounded-lg shadow-md overflow-hidden w-[95%] max-w-[620px] h-[443px]">
@@ -27,12 +31,12 @@ function Modal({ open, onClose }: ModalProps) {
         </div>
         <RadioGroup
           as="ul"
-          className="grid grid-cols-auto-fit py-[1.9rem] px-6 justify-items-center gap-2 max-h-[310px] overflow-y-auto"
+          className="grid grid-cols-auto-fit pt-[1.9rem] px-6 justify-items-center gap-2 max-h-[290px] overflow-y-auto"
         >
-          {[1, 2, 3].map((item) => (
+          {[1, 2, 3, 4, 5, 6].map((item) => (
             <RadioGroup.Option
               as="li"
-              className="relative cursor-pointer"
+              className="relative cursor-pointer outline-none"
               value={item}
               key={item}
             >
@@ -41,19 +45,19 @@ function Modal({ open, onClose }: ModalProps) {
                   <div
                     className={`p-[0.17rem] w-[173px] ${
                       checked ? "bg-space" : "bg-transparent"
-                    } rounded-md hover:bg-space hover:shadow-[0px_4px_30px_rgba(71, 78, 255, 0.25)] transition-all`}
+                    } rounded-md hover:bg-space hover:shadow-[0px_4px_30px_rgba(71, 78, 255, 0.25)] transition-all outline-none`}
                   >
                     <img
                       src="https://assets-global.website-files.com/5e73a1e3ba24f2cd5dd2232a/62f66985e6fa143898ba6762_Como%20criar%20um%20NFT%20(1)%20(1).jpg"
                       alt=""
-                      className="w-[171px] h-[175px] object-cover rounded-[10px] hover:drop-shadow-xl"
+                      className="w-[171px] h-[175px] object-cover rounded-[10px] hover:drop-shadow-xl outline-none"
                     />
                   </div>
-                  <div className="flex flex-col justify-center absolute backdrop-blur-cover bg-white/80 bottom-3 rounded h-[46px] w-[149px] left-[0.8rem]">
+                  <div className="flex flex-col justify-center absolute backdrop-blur-cover bg-white/80 bottom-3 rounded h-[46px] w-[149px] left-[0.8rem] hover:scale-[102%] transition-all">
                     <h3 className="text-black font-bold text-sm ml-4 tracking-tight ">
                       Doodles
                     </h3>
-                    <span className="text-black font-bold text-[12px] ml-4 tracking-tight">
+                    <span className="text-black font-bold text-sm ml-4 tracking-tight">
                       #3333
                     </span>
                   </div>
