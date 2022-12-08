@@ -1,25 +1,30 @@
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
+import { Dialog, Transition, Popover, Combobox } from '@headlessui/react';
+import { Fragment, useState } from 'react';
 import ChooseNFTSVG from '../../assets/svg/ChooseNFT';
-import { ItemDataType } from 'rsuite/esm/@types/common';
-import { DatePicker, Input, InputGroup, InputNumber, SelectPicker}  from 'rsuite';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { InputValid } from './CreateAuction.container';
-
+import DatePicker from 'react-date-picker';
+import './CreateAuction.styles.less';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
 type CreateAuctionComponentProps = {
   open: boolean,
   onClose: () => void
   openSelector: boolean,
   setOpenSelector: (open: boolean) => void,
-  endDate: Date|null,
-  setEndDate: (date: Date|null) => void,
+  endDate: Date|undefined,
+  setEndDate: (date: Date|undefined) => void,
   description: string,
   setDescription: (value: string) => void,
   initialPrice: string|number,
   setInitialPrice: (value: string|number) => void,
   initialPriceAvailableCurrencies: string[],
-  onInitialPriceCurrencySelect: (value: string) => void,
+  initialPriceCurrency: string,
+  initialPriceCurrencySelector: boolean,
+  setInitialPriceCurrencySelector: (open: boolean) => void,
+  setInitialPriceCurrency: (value: string) => void,
+  queryCurrencies: string[],
+  onQueryCurrencies: (value: string) => void,
   onCreateAuction: () => void,
   inputFail: InputValid,
   setInputFail: (status: InputValid) => void,
@@ -38,7 +43,12 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
     initialPrice,
     setInitialPrice,
     initialPriceAvailableCurrencies,
-    onInitialPriceCurrencySelect,
+    initialPriceCurrency,
+    initialPriceCurrencySelector,
+    setInitialPriceCurrencySelector,
+    queryCurrencies,
+    onQueryCurrencies,
+    setInitialPriceCurrency,
     onCreateAuction,
     inputFail,
     setInputFail
@@ -69,90 +79,127 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
       }
     } = props;
 
-    return <button className="input w-full flex flex-col items-center pt-6 pb-14 outline-none"
+    return <button className="w-full flex flex-col items-center pt-6 pb-14 outline-none"
                 onClick={() => setOpenSelector(true)}>
       { renderNFTSelector() }
-      <div className={`w-min h-min rounded-sm ${ nftInput ? 'fail' : '' }`}>
+      <div className={`w-min h-min rounded-sm ${ nftInput ? 'Fail' : '' }`}>
         { selectedNFT
             //TODO Add NFT info to load image
           ? <img src={selectedNFT/*.image*/} alt={selectedNFT/*.name*/} className="hover:transition-all hover:scale-[102%] hover:shadow-button"/>
           : <ChooseNFTSVG className="hover:transition-all hover:scale-[102%] hover:shadow-button"/>
         }
       </div>
-      <span className={ nftInput ? 'block fail-span' : 'hidden'}>Please choose a NFT to auction.</span>
+      <span className={ nftInput ? 'block Fail-span' : 'hidden'}>Please choose a NFT to auction.</span>
     </button>
   }
 
   function renderEndDateInput() {
     const { dateInput } = inputFail;
 
-    return <div className="input flex flex-col">
+    return <div className="flex flex-col">
       <h5 className="font-semibold text-3.5 leading-3.5 tracking mb-2">Auction end date</h5>
       <DatePicker value={endDate}
-                  onChange={(date) => {
+                  calendarIcon={null}
+                  clearIcon={null}
+                  format="y/MM/dd"
+                  minDate={new Date()}
+                  onChange={(date: Date) => {
                     setEndDate(date);
                     setInputFail({...inputFail, dateInput: date ? date < new Date() : true});
                   }}
-                  oneTap
-                  caretAs={() => null}
-                  format="dd/MM/yyyy"
-                  placeholder="DD/MM/AAAA"
-                  disabledDate={(date) => date ? date < new Date() : true}
-                  className={`bg-input rounded-sm text-3 leading-3 ${dateInput ? 'fail' : ''}`}/>
-      <span className={ dateInput ? 'block fail-span' : 'hidden'}>Please enter a date that is after today.</span>
+                  dayPlaceholder="DD"
+                  monthPlaceholder="MM"
+                  yearPlaceholder="AAAA"
+                  className={(dateInput ? 'Fail' : '') + (endDate ? '' : ' placeholder')}/>
+      <span className={ dateInput ? 'block Fail-span' : 'hidden'}>Please enter a date that is after today.</span>
     </div>;
   }
 
   function renderDescriptionInput() {
     const { descriptionInput } = inputFail;
 
-    return <div className="input flex flex-col mt-[2.5rem]">
+    return <div className="flex flex-col mt-[2.5rem]">
       <h5 className="font-semibold text-3.5 leading-3.5 tracking mb-2">Description</h5>
-      <Input className={`bg-input rounded-sm placeholder:text-placeholder max-h-20 ${descriptionInput ? 'fail' : ''}`}
-             as="textarea"
-             rows={6}
-             value={description}
-             onChange={(description) => {
-               setDescription(description);
-               setInputFail({...inputFail, descriptionInput: description.length < 30});
-             }} />
-      <span className={ descriptionInput ? 'block fail-span' : 'hidden'}>Please describe your nft auction with at least 30 characters</span>
+      <textarea value={description}
+                onChange={({target: { value: description }}) => {
+                  setDescription(description);
+                  setInputFail({...inputFail, descriptionInput: description.length < 30});
+                }}
+                className={`bg-input rounded-sm placeholder:text-placeholder outline-none p-4 h-20 ${descriptionInput ? 'Fail' : ''}`} />
+      <span className={ descriptionInput ? 'block Fail-span' : 'hidden'}>Please describe your nft auction with at least 30 characters</span>
     </div>;
   }
   
   function renderInitialPriceCurrencySelector() {
-    return <SelectPicker data={initialPriceAvailableCurrencies.map(value => ({label: value, value: value} as ItemDataType<string>))}
-                         onSelect={onInitialPriceCurrencySelect}
-                         placement="autoHorizontalStart"
-                         defaultValue="ETH"
-                         menuClassName="input-selector"
-                         menuAutoWidth={false}
-                         cleanable={false}
-                         menuMaxHeight={125}/>
+    return <Popover className="relative">
+      <Popover.Button className="Button border-l-[1px]"
+                      onClick={() => setInitialPriceCurrencySelector(true)}>
+        <ChevronDownIcon className="h-3 w-3"/>
+        { initialPriceCurrency }
+      </Popover.Button>
+      <Transition
+        show={initialPriceCurrencySelector}
+        as={Fragment}
+        enter="transition ease-out duration-200"
+        enterFrom="opacity-0 translate-y-1"
+        enterTo="opacity-100 translate-y-0"
+        leave="transition ease-in duration-150"
+        leaveFrom="opacity-100 translate-y-0"
+        leaveTo="opacity-0 translate-y-1"
+      >
+        <Popover.Panel className="Token">
+          <Combobox value={initialPriceCurrency}
+                    onChange={(value) => {
+                      setInitialPriceCurrencySelector(false);
+                      setInitialPriceCurrency(value);
+                      onQueryCurrencies('');
+
+                    }}>
+            <Combobox.Input
+              className="Search"
+              value=""
+              placeholder="Search token"
+              displayValue={() => ""}
+              onChange={({ target: { value: currency } }) => onQueryCurrencies(currency)}
+            />
+            <Combobox.Options className="List" static>
+              { queryCurrencies.map(value => (
+                <Combobox.Option className="Item" key={value} value={value}>
+                  {({ selected, active }) => <div>
+                    {value}
+                  </div>}
+                </Combobox.Option>
+              ))}
+            </Combobox.Options>
+          </Combobox>
+        </Popover.Panel>
+      </Transition>
+    </Popover>
   }
 
   function renderPriceInput() {
     const { priceInput } = inputFail;
 
-    return <div className="input flex flex-col mt-8">
+    return <div className="flex flex-col mt-8">
       <h5 className="font-semibold text-3.5 leading-3.5 tracking mb-2">Initial price</h5>
-      <InputGroup className={`bg-input rounded-sm ${ priceInput ? 'fail' : '' }`}>
-        <InputNumber value={initialPrice ? initialPrice : ''}
-                     className="placeholder:text-placeholder"
-                     onChange={(price) => {
-                       setInitialPrice(price);
-                       setInputFail({...inputFail, priceInput: Number(price) <= 0});
-                     }}
-                     min={0}
-                     step={ .01 }/>
+      <div className={`bg-input rounded-sm flex ${ priceInput ? 'Fail' : '' }`}>
+        <input type="number"
+               value={Number(initialPrice) <= 0 ? '' : initialPrice }
+               onChange={({ target: { value: price } }) => {
+                 setInitialPrice(price);
+                 setInputFail({...inputFail, priceInput: Number(price) <= 0});
+               }}
+               min={0}
+               step={0.01}
+               className="Price"/>
         { renderInitialPriceCurrencySelector() }
-      </InputGroup>
-      <span className={ priceInput ? 'block fail-span' : 'hidden'}>Please type a valid price, bigger than 0</span>
+      </div>
+      <span className={ priceInput ? 'block Fail-span' : 'hidden'}>Please type a valid price, bigger than 0</span>
     </div>
   }
 
   function renderFooter() {
-    return <div className=" inset-0 top-auto flex justify-between items-center mt-9 px-6 h-[80px] border-t-outline border-t-[1px]">
+    return <div className="inset-0 top-auto flex justify-between items-center mt-9 px-6 h-[80px] border-t-outline border-t-[1px]">
       <button className="font-medium text-3.5 leading-3.5 text-highlight tracking bg-space rounded-md py-[.8125rem] px-[1.1875rem] hover:scale-[102%] hover:shadow-button" onClick={onCreateAuction}>Create auction</button>
       <button className="font-medium text-3.5 leading-3.5 text-caption tracking border-[1px] border-outline rounded-md py-[.8125rem] px-[2.34375rem] hover:scale-[102%] hover:shadow-button" onClick={onClose}>Cancel</button>
     </div>
@@ -168,7 +215,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
     leaveTo="translate-x-full"
     as={Fragment}
   >
-    <Dialog onClose={onClose} className="fixed top-0 right-0">
+    <Dialog onClose={onClose} className="CreateAuction fixed top-0 right-0">
       <Dialog.Backdrop className="fixed inset-0 bg-black/30 z-[-1]" aria-hidden="true" />
       <Dialog.Panel className="bg-white rounded-bl-lg rounded-tl-lg shadow-md w-[637px]">
         { renderHeader() }

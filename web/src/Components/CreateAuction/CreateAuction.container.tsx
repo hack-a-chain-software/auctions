@@ -12,11 +12,13 @@ function CreateAuction() {
   const [open, setOpen] = useState<boolean>(true);
   const [selectedNFT, setSelectedNFT] = useState<string>('');
   const [openSelector, setOpenSelector] = useState<boolean>(false);
-  const [endDate, setEndDate] = useState<Date|null>(null);
+  const [endDate, setEndDate] = useState<Date|undefined>(undefined);
   const [description, setDescription] = useState<string>("");
   const [initialPrice, setInitialPrice] = useState<string|number>(0);
-  const [initialPriceCurrency, setInitialPriceCurrency] = useState<string>("");
+  const [initialPriceCurrency, setInitialPriceCurrency] = useState<string>("ETH");
+  const [initialPriceCurrencySelector, setInitialPriceCurrencySelector] = useState<boolean>(false);
   const [initialPriceAvailableCurrencies, setInitialPriceAvailableCurrencies] = useState<string[]>(['BTC', 'ETH', 'NEKO']);
+  const [queryCurrencies, setQueryCurrencies] = useState<string[]>(initialPriceAvailableCurrencies);
   const [inputFail, setInputFail] = useState<InputValid>({
     nftInput: false,
     dateInput: false,
@@ -24,8 +26,12 @@ function CreateAuction() {
     priceInput: false
   });
 
-  function onInitialPriceCurrencySelect(selected: string) {
-    setInitialPriceCurrency(selected);
+  function onQueryCurrencies(input: string) {
+    if(!input || input === '')
+      setQueryCurrencies(initialPriceAvailableCurrencies);
+    setQueryCurrencies(initialPriceAvailableCurrencies
+      .filter(currency => currency.toLowerCase().includes(input.toLowerCase()))
+    );
   }
 
   function onCreateAuction() {
@@ -57,7 +63,12 @@ function CreateAuction() {
     initialPrice,
     setInitialPrice,
     initialPriceAvailableCurrencies,
-    onInitialPriceCurrencySelect,
+    initialPriceCurrency,
+    initialPriceCurrencySelector,
+    setInitialPriceCurrencySelector,
+    setInitialPriceCurrency,
+    queryCurrencies,
+    onQueryCurrencies,
     onCreateAuction,
     inputFail,
     setInputFail,
