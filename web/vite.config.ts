@@ -5,6 +5,18 @@ import NodeGlobalsPolyfillPlugin from "@esbuild-plugins/node-globals-polyfill";
 import VitePluginHtmlEnv from 'vite-plugin-html-env';
 
 export default defineConfig({
+  css: {
+    preprocessorOptions: {
+      less: {
+        options: {
+          lessOptions: {
+            strictMath: true,
+            javascriptEnabled: true
+          }
+        }
+      }
+    },
+  },
   plugins: [
     VitePluginHtmlEnv({
       envPrefixes: 'AUCTION_'
