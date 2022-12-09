@@ -90,9 +90,9 @@ function Auction() {
                 Doodles <CheckedIcon />
               </span>
               <span
-                className={`hidden md:block ${
+                className={`hidden md:flex ${
                   closedAuction ? "" : "w-[208px]"
-                } p-[0.4rem] px-4 text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight`}
+                } p-[0.4rem] px-4 items-center text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight`}
               >
                 {closedAuction
                   ? "Auction closed"
@@ -132,9 +132,7 @@ function Auction() {
                 />
                 <button
                   className={`w-full h-10 ${
-                    closedAuction
-                      ? "bg-caption cursor-not-allowed"
-                      : "bg-space"
+                    closedAuction ? "bg-caption cursor-not-allowed" : "bg-space"
                   } text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px]`}
                   disabled={closedAuction}
                 >
