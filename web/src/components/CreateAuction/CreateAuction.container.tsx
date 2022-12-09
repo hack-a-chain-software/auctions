@@ -65,8 +65,8 @@ function CreateAuction(props: CreateAuctionProps) {
   }
 
   const createAuctionProps = {
-    open: open ? open : true,
-    onClose: onClose ? onClose : setOpen ? () => setOpen(false) : () => null,
+    open: open !== undefined ? open : true,
+    onClose: onClose !== undefined ? onClose : setOpen !== undefined ? () => setOpen(false) : () => null,
     openNFTSelector,
     setOpenNFTSelector,
     endDate,
