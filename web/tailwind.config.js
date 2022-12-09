@@ -5,6 +5,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        'sw-navbar': envColor('AUCTION_COLOR_SHADOW_NAVBAR'),
+        'sw-tab': envColor('AUCTION_COLOR_SHADOW_TAB'),
+        'sw-sm': envColor('AUCTION_COLOR_SHADOW_SMALLER'),
+        'sw-md': envColor('AUCTION_COLOR_SHADOW_SMALL'),
+        'sw': envColor('AUCTION_COLOR_SHADOW_MEDIUM'),
+        'sw-lg': envColor('AUCTION_COLOR_SHADOW_LARGE'),
         tab: envColor('AUCTION_COLOR_TAB'),
         button: envColor('AUCTION_COLOR_BUTTON'),
         highlight: envColor('AUCTION_COLOR_HIGHLIGHT'),
@@ -28,7 +34,8 @@ module.exports = {
       },
       backgroundImage: {
         image: useEnv('AUCTION_BACKGROUND_IMAGE'),
-        space: useEnv('AUCTION_COLOR_GRADIENT')
+        space: useEnv('AUCTION_COLOR_GRADIENT'),
+        'gd-button': useEnv('AUCTION_COLOR_BUTTON_GRADIENT')
       },
       backdropBlur: {
         cover: useEnv('AUCTION_BACKGROUND_BLUR')
@@ -58,6 +65,11 @@ module.exports = {
         5: "1.25rem",
         6: "1.5rem",
       },
+      fontWeight: {
+        semibold: 600,
+        bold: 700,
+        bolder: 800,
+      },
       spacing: {
         4.5: "1.125rem",
         17: "4.25rem",
@@ -70,13 +82,13 @@ module.exports = {
         lg: '1.25rem',     // 20px
         large: '1.5rem'    // 24px
       },
-      dropShadow: {
-        navbar: `0px 4px 15px ${envColor('AUCTION_COLOR_SHADOW_NAVBAR')}`,
-        tab: `0px 2px 10px ${envColor('AUCTION_COLOR_SHADOW_TAB')}`,
-        sm: `0px 4px 10px ${envColor('AUCTION_COLOR_SHADOW_SMALLER')}`,
-        md: `0px 4px 20px ${envColor('AUCTION_COLOR_SHADOW_SMALL')}`,
-        DEFAULT: `0px 4px 20px ${envColor('AUCTION_COLOR_SHADOW_MEDIUM')}`,
-        lg: `0px 4px 30px ${envColor('AUCTION_COLOR_SHADOW_LARGE')}`,
+      boxShadow: {
+        navbar: `0px 4px 15px #000`,
+        tab: `0px 2px 10px #000`,
+        sm: `0px 4px 10px #000`,
+        md: `0px 4px 20px #000`,
+        DEFAULT: `0px 4px 20px #000`,
+        lg: `0px 4px 30px #000`,
       },
       animation: {
         'skeleton-body': 'shimmer 5s infinite linear',
