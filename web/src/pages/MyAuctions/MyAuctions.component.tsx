@@ -3,6 +3,7 @@ import TabHeader from '../../components/TabHeader';
 import Tabs from '../../components/Tabs';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import Empty from '../../components/Empty';
+import CardsContainer from '../../components/CardsContainer';
 
 type MyAuctionsComponentProps = {
   indexTabHeader: number,
@@ -58,19 +59,19 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
 
   function renderCards(emptyMessage: string) {
     if(loading)
-      return <div className="flex flex-wrap gap-6 w-full box-border">
+      return <CardsContainer>
         { [null, null, null, null].map(renderCardSkeleton) }
-      </div>;
+      </CardsContainer>;
     if(!cards.length)
       return <Empty>{ emptyMessage }</Empty>;
-    return <div>
+    return <CardsContainer>
       { cards.map(renderCard) }
-    </div>;
+    </CardsContainer>;
   }
 
   function renderCreateAuctionButton() {
     return <button onClick={() => showCreatePanel(true)}
-                   className="flex gap-2.5 rounded items-center px-4 h-10 bg-button text-3.5 translate-y-[4px] leading-3.5 tracking-tight font-semibold text-white">
+                   className="fixed sm:block bottom-4 right-4 z-[10] flex gap-2.5 rounded items-center px-4 h-10 bg-button text-3.5 translate-y-[4px] leading-3.5 tracking-tight font-semibold text-white">
       <PlusIcon className="h-4 w-4 stroke-white opacity-100"/>
       Create Auction
     </button>
@@ -79,7 +80,7 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
   function renderMyOffersPanel() {
     return <PageContainer>
       <Tabs tabList={['Auctions live', 'Closed auctions', 'Auctions won']}
-                   onChange={onSwitchTabMyOffers}>
+            onChange={onSwitchTabMyOffers}>
         {[
           renderCards('The auctions in progress that you birded will appear here'),
           renderCards('When a auctions your birded close without you winning, they will be listed here'),
