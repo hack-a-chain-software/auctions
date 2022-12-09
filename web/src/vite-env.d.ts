@@ -11,10 +11,12 @@ interface ImportMetaEnv {
   readonly AUCTION_GENERAL_LANGUAGE: string;
 
   readonly AUCTION_COLOR_GRADIENT: string;
+  readonly AUCTION_COLOR_BUTTON_GRADIENT: string;
   readonly AUCTION_COLOR_TAB: string;
   readonly AUCTION_COLOR_BUTTON: string;
   readonly AUCTION_COLOR_HIGHLIGHT: string;
   readonly AUCTION_COLOR_SUCCESS: string;
+  readonly AUCTION_COLOR_LINE: string;
   readonly AUCTION_COLOR_ERROR: string;
   readonly AUCTION_COLOR_PARAGRAPH: string;
   readonly AUCTION_COLOR_TITLE: string;

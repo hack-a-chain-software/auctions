@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { routes } from "./routes";
-import Home from './pages/Home';
 
 /**
  * @name Router
@@ -11,7 +10,11 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={routes.home} element={<Home />} />
+        {
+          routes.map(({path, component}) =>
+            <Route path={path} element={component} />
+          )
+        }
       </Routes>
     </BrowserRouter>
   );

@@ -2,7 +2,8 @@ import "./index.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import Router from "./router";
-import "@fontsource/inter";
+import "@fontsource/inter/variable-full.css";
+import "@fontsource/poppins/700.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
