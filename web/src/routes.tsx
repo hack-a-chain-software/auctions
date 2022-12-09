@@ -1,4 +1,3 @@
-import Home from './pages/Home';
 import { ReactNode } from 'react';
 import MyAuctions from './pages/MyAuctions';
 import ExploreAuctions from './pages/ExploreAuctions';
