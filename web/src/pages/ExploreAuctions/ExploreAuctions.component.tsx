@@ -3,6 +3,7 @@ import Empty from '../../components/Empty';
 import CardSkeleton from '../../components/CardSkeleton';
 import ContentHeader from '../../components/ContentHeader';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import CardsContainer from '../../components/CardsContainer';
 
 type MyAuctionsComponentProps = {
   loading: boolean,
@@ -31,16 +32,16 @@ function ExploreAuctionsComponent(props: MyAuctionsComponentProps) {
 
   function renderCards() {
     if(loading)
-      return <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6 w-full box-border">
+      return <CardsContainer>
         { [null, null, null, null].map(renderCardSkeleton) }
-      </div>;
+      </CardsContainer>;
     if(search.length && !cards.length)
       return <Empty>There no results for that :(</Empty>;
     if(!cards.length)
       return <Empty>Looks Like no one is doing a auction, you can be one!</Empty>;
-    return <div className="flex flex-wrap justify-center md:justify-start gap-4 md:gap-6 w-full box-border">
+    return <CardsContainer>
       { cards.map(renderCard) }
-    </div>;
+    </CardsContainer>;
   }
 
   function renderSearchBar() {
@@ -59,11 +60,9 @@ function ExploreAuctionsComponent(props: MyAuctionsComponentProps) {
       subtitle="Buy and sell NFTs">
       { renderSearchBar() }
     </ContentHeader>
-    <PageContainer>
-      <div className="px-6 pt-10">
-        { renderCards() }
-      </div>
-    </PageContainer>
+    <div className="mt-8 md:mt-10 outline-none px-6 box-content">
+      { renderCards() }
+    </div>
   </>;
 }
 
