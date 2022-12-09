@@ -104,6 +104,9 @@ module.exports = {
             mask: 'linear-gradient(-60deg,#000 30%,#0009,#000 70%) left/600% 100%',
           },
         }
+      },
+      screens: {
+        smaller: '360px'
       }
     },
   },

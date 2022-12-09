@@ -13,7 +13,7 @@ function Tabs(props: TabsProps) {
   const { tabList, children, onChange, selectedIndex, rightBar } = props;
 
   function renderPanel(child: ReactNode, key: number) {
-    return <Tab.Panel key={key} tabIndex={-1} className="mt-10 outline-none">
+    return <Tab.Panel key={key} tabIndex={-1} className="mt-8 md:mt-10 outline-none px-6 box-content">
       { child }
     </Tab.Panel>;
   }
@@ -31,8 +31,8 @@ function Tabs(props: TabsProps) {
   return <div className="w-full">
     <Tab.Group onChange={onChange} selectedIndex={selectedIndex}>
       <div className="flex gap-4 sm:gap-4 py-0 items-end h-[78px]">
-        <div className="flex justify-between gap-4 sm:gap-4 py-0 items-end w-full flex-wrap">
-          <Tab.List className="flex gap-4 overflow-x-scroll scrollbar-hide px-6">
+        <div className="flex justify-between gap-4 sm:gap-4 py-0 items-end w-full flex-wrap mx-auto px-6 box-content max-w-[1280px]">
+          <Tab.List className="flex gap-4 box-content overflow-x-scroll scrollbar-hide">
             { tabList.map(renderTab) }
           </Tab.List>
           { rightBar }

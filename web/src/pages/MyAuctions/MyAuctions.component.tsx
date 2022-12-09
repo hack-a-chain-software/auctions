@@ -53,36 +53,32 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
 
   function renderCreateAuctionButton() {
     return <button onClick={() => showCreatePanel(true)}
-                   className="fixed sm:block bottom-4 right-4 z-[10] flex gap-2.5 rounded items-center px-4 h-10 bg-button text-3.5 translate-y-[4px] leading-3.5 tracking-tight font-semibold text-white">
-      <PlusIcon className="h-4 w-4 stroke-white opacity-100"/>
-      Create Auction
+                   className="fixed sm:relative bottom-4 right-4 sm:inset-auto z-[10] flex gap-2.5 rounded-large sm:rounded items-center justify-center w-10 smaller:w-auto smaller:pr-5 smaller:pl-4 sm:px-4 h-10 bg-button text-3.5 translate-y-[4px] leading-3.5 tracking-tight font-semibold text-white">
+      <PlusIcon className="h-5 w-5 smaller:h-4 smaller:w-4 stroke-white opacity-100"/>
+      <span className="hidden smaller:inline">Create Auction</span>
     </button>
   }
 
   function renderMyOffersPanel() {
-    return <PageContainer>
-      <Tabs tabList={['Auctions live', 'Closed auctions', 'Auctions won']}
+    return <Tabs tabList={['Auctions live', 'Closed auctions', 'Auctions won']}
             onChange={onSwitchTabMyOffers}>
         {[
           renderCards('The auctions in progress that you birded will appear here'),
           renderCards('When a auctions your birded close without you winning, they will be listed here'),
           renderCards('When you win a auction, it will appear here')
         ]}
-      </Tabs>
-    </PageContainer>;
+      </Tabs>;
   }
 
   function renderMyCreatedPanel() {
-    return <PageContainer>
-      <Tabs tabList={['Your auctions live', 'Your closed auctions']}
+    return <Tabs tabList={['Your auctions live', 'Your closed auctions']}
             rightBar={renderCreateAuctionButton()}
             onChange={onSwitchTabMyCreated}>
         {[
           renderCards('The open auctions you create will be listed here'),
           renderCards('The closed auctions you created will be listed here.')
         ]}
-      </Tabs>
-    </PageContainer>;
+      </Tabs>;
   }
 
   return <>
