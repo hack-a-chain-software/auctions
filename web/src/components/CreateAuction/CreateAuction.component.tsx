@@ -6,6 +6,7 @@ import { InputValid } from './CreateAuction.container';
 import DatePicker from 'react-date-picker';
 import './CreateAuction.styles.less';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { createPortal } from 'react-dom';
 
 type CreateAuctionComponentProps = {
   open: boolean,
@@ -129,51 +130,52 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
       <span className={ descriptionInput ? 'block Fail-span' : 'hidden'}>Describe your nft auction (min: 30 characters)</span>
     </div>;
   }
-  
+
   function renderInitialPriceCurrencySelector() {
     return <Popover className="sm:relative">
-      <Popover.Button className="Button border-l-[1px]"
-                      onClick={() => setInitialPriceCurrencySelector(true)}>
-        <ChevronDownIcon className="h-3 w-3"/>
-        { initialPriceCurrency }
-      </Popover.Button>
-      <Transition
-        show={initialPriceCurrencySelector}
-        as={Fragment}
-        enter="transition ease-out duration-200"
-        enterFrom="opacity-0 translate-y-1"
-        enterTo="opacity-100 translate-y-0"
-        leave="transition ease-in duration-150"
-        leaveFrom="opacity-100 translate-y-0"
-        leaveTo="opacity-0 translate-y-1"
-      >
-        <Popover.Panel className="Token">
-          <Combobox value={initialPriceCurrency}
-                    onChange={(value) => {
-                      setInitialPriceCurrencySelector(false);
-                      setInitialPriceCurrency(value);
-                      onQueryCurrencies('');
+      {({open, close}) => <>
+        <Transition
+          show={open}
+          enter="transition ease-out duration-200"
+          enterFrom="opacity-0 translate-y-1"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition ease-in duration-150"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 translate-y-1"
+        >
+          <Popover.Panel className="Token">
+            <Combobox value={ initialPriceCurrency }
+                      onChange={ (value) => {
+                        close();
+                        setInitialPriceCurrency(value);
+                        onQueryCurrencies('');
 
-                    }}>
-            <Combobox.Input
-              className="Search"
-              value=""
-              placeholder="Search token"
-              displayValue={() => ""}
-              onChange={({ target: { value: currency } }) => onQueryCurrencies(currency)}
-            />
-            <Combobox.Options className="List" static>
-              { queryCurrencies.map(value => (
-                <Combobox.Option className="Item" key={value} value={value}>
-                  {({ selected, active }) => <div>
-                    {value}
-                  </div>}
-                </Combobox.Option>
-              ))}
-            </Combobox.Options>
-          </Combobox>
-        </Popover.Panel>
-      </Transition>
+                      } }>
+              <Combobox.Input
+                className="Search"
+                value=""
+                placeholder="Search token"
+                displayValue={ () => "" }
+                onChange={ ({ target: { value: currency } }) => onQueryCurrencies(currency) }
+              />
+              <Combobox.Options className="List" static>
+                { queryCurrencies.map(value => (
+                  <Combobox.Option className="Item" key={ value } value={ value }>
+                    { ({ selected, active }) => <div>
+                      { value }
+                    </div> }
+                  </Combobox.Option>
+                )) }
+              </Combobox.Options>
+            </Combobox>
+          </Popover.Panel>
+        </Transition>
+        <Popover.Button className="Button border-l-[1px]"
+                        onClick={() => setInitialPriceCurrencySelector(true)}>
+          <ChevronDownIcon className="h-3 w-3"/>
+          { initialPriceCurrency }
+        </Popover.Button>
+      </>}
     </Popover>
   }
 
