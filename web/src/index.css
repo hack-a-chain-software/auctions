@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-color bg-cover bg-image w-screen h-screen;
+  @apply bg-color bg-cover bg-image h-screen;
   font-family: 'Inter', sans-serif;
   color: black;
 }
