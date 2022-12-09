@@ -2,7 +2,6 @@ import {
   Bars3Icon,
   XMarkIcon,
   ChevronDownIcon,
-  MagnifyingGlassIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/solid";
 import { WalletIcon } from "@heroicons/react/24/outline";
@@ -15,21 +14,21 @@ function Header() {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <header className="bg-white flex flex-col justify-between items-center w-full mb-2 md:h-20 sticky top-0 backdrop-blur-sm bg-white/50 xl:px-24 xl:py-1">
-      <div className="flex justify-between items-center p-4 w-full">
+    <header className="bg-white flex flex-col justify-between items-center w-full mb-2 md:h-20 sticky top-0 backdrop-blur-sm bg-white/50 xl:px-20 xl:py-2">
+      <div className="flex justify-between items-center p-3 pr-7 pl-5 w-full">
         <Bars3Icon
-          className="text-black w-8 md:hidden"
+          className="text-black w-6 md:hidden"
           onClick={() => setOpen(true)}
         />
-        <div className="hidden md:flex items-center gap-4 pl-1">
+        <div className="hidden md:flex items-center gap-4 pl-4">
           <SpaceBitLogo38 />
-          <h1 className="uppercase text-black tracking-[0.2rem] text-xl font-bold font-['Poppins']">
+          <h1 className="uppercase text-black tracking-[.2rem] text-xl font-bold font-['Poppins']">
             Spacebit
           </h1>
         </div>
         <nav className="hidden md:flex">
           <ul className="flex gap-[2.7rem] items-center">
-            <li className="pb-1">
+            <li className="pb-1 md:pb-0">
               <a
                 href="#"
                 className="text-black font-semibold text-sm tracking-tight"
@@ -72,7 +71,7 @@ function Header() {
                 type="button"
                 className="bg-space flex justify-center items-center w-[150px] h-10 gap-2 text-sm font-bold rounded-md text-white tracking-tight"
               >
-                <WalletIcon className="w-3 text-caption" /> Connect wallet
+                <WalletIcon className="w-5 text-caption" /> Connect wallet
               </button>
             </li>
           </ul>
@@ -105,7 +104,7 @@ function Header() {
                   >
                     <Dialog.Panel
                       className="
-                      w-[257px]
+                      w-[258px]
                       shadow-bar
                       pointer-events-auto
                       relative w-60 h-screen bg-white rounded-tr-lg rounded-br-lg"
@@ -183,7 +182,7 @@ function Header() {
           </Dialog>
         </Transition.Root>
         <nav className="md:hidden">
-          <ul className="flex items-center gap-[3.3rem]">
+          <ul className="flex items-center gap-16">
             <li>
               <a href="#" className="text-black text-sm font-semibold">
                 Explore auctions
@@ -199,14 +198,6 @@ function Header() {
             </li>
           </ul>
         </nav>
-      </div>
-      <div className="flex gap-4 justify-between w-[95%] max-w-[1224px] h-10 bg-input rounded-sm mt-6 mb-6 md:hidden">
-        <MagnifyingGlassIcon className="text-paragraph w-6 ml-4" />
-        <input
-          type="search"
-          placeholder="Search for an auction"
-          className="bg-transparent w-full text-black outline-none text-sm placeholder-text font-semibold"
-        />
       </div>
     </header>
   );
