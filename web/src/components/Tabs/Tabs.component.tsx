@@ -13,28 +13,30 @@ function Tabs(props: TabsProps) {
   const { tabList, children, onChange, selectedIndex, rightBar } = props;
 
   function renderPanel(child: ReactNode, key: number) {
-    return <Tab.Panel key={key} tabIndex={-1}>
+    return <Tab.Panel key={key} tabIndex={-1} className="mt-10 outline-none">
       { child }
     </Tab.Panel>;
   }
 
   function renderTab(tab:string, key:number) {
-    return <Tab key={key} tabIndex={-1}>
+    return <Tab key={key} tabIndex={-1} className="outline-none">
       {({selected}) =>
-        <button className={selected ? 'selected' : ''}>
+        <button className={`rounded py-2.5 px-4 text-3.5 leading-3.5 tracking outline-none ${selected ? 'bg-gd-button text-white font-bold' : 'border-outline border-[1px] font-semibold text-black'}`}>
           { tab }
         </button>
       }
     </Tab>;
   }
 
-  return <div>
+  return <div className="w-full">
     <Tab.Group onChange={onChange} selectedIndex={selectedIndex}>
-      <div className="flex justify-between">
-        <Tab.List>
-          { tabList.map(renderTab) }
-        </Tab.List>
-        { rightBar }
+      <div className="flex gap-4 sm:gap-4 py-4 sm:py-0 sm:items-end h-[78px]">
+        <div className="flex justify-between gap-4 sm:gap-4 py-4 sm:py-0 sm:items-end w-full flex-wrap">
+          <Tab.List className="flex gap-4 flex-wrap">
+            { tabList.map(renderTab) }
+          </Tab.List>
+          { rightBar }
+        </div>
       </div>
       <Tab.Panels>
         { children.map(renderPanel) }
