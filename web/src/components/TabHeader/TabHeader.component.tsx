@@ -15,7 +15,7 @@ function TabHeader(props: TabHeaderProps) {
   function renderPanel(child: ReactNode, key: number) {
     return <Tab.Panel key={key}
                       tabIndex={-1}
-                      className="px-6 box-content">
+                      className="box-content">
       { child }
     </Tab.Panel>;
   }

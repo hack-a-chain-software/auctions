@@ -104,7 +104,7 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
 
   return <>
     {/*TODO AUC-5 Add CreateAuction panel
-      * <CreateAuction open={createPanel} onClose={() => showCreatePanel(false)} />*/}
+      * <CreateAuction open={createPanel} setOpen={showCreatePanel} />*/}
     <TabHeader
       title="My Auctions"
       tabList={['My offers', 'Created auctions']}
