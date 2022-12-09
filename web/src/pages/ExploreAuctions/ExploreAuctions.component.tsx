@@ -1,4 +1,3 @@
-import PageContainer from '../../components/PageContainer';
 import Empty from '../../components/Empty';
 import CardSkeleton from '../../components/CardSkeleton';
 import ContentHeader from '../../components/ContentHeader';
@@ -36,9 +35,9 @@ function ExploreAuctionsComponent(props: MyAuctionsComponentProps) {
         { [null, null, null, null].map(renderCardSkeleton) }
       </CardsContainer>;
     if(search.length && !cards.length)
-      return <Empty>There no results for that :(</Empty>;
+      return <Empty>There are no results for that :(</Empty>;
     if(!cards.length)
-      return <Empty>Looks Like no one is doing a auction, you can be one!</Empty>;
+      return <Empty>Looks Like no one is doing an auction, you can be one!</Empty>;
     return <CardsContainer>
       { cards.map(renderCard) }
     </CardsContainer>;
