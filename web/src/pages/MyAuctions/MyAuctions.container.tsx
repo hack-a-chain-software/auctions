@@ -1,5 +1,5 @@
 import MyAuctionsComponent from './MyAuctions.component';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 type MyAuctionsFilter = 'offer-live'|'offer-closed'|'offer-won'|'your-live'|'your-closed';
