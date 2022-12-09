@@ -40,7 +40,7 @@ function ExploreAuctionsComponent(props: MyAuctionsComponentProps) {
 
   function renderCards(emptyMessage: string) {
     if(loading)
-      return <div className="flex flex-wrap gap-6 w-full box-border">
+      return <div className="flex flex-wrap  gap-4 md:gap-6 w-full box-border">
         { [null, null, null, null].map(renderCardSkeleton) }
       </div>;
     if(!cards.length)
