@@ -13,7 +13,7 @@ function ExploreAuctions() {
 
   useEffect(() => {
     //TODO Add all loading variables to this memo
-    setTimeout(() => setLoading(false), 3000);
+    setTimeout(() => setLoading(true), 3000);
   }, []);
 
   const exploreAuctionsComponentProps = {
