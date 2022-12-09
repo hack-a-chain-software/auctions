@@ -1,44 +1,307 @@
-import { ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { ChevronLeftIcon, ListBulletIcon } from "@heroicons/react/24/solid";
+import CheckedIcon from "../../assets/svg/CheckedIcon";
+import CrownIcon from "../../assets/svg/CrownIcon";
 
 function Auction() {
+  const offered = false;
+  const closedAuction = true;
+  const isWon = false;
+
   return (
     <>
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-1 items-center w-[95%] max-w-[411px] m-auto mt-6 px-3 md:ml-6 px-0 xl:ml-0">
         <ChevronLeftIcon className="w-[15px] h-[5]" />
-        <span className="text-black font-semibold text-sm tracking-tight">
+        <button className="text-black font-semibold text-sm tracking-tight">
           Back to all acutions
-        </span>
+        </button>
       </div>
-      <section className="flex flex-col items-center w-[95%] m-auto">
-        <div className="w-[95%] h-[300px] max-w-[413px]">
-          <img
-            src="https://www.bitmag.com.br/wp-content/uploads/2022/03/monkey-7009603_1920.jpg"
-            alt=""
-            className="w-full h-full rounded-sm object-cover"
-          />
-        </div>
-        <div className="w-[95%]">
-          <h3 className="text-black text-xl font-semibold tracking-tight">
-            Description
-          </h3>
-          <p className="w-full max-w-[419px] text-paragraph font-medium leading-4">
-            Once upon a time, there was a young girl. She was 9 years old and
-            her name was Wende. Wende was incredibly intelligent, yet she had a
-            hard time learning things by heart. No matter how hard she tried,
-            she just could not memorize the planets of the solar system.
-          </p>
-        </div>
-        <div className="w-[95%] max-w-[419px] border-solid border-[1px] rounded-lg border-outline">
-          <div className="flex items-center h-[52px] border-b-[1px]">
-            <h3 className="px-8 text-md font-medium text-black tracking-tight">Details</h3>
+      <section className="flex flex-col mt-6 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-20 md:items-start mx-auto md:mt-6 xl:w-full">
+        <div className="row-span-3 max-w-[411px] flex flex-col items-center md:items-start">
+          <div className="w-[95%] max-w-[411px] h-[300px] md:h-[300px] md:w-full xl:h-[411px] relative">
+            <img
+              src="https://www.bitmag.com.br/wp-content/uploads/2022/03/monkey-7009603_1920.jpg"
+              alt=""
+              className="w-full h-full rounded-sm object-cover"
+            />
+            <div className="absolute top-44 w-[95%] mx-[0.6rem] bg-white/70 rounded-lg p-4 md:hidden">
+              <span className="flex gap-4 items-center text-md font-medium tracking-tight">
+                Doodles <CheckedIcon />
+              </span>
+              <h3 className="font-bold text-xl tracking-tight">
+                Doodles #3366
+              </h3>
+              <span className="text-md font-medium text-black tracking-tight">
+                By <strong>@johnsnow</strong>
+              </span>
+            </div>
           </div>
-          <div className="flex flex-col px-8 h-[305px] mt-7 gap-4">
-            <span>Medium</span>
-            <span>Dimensions</span>
-            <span>File size</span>
-            <span>Contract address</span>
-            <span>Token standard</span>
-            <span>Chain</span>
+          <div className="w-full max-w-[411px] mt-6">
+            <h3 className="text-black text-xl font-semibold tracking-tight">
+              Description
+            </h3>
+            <p className="w-full text-paragraph font-medium leading-4 mt-2">
+              Once upon a time, there was a young girl. She was 9 years old and
+              her name was Wende. Wende was incredibly intelligent, yet she had
+              a hard time learning things by heart. No matter how hard she
+              tried, she just could not memorize the planets of the solar
+              system.
+            </p>
+          </div>
+          <div className="hidden md:block mt-[3.4rem] w-full max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white xl:h-[360px]">
+            <div className="flex items-center h-[51px] border-b-[1px]">
+              <h3 className="px-7 text-md font-semibold text-black tracking-tight">
+                Details
+              </h3>
+            </div>
+            <div className="flex justify-between">
+              <div className="flex flex-col px-6 mt-6 gap-5">
+                {[
+                  "Medium",
+                  "Dimensions",
+                  "File size",
+                  "Contract address",
+                  "Token standard",
+                  "Chain",
+                ].map((label) => (
+                  <span className="font-medium text-black text-md">
+                    {label}
+                  </span>
+                ))}
+              </div>
+              <div className="flex flex-col items-end px-6 h-[305px] mt-6 gap-5">
+                {[
+                  "GIF",
+                  "200x200",
+                  "20 MB",
+                  "123kj789...",
+                  "ERC-741",
+                  "Ethereum",
+                ].map((label) => (
+                  <span className="font-bold text-black text-md">{label}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-span-2 w-full max-w-[411px] md:max-w-[761px] xl:pl-6">
+          <div className="hidden md:block w-full flex flex-col gap-1 px-1">
+            <div className="flex justify-between">
+              <span className="flex gap-4 items-center text-xl font-medium tracking-tight mb-2">
+                Doodles <CheckedIcon />
+              </span>
+              <span
+                className={`hidden md:block ${
+                  closedAuction ? "" : "w-[208px]"
+                } p-[0.4rem] px-4 text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight`}
+              >
+                {closedAuction
+                  ? "Auction closed"
+                  : "Auction ends in: 2h 10m 15s"}
+              </span>
+            </div>
+            <h3 className="font-bold text-[28px] tracking-tight mb-2">
+              Doodles #3366
+            </h3>
+            <span className="text-md font-medium text-black tracking-tight mb-2">
+              By <strong>@johnsnow</strong>
+            </span>
+          </div>
+          <div className="flex flex-col gap-4 mt-8 mx-auto w-full max-w-[411px] md:max-w-[761px] md:mx-0">
+            {isWon ? (
+              <>
+                <span className="mt-6 max-w-[419px] text-green-500 flex gap-3 py-1 text-xl font-semibold items-center">
+                  {" "}
+                  <CrownIcon /> You won!
+                </span>
+                <button className="w-full h-10 bg-space mt-4 text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px]">
+                  Claim rewards
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="w-[173px] p-[0.4rem] text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight">
+                  Minimum bid: 0,3 ETH
+                </p>
+                <input
+                  type="text"
+                  placeholder="Type your bid"
+                  className={`w-full h-10 text-sm bg-bid rounded placeholder-caption px-4 outline-none max-w-[440px] xl:max-w-[340px] ${
+                    closedAuction && "cursor-not-allowed"
+                  }`}
+                  disabled={closedAuction}
+                />
+                <button
+                  className={`w-full h-10 ${
+                    closedAuction
+                      ? "bg-caption cursor-not-allowed"
+                      : "bg-space"
+                  } text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px]`}
+                  disabled={closedAuction}
+                >
+                  {closedAuction ? "Auction closed" : "Make offer"}
+                </button>
+                <strong className="font-semibold text-sm tracking-tight text-[#000000b3]">
+                  Your balance: 10 ETH
+                </strong>
+                <span className="w-[228px] p-[0.4rem] px-4 text-center rounded-[50px] text-white font-medium text-sm bg-paragraph md:hidden">
+                  Auction ends in: 2h 10m 15s
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+        <div className="row-span-2 col-span-2 w-[95%] xl:w-[761px] xl:mt-14 xl:px-5">
+          <div className="mt-2 w-full border-solid border-[1px] rounded-lg border-outline bg-white ml-auto xl:h-[202px]">
+            <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
+              <h3 className="px-8 flex items-center gap-3 font-semibold text-black tracking-tight text-md xl:px-4">
+                <ListBulletIcon className="w-7" /> Your offers
+              </h3>
+            </div>
+            <div className="">
+              {offered || isWon ? (
+                <div className="p-8 flex justify-between xl:p-5 ml-3">
+                  <div className="flex flex-col gap-5">
+                    <span className="text-md font-medium tracking-tight text-black">
+                      Price
+                    </span>
+                    <div className="flex gap-6">
+                      <span className="md:text-xl font-semibold tracking-tight text-black">
+                        0,32 ETH
+                      </span>
+                      <span className="text-white tracking-tight text-md flex items-center justify-center font-medium bg-success rounded-[30px] w-[114px] xl:h-8">
+                        Highest bid
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 items-start justify-between xl:mr-6">
+                    <span className="text-md text-black font-medium tracking-tight">
+                      Date
+                    </span>
+                    <span className="font-semibold tracking-teight text-black xl:text-xl">
+                      06/12/2022
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <h3 className="p-[3.4rem] text-center text-paragraph text-xl font-medium tracking-tight xl:mr-1">
+                  You don't have offers yet
+                </h3>
+              )}
+            </div>
+          </div>
+          <div className="mt-8 border-solid border-[1px] rounded-lg border-outline bg-white ml-auto">
+            <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
+              <h3 className="px-4 flex items-center gap-3 font-semibold text-black tracking-tight text-md">
+                <ListBulletIcon className="w-7" /> Offers
+              </h3>
+            </div>
+            <div className="p-6 flex justify-between xl:h-[372px]">
+              <div className="flex flex-col gap-6">
+                <span className="text-md font-medium tracking-teight">
+                  Price
+                </span>
+                {[1, 2, 3, 4, 5, 6].map((item) => {
+                  // item === 1 (primeiro lugar ate puxar os dados corretos)
+                  if ((item === 1 && isWon) || (item === 1 && closedAuction)) {
+                    return (
+                      <div className="relative">
+                        <span className="absolute top-[-20px] text-transparent bg-clip-text bg-space max-w-[419px] flex gap-2 text-sm font-semibold items-center">
+                          <CrownIcon /> Winner!
+                        </span>
+                        <span
+                          className={`md:text-xl ${
+                            isWon || closedAuction
+                              ? "font-semibold"
+                              : "font-medium"
+                          } tracking-teight text-green-500 flex`}
+                        >
+                          0,32 ETH
+                        </span>
+                      </div>
+                    );
+                  }
+                  if (item === 1) {
+                    return (
+                      <span className="md:text-xl font-semibold tracking-teight text-black flex items-center gap-3">
+                        0,35 ETH <CrownIcon />
+                      </span>
+                    );
+                  }
+                  return (
+                    <span className="md:text-xl font-medium tracking-teight text-black">
+                      0,32 ETH
+                    </span>
+                  );
+                })}
+              </div>
+              <div className="flex flex-col gap-6 xl:mr-44">
+                <span className="text-md font-medium tracking-teight">
+                  From
+                </span>
+                {[1, 2, 3, 4, 5, 6].map((item) => {
+                  if ((item === 1 && isWon) || (item === 1 && closedAuction)) {
+                    return (
+                      <span
+                        className={`md:text-xl ${
+                          isWon || closedAuction
+                            ? "font-semibold"
+                            : "font-medium"
+                        } tracking-teight text-green-500 flex gap-3`}
+                      >
+                        @Usertal
+                      </span>
+                    );
+                  }
+                  if (item === 1) {
+                    return (
+                      <span className="md:text-xl font-semibold tracking-teight text-black flex items-center gap-1">
+                        @Usertal
+                      </span>
+                    );
+                  }
+                  return (
+                    <p className="md:text-xl font-medium tracking-teight text-black w-[90px] truncate">
+                      @Usertal
+                    </p>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+          <div className="mt-8 w-full max-w-[469px] border-solid border-[1px] rounded-lg border-outline bg-white md:hidden">
+            <div className="flex items-center h-[52px] border-b-[1px]">
+              <h3 className="px-8 text-md font-semibold text-black tracking-tight">
+                Details
+              </h3>
+            </div>
+            <div className="flex justify-between">
+              <div className="flex flex-col px-8 h-[305px] mt-7 gap-4">
+                {[
+                  "Medium",
+                  "Dimensions",
+                  "File size",
+                  "Contract address",
+                  "Token standard",
+                  "Chain",
+                ].map((label) => (
+                  <span className="font-medium text-black text-md">
+                    {label}
+                  </span>
+                ))}
+              </div>
+              <div className="flex flex-col items-end px-8 h-[305px] mt-7 gap-4">
+                {[
+                  "GIF",
+                  "200x200",
+                  "20 MB",
+                  "123kj789...",
+                  "ERC-741",
+                  "Ethereum",
+                ].map((label) => (
+                  <span className="font-bold text-black text-md">{label}</span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
