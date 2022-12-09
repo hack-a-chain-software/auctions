@@ -1,5 +1,5 @@
 import CreateAuctionComponent from './CreateAuction.component';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export type InputValid = {
   nftInput: boolean,
@@ -8,10 +8,17 @@ export type InputValid = {
   priceInput: boolean
 }
 
-function CreateAuction() {
-  const [open, setOpen] = useState<boolean>(true);
+type CreateAuctionProps = {
+  open?: boolean,
+  setOpen?: (open: boolean) => void,
+  onClose?: () => void
+}
+
+function CreateAuction(props: CreateAuctionProps) {
+  const { open, setOpen, onClose } = props;
+
   const [selectedNFT, setSelectedNFT] = useState<string>('');
-  const [openSelector, setOpenSelector] = useState<boolean>(false);
+  const [openNFTSelector, setOpenNFTSelector] = useState<boolean>(false);
   const [endDate, setEndDate] = useState<Date|undefined>(undefined);
   const [description, setDescription] = useState<string>("");
   const [initialPrice, setInitialPrice] = useState<string|number>(0);
@@ -25,6 +32,12 @@ function CreateAuction() {
     descriptionInput: false,
     priceInput: false
   });
+
+  useEffect(() => {
+    // TODO Add here the loader for available currencies
+    //  setInitialPriceAvailableCurrencies(['BTC', 'ETH', 'NEKO'])
+    //  setInitialPriceCurrency('ETH')
+  }, []);
 
   function onQueryCurrencies(input: string) {
     if(!input || input === '')
@@ -52,10 +65,10 @@ function CreateAuction() {
   }
 
   const createAuctionProps = {
-    open,
-    onClose: () => setOpen(false),
-    openSelector,
-    setOpenSelector,
+    open: open ? open : true,
+    onClose: onClose ? onClose : setOpen ? () => setOpen(false) : () => null,
+    openNFTSelector,
+    setOpenNFTSelector,
     endDate,
     setEndDate,
     description,

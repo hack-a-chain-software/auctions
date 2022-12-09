@@ -1,5 +1,5 @@
 import { Dialog, Transition, Popover, Combobox } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import ChooseNFTSVG from '../../assets/svg/ChooseNFT';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { InputValid } from './CreateAuction.container';
@@ -10,8 +10,8 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 type CreateAuctionComponentProps = {
   open: boolean,
   onClose: () => void
-  openSelector: boolean,
-  setOpenSelector: (open: boolean) => void,
+  openNFTSelector: boolean,
+  setOpenNFTSelector: (open: boolean) => void,
   endDate: Date|undefined,
   setEndDate: (date: Date|undefined) => void,
   description: string,
@@ -55,7 +55,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
 } = props;
 
   function renderHeader() {
-    return <div className="inset-0 flex justify-between items-center pl-6 pr-2.5 h-[67px] border-b-line border-b-[1px]">
+    return <div className="inset-0 flex justify-between items-center pl-4 sm:pl-6 pr-2.5 h-[67px] border-b-line border-b-[1px]">
       <h3 className="tracking leading-4 text-4 font-semibold">Create auction</h3>
       <button onClick={onClose} className="p-3 pr-[11px] self-start mt-[3px] hover:scale-[110%] hover:shadow-button" tabIndex={-1}>
         <XMarkIcon className="h-6 w-6"/>
@@ -64,7 +64,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
   }
 
   function renderNFTSelector() {
-    const { openSelector, setOpenSelector, setSelectedNFT } = props;
+    const { openNFTSelector, setOpenNFTSelector, setSelectedNFT } = props;
 
     //TODO AUC-6 Add modal choose NFT
     return <></>;
@@ -72,7 +72,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
 
   function renderImage() {
     const {
-      setOpenSelector,
+      setOpenNFTSelector,
       selectedNFT,
       inputFail: {
         nftInput
@@ -80,7 +80,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
     } = props;
 
     return <button className="w-full flex flex-col items-center pt-6 pb-14 outline-none"
-                onClick={() => setOpenSelector(true)}>
+                onClick={() => setOpenNFTSelector(true)}>
       { renderNFTSelector() }
       <div className={`w-min h-min rounded-sm ${ nftInput ? 'Fail' : '' }`}>
         { selectedNFT
@@ -126,12 +126,12 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
                   setInputFail({...inputFail, descriptionInput: description.length < 30});
                 }}
                 className={`bg-input rounded-sm placeholder:text-placeholder outline-none p-4 h-20 ${descriptionInput ? 'Fail' : ''}`} />
-      <span className={ descriptionInput ? 'block Fail-span' : 'hidden'}>Please describe your nft auction with at least 30 characters</span>
+      <span className={ descriptionInput ? 'block Fail-span' : 'hidden'}>Describe your nft auction (min: 30 characters)</span>
     </div>;
   }
   
   function renderInitialPriceCurrencySelector() {
-    return <Popover className="relative">
+    return <Popover className="sm:relative">
       <Popover.Button className="Button border-l-[1px]"
                       onClick={() => setInitialPriceCurrencySelector(true)}>
         <ChevronDownIcon className="h-3 w-3"/>
@@ -182,7 +182,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
 
     return <div className="flex flex-col mt-8">
       <h5 className="font-semibold text-3.5 leading-3.5 tracking mb-2">Initial price</h5>
-      <div className={`bg-input rounded-sm flex ${ priceInput ? 'Fail' : '' }`}>
+      <div className={`relative bg-input rounded-sm flex ${ priceInput ? 'Fail' : '' }`}>
         <input type="number"
                value={Number(initialPrice) <= 0 ? '' : initialPrice }
                onChange={({ target: { value: price } }) => {
@@ -199,9 +199,9 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
   }
 
   function renderFooter() {
-    return <div className="inset-0 top-auto flex justify-between items-center mt-9 px-6 h-[80px] border-t-outline border-t-[1px]">
-      <button className="font-medium text-3.5 leading-3.5 text-highlight tracking bg-space rounded-md py-[.8125rem] px-[1.1875rem] hover:scale-[102%] hover:shadow-button" onClick={onCreateAuction}>Create auction</button>
-      <button className="font-medium text-3.5 leading-3.5 text-caption tracking border-[1px] border-outline rounded-md py-[.8125rem] px-[2.34375rem] hover:scale-[102%] hover:shadow-button" onClick={onClose}>Cancel</button>
+    return <div className="inset-0 top-auto flex justify-between items-center mt-9 px-4 sm:px-6 h-[80px] border-t-outline border-t-[1px]">
+      <button className="w-full sm:w-auto font-medium text-3.5 leading-3.5 text-highlight tracking bg-space rounded-md py-[.8125rem] px-[1.1875rem] hover:scale-[102%] hover:shadow-button" onClick={onCreateAuction}>Create auction</button>
+      <button className="hidden sm:block font-medium text-3.5 leading-3.5 text-caption tracking border-[1px] border-outline rounded-md py-[.8125rem] px-[2.34375rem] hover:scale-[102%] hover:shadow-button" onClick={onClose}>Cancel</button>
     </div>
   }
 
@@ -215,12 +215,12 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
     leaveTo="translate-x-full"
     as={Fragment}
   >
-    <Dialog onClose={onClose} className="CreateAuction fixed top-0 right-0">
+    <Dialog onClose={onClose} className="CreateAuction fixed top-0 right-0 left-0 sm:left-auto h-screen sm:h-auto overflow-y-scroll sm:overflow-y-auto">
       <Dialog.Backdrop className="fixed inset-0 bg-black/30 z-[-1]" aria-hidden="true" />
-      <Dialog.Panel className="bg-white rounded-bl-lg rounded-tl-lg shadow-md w-[637px]">
+      <Dialog.Panel className="bg-white rounded-bl-lg rounded-tl-lg shadow-md shadow-sw-md w-full sm:w-[637px]">
         { renderHeader() }
         { renderImage() }
-        <div className="px-[3.75rem]">
+        <div className="px-4 sm:px-[3.75rem]">
           { renderEndDateInput() }
           { renderDescriptionInput() }
           { renderPriceInput() }
