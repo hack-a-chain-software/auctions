@@ -1,6 +1,6 @@
-import { ChevronLeftIcon, ListBulletIcon } from "@heroicons/react/24/solid";
-import CheckedIcon from "../../assets/svg/CheckedIcon";
+import { ChevronLeftIcon, ListBulletIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
 import CrownIcon from "../../assets/svg/CrownIcon";
+import PageContainer from "../../components/PageContainer";
 
 function Auction() {
   const offered = false;
@@ -8,14 +8,14 @@ function Auction() {
   const isWon = false;
 
   return (
-    <>
+    <PageContainer>
       <div className="flex gap-1 items-center w-[95%] max-w-[411px] m-auto mt-6 px-3 md:ml-6 px-0 xl:ml-0">
-        <ChevronLeftIcon className="w-[15px] h-[5]" />
+        <ChevronLeftIcon className="w-[15px] h-[5px]" />
         <button className="text-black font-semibold text-sm tracking-tight">
           Back to all acutions
         </button>
       </div>
-      <section className="flex flex-col mt-6 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-20 md:items-start mx-auto md:mt-6 xl:w-full">
+      <section className="flex flex-col mt-6 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-20 md:items-start mx-auto md:mt-6 xl:w-screen">
         <div className="row-span-3 max-w-[411px] flex flex-col items-center md:items-start">
           <div className="w-[95%] max-w-[411px] h-[300px] md:h-[300px] md:w-full xl:h-[411px] relative">
             <img
@@ -25,7 +25,7 @@ function Auction() {
             />
             <div className="absolute top-44 w-[95%] mx-[0.6rem] bg-white/70 rounded-lg p-4 md:hidden">
               <span className="flex gap-4 items-center text-md font-medium tracking-tight">
-                Doodles <CheckedIcon />
+                Doodles <CheckCircleIcon className="fill-space-success" />
               </span>
               <h3 className="font-bold text-xl tracking-tight">
                 Doodles #3366
@@ -87,12 +87,12 @@ function Auction() {
           <div className="hidden md:block w-full flex flex-col gap-1 px-1">
             <div className="flex justify-between">
               <span className="flex gap-4 items-center text-xl font-medium tracking-tight mb-2">
-                Doodles <CheckedIcon />
+                Doodles <CheckCircleIcon className="fill-space-success" />
               </span>
               <span
                 className={`hidden md:flex ${
                   closedAuction ? "" : "w-[208px]"
-                } p-[0.4rem] px-4 items-center text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight`}
+                } p-[.4rem] px-4 items-center text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight`}
               >
                 {closedAuction
                   ? "Auction closed"
@@ -138,10 +138,10 @@ function Auction() {
                 >
                   {closedAuction ? "Auction closed" : "Make offer"}
                 </button>
-                <strong className="font-semibold text-sm tracking-tight text-[#000000b3]">
+                <strong className="font-semibold text-sm tracking-tight text-black/70">
                   Your balance: 10 ETH
                 </strong>
-                <span className="w-[228px] p-[0.4rem] px-4 text-center rounded-[50px] text-white font-medium text-sm bg-paragraph md:hidden">
+                <span className="w-[228px] p-[.4rem] px-4 text-center rounded-[50px] text-white font-medium text-sm bg-paragraph md:hidden">
                   Auction ends in: 2h 10m 15s
                 </span>
               </>
@@ -211,7 +211,7 @@ function Auction() {
                             isWon || closedAuction
                               ? "font-semibold"
                               : "font-medium"
-                          } tracking-teight text-green-500 flex`}
+                          } tracking-tight text-green-500 flex`}
                         >
                           0,32 ETH
                         </span>
@@ -220,20 +220,20 @@ function Auction() {
                   }
                   if (item === 1) {
                     return (
-                      <span className="md:text-xl font-semibold tracking-teight text-black flex items-center gap-3">
+                      <span className="md:text-xl font-semibold tracking-tight text-black flex items-center gap-3">
                         0,35 ETH <CrownIcon />
                       </span>
                     );
                   }
                   return (
-                    <span className="md:text-xl font-medium tracking-teight text-black">
+                    <span className="md:text-xl font-medium tracking-tight text-black">
                       0,32 ETH
                     </span>
                   );
                 })}
               </div>
               <div className="flex flex-col gap-6 xl:mr-44">
-                <span className="text-md font-medium tracking-teight">
+                <span className="text-md font-medium tracking-tight">
                   From
                 </span>
                 {[1, 2, 3, 4, 5, 6].map((item) => {
@@ -244,7 +244,7 @@ function Auction() {
                           isWon || closedAuction
                             ? "font-semibold"
                             : "font-medium"
-                        } tracking-teight text-green-500 flex gap-3`}
+                        } tracking-tight text-green-500 flex gap-3`}
                       >
                         @Usertal
                       </span>
@@ -252,13 +252,13 @@ function Auction() {
                   }
                   if (item === 1) {
                     return (
-                      <span className="md:text-xl font-semibold tracking-teight text-black flex items-center gap-1">
+                      <span className="md:text-xl font-semibold tracking-tight text-black flex items-center gap-1">
                         @Usertal
                       </span>
                     );
                   }
                   return (
-                    <p className="md:text-xl font-medium tracking-teight text-black w-[90px] truncate">
+                    <p className="md:text-xl font-medium tracking-tight text-black w-[90px] truncate">
                       @Usertal
                     </p>
                   );
@@ -303,7 +303,7 @@ function Auction() {
           </div>
         </div>
       </section>
-    </>
+    </PageContainer>
   );
 }
 
