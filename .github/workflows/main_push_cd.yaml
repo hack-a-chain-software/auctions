@@ -1,0 +1,30 @@
+name: Main branch CD
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  PRODUCTION: true
+
+on: 
+  push: 
+    branches:
+      - "main"
+
+jobs:
+  vercel_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@canary
+
+      - name: Install Yarn Globally
+        run: npm install -g yarn
+
+      - name: Installing Dependencies
+        working-directory: ./web
+        run: yarn
+
+      - name: Deploy All to Vercel
+        working-directory: ./web
+        run: yarn build_vercel
