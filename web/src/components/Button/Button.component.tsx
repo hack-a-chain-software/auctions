@@ -10,7 +10,7 @@ type ButtonProps = {
 function MakeOfferButton() {
   return (
     <button
-      className={`hidden md:block w-[265px] h-10 ml-[1px] rounded font-semibold text-sm leading-3. tracking-tight text-white bg-button
+      className={`hidden md:block w-[265px] h-10 ml-[1px] rounded font-semibold text-sm leading-3.5 tracking-tight text-white bg-button
   `}
     >
       Make offer
