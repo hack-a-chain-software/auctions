@@ -3,6 +3,7 @@ import CardSkeleton from '../../components/CardSkeleton';
 import ContentHeader from '../../components/ContentHeader';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import CardsContainer from '../../components/CardsContainer';
+import Card from '../../components/Card';
 
 type MyAuctionsComponentProps = {
   loading: boolean,
@@ -20,9 +21,7 @@ function ExploreAuctionsComponent(props: MyAuctionsComponentProps) {
   } = props;
 
   function renderCard(card: string, key: number) {
-    //TODO AUC-4 Add card component
-    // return <Card {...card}/>;
-    return <span key={key}>{ card }</span>;
+    return <Card {...card}/>;
   }
 
   function renderCardSkeleton(ignore: null, key: number) {
