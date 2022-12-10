@@ -6,7 +6,6 @@ import { InputValid } from './CreateAuction.container';
 import DatePicker from 'react-date-picker';
 import './CreateAuction.styles.less';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import { createPortal } from 'react-dom';
 
 type CreateAuctionComponentProps = {
   open: boolean,
@@ -217,7 +216,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
     leaveTo="translate-x-full"
     as={Fragment}
   >
-    <Dialog onClose={onClose} className="CreateAuction fixed top-0 right-0 left-0 sm:left-auto h-screen sm:h-auto overflow-y-scroll sm:overflow-y-visible">
+    <Dialog onClose={onClose} className="CreateAuction fixed top-0 right-0 left-0 sm:left-auto h-screen sm:h-auto overflow-y-scroll sm:overflow-y-visible z-[10]">
       <Dialog.Backdrop className="fixed inset-0 z-[-1]" aria-hidden="true" />
       <Dialog.Panel className="bg-white rounded-bl-lg rounded-tl-lg shadow-md shadow-sw-md w-full sm:w-[637px]">
         { renderHeader() }
