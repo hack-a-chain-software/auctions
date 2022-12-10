@@ -1,10 +1,10 @@
-import PageContainer from '../../components/PageContainer';
 import TabHeader from '../../components/TabHeader';
 import Tabs from '../../components/Tabs';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import Empty from '../../components/Empty';
 import CardsContainer from '../../components/CardsContainer';
 import CardSkeleton from '../../components/CardSkeleton';
+import CreateAuction from '../../components/CreateAuction';
 
 type MyAuctionsComponentProps = {
   indexTabHeader: number,
@@ -82,8 +82,6 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
   }
 
   return <>
-    {/*TODO AUC-5 Add CreateAuction panel
-      * <CreateAuction open={createPanel} setOpen={showCreatePanel} />*/}
     <TabHeader
       title="My Auctions"
       tabList={['My offers', 'Created auctions']}
@@ -94,6 +92,7 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
         renderMyCreatedPanel()
       ]}
     </TabHeader>
+    <CreateAuction open={createPanel} setOpen={showCreatePanel} />
   </>;
 }
 
