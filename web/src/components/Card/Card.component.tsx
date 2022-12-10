@@ -12,12 +12,12 @@ function Card() {
 
   return (
     <li
-      className={`rounded-[29px] w-[180px] h-[275px] drop-shadow-navbar p-2 md:drop-shadow-none list-none md:w-[302px] ${
+      className={`rounded-[29px] h-[275px] drop-shadow-navbar p-2 md:drop-shadow-none list-none md:w-[302px] ${
         isOwner || offered ? "md:h-[537px]" : "md:h-[472px]"
       } md:p-4 bg-white border-solid border-outline border-[1px] rounded-large flex flex-col items-center relative`}
     >
       {isWon && (
-        <div className="w-[80px] h-[20px] md:w-[105px] h-[34px] flex justify-center items-center absolute gap-2 bg-white border-solid border-[1px] border-purple-500 rounded-sm z-[1] top-[1.5rem] right-[1rem] top-[1.93rem] right-[1.79rem]">
+        <div className="w-20 h-5 md:w-[105px] h-[34px] flex justify-center items-center absolute gap-2 bg-white border-solid border-[1px] border-purple-500 rounded-sm z-[1] top-6 right-[1rem] top-[1.93rem] right-[1.79rem]">
           <CrownIcon />
           <span className="text-transparent bg-clip-text bg-space items-center justify-around font-semibold text-sm tracking-tight">
             Winner
@@ -25,14 +25,14 @@ function Card() {
         </div>
       )}
       {firstPlace && offered && (
-        <div className="w-[80px] h-[19px] md:w-[103px] md:h-[30px] flex justify-center items-center absolute gap-2 bg-space rounded-[30px] z-[1] top-[1.5rem] right-[1.40rem] md:top-[1.93rem] right-[1.79rem]">
-          <span className="text-white justify-around font-medium text-[12px] md:text-sm pr-1 tracking-tight">
+        <div className="w-20 h-[19px] md:w-[103px] md:h-[30px] flex justify-center items-center absolute gap-2 bg-space rounded-[30px] z-[1] top-6 right-[1.40rem] md:top-[1.93rem] right-[1.79rem]">
+          <span className="text-white justify-around font-medium text-3.5 md:text-sm pr-1 tracking-tight">
             Highest bid
           </span>
         </div>
       )}
       {outbid && offered && (
-        <div className="w-[80px] h-[19px] md:w-[76px] md:h-[30px] flex justify-center items-center absolute gap-2 bg-red-500 rounded-[30px] z-[1] top-[1.3rem] right-[1.40rem] md:top-[1.93rem] md:right-[1.79rem]">
+        <div className="w-20 h-[19px] md:w-[76px] md:h-[30px] flex justify-center items-center absolute gap-2 bg-error rounded-[30px] z-[1] top-[1.3rem] right-[1.40rem] md:top-[1.93rem] md:right-[1.79rem]">
           <span className="text-white justify-around font-semibold text-sm pr-1 tracking-tight">
             Outbid
           </span>
@@ -47,18 +47,18 @@ function Card() {
           <h3 className="text-sm md:text-black font-bold md:text-base h-[17px] tracking-tight">
             Bored Ape Yatch Club
           </h3>
-          <span className="text-sm md:text-black font-bold mdtext-base h-[15px] tracking-tight">
+          <span className="text-sm md:text-black font-bold md:text-base h-[15px] tracking-tight">
             #3040
           </span>
         </div>
         {isWon ? (
-          <h3 className="text-success text-center mt-5 font-bold text-md  tracking-tight">
+          <h3 className="text-success text-center mt-5 font-bold text-md tracking-tight">
             You won!
           </h3>
         ) : (
           <div className="flex justify-between mb-[-4px]">
             <div className="mt-[0.2rem]">
-              <h3 className="text-sm font-medium md:text-black font-bold md:text-[16px] tracking-tight">
+              <h3 className="text-md font-semibold md:text-paragraph font-semibold md:text-4 tracking-tight">
                 {isOwner && isClose
                   ? "Auction ends in:"
                   : isOwner
@@ -68,7 +68,7 @@ function Card() {
               <span
                 className={`${
                   isClose ? "text-error" : "text-black tracking-tight"
-                } text-sm font-bold md:font-bold md:text-base tracking-tight`}
+                } text-sm font-extrabold md:font-bold md:text-base tracking-tight`}
               >
                 {isClose && isOwner
                   ? "Closed auction"
@@ -79,8 +79,8 @@ function Card() {
                   : "2d 3h 10m 03s"}
               </span>
             </div>
-            <div className="hidden md:block mt-[0.2rem]">
-              <h3 className="text-black font-semibold text-md text-end tracking-tight">
+            <div className="hidden md:block mt-[.2rem]">
+              <h3 className="text-paragraph font-semibold text-md text-end tracking-tight">
                 {isOwner && isClose
                   ? "Winner:"
                   : isClose
@@ -92,7 +92,7 @@ function Card() {
               <span
                 className={`${
                   isClose ? "text-button" : "text-black"
-                } font-bold text-md block text-end truncate w-28 tracking-tight`}
+                } font-extrabold text-md block text-end truncate w-28 tracking-tight`}
               >
                 {isOwner && isClose
                   ? "wallet123g454545"
@@ -114,7 +114,7 @@ function Card() {
           </div>
         )}
         {offered && (
-          <div className="hidden md:block mb-[6px] mt-[6px]">
+          <div className="hidden md:block my-1.5">
             <h3 className="text-black font-extrabold text-md tracking-tight">
               Your offer:
             </h3>
