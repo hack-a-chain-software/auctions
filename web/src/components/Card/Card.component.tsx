@@ -39,8 +39,8 @@ function Card() {
         </div>
       )}
       <Image
-        src="https://s2.glbimg.com/EPCclUpcD8MwJ3gqsD5Nw1FsOgw=/0x0:595x599/924x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_63b422c2caee4269b8b34177e8876b93/internal_photos/bs/2021/c/8/vwEnBlQTOR5JMPV1qigw/captura-de-tela-2021-12-14-114837.jpg"
-        className="w-[159px] h-[159px] max-w-[159px] rounded-lg md:w-[280px] md:h-[270px] max-w-full object-cover md:rounded-md"
+        src="https://nextdrop.s3.amazonaws.com/8287doodles-nft.png"
+        className="w-full h-[159px] max-w-[159px] rounded-lg md:w-[280px] md:h-[270px] max-w-full object-cover md:rounded-md"
       />
       <div className="flex flex-col w-full ml-3 md:gap-[0.8rem] md:ml-0">
         <div className="mt-[2px] md:flex flex-col md:mt-[0.7rem]">
@@ -58,7 +58,7 @@ function Card() {
         ) : (
           <div className="flex justify-between mb-[-4px]">
             <div className="mt-[0.2rem]">
-              <h3 className="text-md font-semibold md:text-paragraph font-semibold md:text-4 tracking-tight">
+              <h3 className="text-md font-semibold md:text-paragraph md:text-4 tracking-tight">
                 {isOwner && isClose
                   ? "Auction ends in:"
                   : isOwner
@@ -68,7 +68,7 @@ function Card() {
               <span
                 className={`${
                   isClose ? "text-error" : "text-black tracking-tight"
-                } text-sm font-extrabold md:font-bold md:text-base tracking-tight`}
+                } text-sm font-extrabold md:text-base tracking-tight`}
               >
                 {isClose && isOwner
                   ? "Closed auction"

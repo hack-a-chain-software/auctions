@@ -5,6 +5,7 @@ import Empty from '../../components/Empty';
 import CardsContainer from '../../components/CardsContainer';
 import CardSkeleton from '../../components/CardSkeleton';
 import CreateAuction from '../../components/CreateAuction';
+import Card from '../../components/Card';
 
 type MyAuctionsComponentProps = {
   indexTabHeader: number,
@@ -30,9 +31,7 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
   } = props;
 
   function renderCard(card: string, key: number) {
-    //TODO AUC-4 Add card component
-    // return <Card {...card}/>;
-    return <span key={key}>{ card }</span>;
+    return <Card key={key} card={card}/>;
   }
 
   function renderCardSkeleton(ignore: null, key: number) {
