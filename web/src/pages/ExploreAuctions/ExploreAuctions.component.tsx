@@ -21,7 +21,7 @@ function ExploreAuctionsComponent(props: MyAuctionsComponentProps) {
   } = props;
 
   function renderCard(card: string, key: number) {
-    return <Card {...card}/>;
+    return <Card key={key} card={card}/>;
   }
 
   function renderCardSkeleton(ignore: null, key: number) {

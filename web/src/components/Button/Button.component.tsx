@@ -10,7 +10,7 @@ type ButtonProps = {
 function MakeOfferButton() {
   return (
     <button
-      className={`hidden md:block w-[265px] h-10 ml-[1px] rounded font-semibold text-sm leading-3.5 tracking-tight text-white bg-button
+      className={`hidden md:block w-[265px] h-10 ml-[1px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button
   `}
     >
       Make offer
@@ -21,7 +21,7 @@ function MakeOfferButton() {
 function ViewDetailsButton() {
   return (
     <button
-      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-3 rounded font-semibold text-sm leading-3.5 tracking-tight text-white bg-button`}
+      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-3 rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
     >
       View details
     </button>
@@ -31,7 +31,7 @@ function ViewDetailsButton() {
 function ViewAuctionButton() {
   return (
     <button
-      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[2px] rounded font-semibold text-sm leading-2.5 tracking-tight text-white  bg-button`}
+      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[2px] rounded font-medium text-sm leading-2.5 tracking-normal text-white  bg-button`}
     >
       View auctions
     </button>
@@ -41,7 +41,7 @@ function ViewAuctionButton() {
 function SeeOfferButton() {
   return (
     <button
-      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-semibold text-sm leading-3. tracking-tight text-white bg-button`}
+      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
     >
       See offers
     </button>
@@ -51,7 +51,7 @@ function SeeOfferButton() {
 function ClaimRewardsButton() {
   return (
     <button
-      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-4 rounded font-semibold text-sm leading-3.5 tracking-tight text-white  bg-space`}
+      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-4 rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-space`}
     >
       Claim rewards
     </button>
@@ -95,7 +95,7 @@ function Button({
 
   return (
     <button
-      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[10px] rounded font-semibold text-sm leading-3. tracking-tight text-white bg-button
+      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[10px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button
       `}
     >
       Make offer
