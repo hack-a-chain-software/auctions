@@ -6,6 +6,7 @@ import { InputValid } from './CreateAuction.container';
 import DatePicker from 'react-date-picker';
 import './CreateAuction.styles.less';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import ChooseNFT from '../ChooseNFT';
 
 type CreateAuctionComponentProps = {
   open: boolean,
@@ -66,8 +67,11 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
   function renderNFTSelector() {
     const { openNFTSelector, setOpenNFTSelector, setSelectedNFT } = props;
 
-    //TODO AUC-6 Add modal choose NFT
-    return <></>;
+    return <ChooseNFT 
+            openNFTSelector={openNFTSelector} 
+            setOpenNFTSelector={setOpenNFTSelector}
+            setSelectedNFT={setSelectedNFT}
+        />;
   }
 
   function renderImage() {

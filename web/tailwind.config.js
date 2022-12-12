@@ -107,7 +107,10 @@ module.exports = {
       },
       screens: {
         smaller: '360px'
-      }
+      },
+      gridTemplateColumns: {
+        'auto-fit': 'repeat(auto-fit, minmax(10rem, 1fr))',
+      },
     },
   },
   plugins: [
