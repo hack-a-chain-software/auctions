@@ -1,19 +1,22 @@
-import { Dialog } from "@headlessui/react";
+import { Dialog, RadioGroup } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { RadioGroup } from "@headlessui/react";
 
-type ModalProps = {
-  open: boolean;
-  onClose: () => void;
+type ChooseNFTProps = {
+  openNFTSelector: boolean;
+  setOpenNFTSelector: (open: boolean) => void;
+  setSelectedNFT: (nft: string) => void;
 };
 
-function Modal({ open, onClose }: ModalProps) {
-
+function ChooseNFT({
+  openNFTSelector,
+  setOpenNFTSelector,
+  setSelectedNFT,
+}: ChooseNFTProps) {
   return (
     <Dialog
-      open={open}
+      open={openNFTSelector}
       className="fixed inset-0 z-[55] flex justify-center items-center"
-      onClose={onClose}
+      onClose={setOpenNFTSelector}
     >
       <Dialog.Backdrop className="fixed inset-0 bg-black/50 z-50" />
       <Dialog.Panel className="relative bg-white rounded-lg shadow-md overflow-hidden w-[95%] max-w-[620px] h-[443px]">
@@ -27,12 +30,12 @@ function Modal({ open, onClose }: ModalProps) {
         </div>
         <RadioGroup
           as="ul"
-          className="grid grid-cols-auto-fit pt-[1.9rem] px-6 justify-items-center gap-2 max-h-[290px] overflow-y-auto"
+          className="grid grid-cols-auto-fit pt-[1.9rem] px-6 justify-items-center gap-1 max-h-[323px] mb-2 overflow-y-auto"
         >
           {[1, 2, 3, 4, 5, 6].map((item) => (
             <RadioGroup.Option
               as="li"
-              className="relative cursor-pointer outline-none rounded-md hover:bg-space hover:shadow-[0px_4px_30px_rgba(71, 78, 255, 0.25)] transition-all outline-none"
+              className="relative cursor-pointer outline-none rounded-md hover:bg-space hover:shadow-lg hover:shadow-button/[.25] transition-all outline-none"
               value={item}
               key={item}
             >
@@ -42,6 +45,7 @@ function Modal({ open, onClose }: ModalProps) {
                     className={`p-[.17rem] w-[173px] ${
                       checked ? "bg-space" : "bg-transparent"
                     } rounded-md`}
+                    // onClick={() => setSelectedNFT()}
                   >
                     <img
                       src="https://assets-global.website-files.com/5e73a1e3ba24f2cd5dd2232a/62f66985e6fa143898ba6762_Como%20criar%20um%20NFT%20(1)%20(1).jpg"
@@ -75,4 +79,4 @@ function Modal({ open, onClose }: ModalProps) {
   );
 }
 
-export default Modal;
+export default ChooseNFT;
