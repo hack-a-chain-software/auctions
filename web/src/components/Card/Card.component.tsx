@@ -11,8 +11,8 @@ function Card({ card }: CardProps) {
   const firstPlace = false;
   const isWon = false;
   const isOwner = false;
-  const offered = false;
-  const outbid = false;
+  const offered = true;
+  const outbid = true;
 
   return (
     <li
