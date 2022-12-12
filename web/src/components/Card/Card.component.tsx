@@ -2,7 +2,11 @@ import CrownIcon from "../../assets/svg/CrownIcon";
 import Button from "../Button";
 import Image from "../Image";
 
-function Card() {
+type CardProps = {
+  card: string;
+};
+
+function Card({ card }: CardProps) {
   const isClose = false;
   const firstPlace = false;
   const isWon = false;
@@ -12,12 +16,12 @@ function Card() {
 
   return (
     <li
-      className={`rounded-[29px] h-[275px] drop-shadow-navbar p-2 md:drop-shadow-none list-none md:w-[302px] ${
+      className={`rounded-[29px] h-auto drop-shadow-navbar p-2 md:drop-shadow-none list-none md:w-[302px] ${
         isOwner || offered ? "md:h-[537px]" : "md:h-[472px]"
       } md:p-4 bg-white border-solid border-outline border-[1px] rounded-large flex flex-col items-center relative`}
     >
       {isWon && (
-        <div className="w-20 h-5 md:w-[105px] h-[34px] flex justify-center items-center absolute gap-2 bg-white border-solid border-[1px] border-purple-500 rounded-sm z-[1] top-6 right-[1rem] top-[1.93rem] right-[1.79rem]">
+        <div className="w-20 h-5 md:w-[105px] h-[34px] flex justify-center items-center absolute gap-2 bg-white border-solid border-[1px] border-purple-500 rounded-sm z-[1] top-6 right-4 top-[1.93rem] right-[1.79rem]">
           <CrownIcon />
           <span className="text-transparent bg-clip-text bg-space items-center justify-around font-semibold text-sm tracking-tight">
             Winner
@@ -40,11 +44,14 @@ function Card() {
       )}
       <Image
         src="https://nextdrop.s3.amazonaws.com/8287doodles-nft.png"
-        className="w-full h-[159px] max-w-[159px] rounded-lg md:w-[280px] md:h-[270px] max-w-full object-cover md:rounded-md"
+        className="w-full h-auto rounded-lg md:w-[280px] md:h-[270px] md:max-w-full object-cover md:rounded-md"
       />
-      <div className="flex flex-col w-full ml-3 md:gap-[0.8rem] md:ml-0">
-        <div className="mt-[2px] md:flex flex-col md:mt-[0.7rem]">
-          <h3 className="text-sm md:text-black font-bold md:text-base h-[17px] tracking-tight">
+      <div className="flex flex-col w-full ml-3 mt-1 md:gap-[.8rem] md:ml-0">
+        <div className="mt-[2px] md:flex flex-col md:mt-[.7rem]">
+          <h3
+            className="text-sm truncate text-paragraph font-semibold md:text-base h-5 tracking-tight"
+            title="Bored Ape Yatch Club"
+          >
             Bored Ape Yatch Club
           </h3>
           <span className="text-sm md:text-black font-bold md:text-base h-[15px] tracking-tight">
@@ -57,8 +64,8 @@ function Card() {
           </h3>
         ) : (
           <div className="flex justify-between mb-[-4px]">
-            <div className="mt-[0.2rem]">
-              <h3 className="text-md font-semibold md:text-paragraph md:text-4 tracking-tight">
+            <div className="mt-[.2rem]">
+              <h3 className="text-md font-semibold text-paragraph md:text-4 tracking-tight">
                 {isOwner && isClose
                   ? "Auction ends in:"
                   : isOwner
