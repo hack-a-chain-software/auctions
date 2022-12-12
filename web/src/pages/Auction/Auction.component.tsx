@@ -35,16 +35,16 @@ function Auction() {
               );
             })}
           </div>
-          <div className="flex flex-col justify-between gap-8 xl:w-[270px]">
+          <div className="flex flex-col justify-between xl:w-[270px]">
             <span className="text-md font-medium tracking-tight">From</span>
             {[1, 2, 3, 4, 5].map((item) => {
               return (
-                <p
+                <span
                   className="md:text-xl font-medium tracking-tight text-black w-[100px] truncate"
                   title="@Userta12348545"
                 >
                   @Usertal1354645
-                </p>
+                </span>
               );
             })}
           </div>
@@ -196,9 +196,9 @@ function Auction() {
     <PageContainer>
       <div className="flex gap-1 items-center w-[95%] mx-auto mt-4 px-3 md:ml-6 md:px-2 xl:px-0 xl:mx-0 mb-[.4rem]">
         <ChevronLeftIcon className="w-[15px] h-5" />
-        <button className="text-black font-semibold text-sm tracking-tight">
+        <a href="/" className="text-black font-semibold text-sm tracking-tight">
           Back to all acutions
-        </button>
+        </a>
       </div>
       <section className="flex flex-col mt-10 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-28 md:items-start mx-auto md:mt-6 xl:w-full">
         <div className="row-span-3 w-full flex flex-col items-center md:items-start md:max-w-[413px]">

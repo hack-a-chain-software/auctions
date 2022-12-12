@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import MyAuctions from './pages/MyAuctions';
 import ExploreAuctions from './pages/ExploreAuctions';
+import Auction from './pages/Auction';
 
 type Route = {
   path: string,
@@ -11,6 +12,10 @@ export const routes = [
   {
     path: "/",
     component: <ExploreAuctions/>
+  },
+  {
+    path: "/auction",
+    component: <Auction />
   },
   {
     path: "my-auctions",
