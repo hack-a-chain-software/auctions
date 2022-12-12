@@ -208,7 +208,7 @@ function Auction() {
               alt=""
               className="w-full h-full rounded-sm object-cover"
             />
-            <div className="absolute top-44 w-[95%] mx-[0.6rem] bg-white/70 rounded-lg p-4 md:hidden">
+            <div className="absolute top-44 w-[95%] mx-[.6rem] bg-white/70 rounded-lg p-4 md:hidden">
               <span className="flex gap-4 items-center text-md font-medium tracking-tight">
                 Doodles <CheckCircleIcon className="w-4 text-success" />
               </span>
@@ -306,7 +306,7 @@ function Auction() {
               </>
             ) : (
               <>
-                <p className="w-[173px] p-[0.4rem] text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight xl:mt-8 xl:h-8">
+                <p className="w-[173px] p-[.4rem] text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight xl:mt-8 xl:h-8">
                   Minimum bid: 0,3 ETH
                 </p>
                 <input
@@ -364,7 +364,7 @@ function Auction() {
                     <span className="text-md text-black font-medium tracking-tight">
                       Date
                     </span>
-                    <span className="font-semibold tracking-teight text-black xl:text-xl">
+                    <span className="font-semibold tracking-tight text-black xl:text-xl">
                       06/12/2022
                     </span>
                   </div>
