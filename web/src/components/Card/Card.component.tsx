@@ -11,8 +11,8 @@ function Card({ card }: CardProps) {
   const firstPlace = false;
   const isWon = false;
   const isOwner = false;
-  const offered = false;
-  const outbid = false;
+  const offered = true;
+  const outbid = true;
 
   return (
     <li
@@ -46,26 +46,26 @@ function Card({ card }: CardProps) {
         src="https://nextdrop.s3.amazonaws.com/8287doodles-nft.png"
         className="w-full h-auto rounded-lg md:w-[280px] md:h-[270px] md:max-w-full object-cover md:rounded-md"
       />
-      <div className="flex flex-col w-full ml-3 mt-1 md:gap-[.8rem] md:ml-0">
+      <div className="flex flex-col w-full ml-3 md:gap-[.8rem] md:ml-0">
         <div className="mt-[2px] md:flex flex-col md:mt-[.7rem]">
           <h3
-            className="text-sm truncate text-paragraph font-semibold md:text-base h-5 tracking-tight"
+            className="text-sm break-keep text-paragraph font-semibold md:text-base tracking-tight"
             title="Bored Ape Yatch Club"
           >
             Bored Ape Yatch Club
           </h3>
-          <span className="text-sm md:text-black font-bold md:text-base h-[15px] tracking-tight">
+          <p className="text-sm md:text-black font-extrabold md:text-base h-[15px] mt-[-4px] tracking-tight xl:mt-[-8px]">
             #3040
-          </span>
+          </p>
         </div>
         {isWon ? (
           <h3 className="text-success text-center mt-5 font-bold text-md tracking-tight">
             You won!
           </h3>
         ) : (
-          <div className="flex justify-between mb-[-4px]">
+          <div className="flex justify-between mt-1 mb-[-4px]">
             <div className="mt-[.2rem]">
-              <h3 className="text-md font-semibold text-paragraph md:text-4 tracking-tight">
+              <h3 className="text-sm font-semibold text-paragraph md:text-4 tracking-tight">
                 {isOwner && isClose
                   ? "Auction ends in:"
                   : isOwner
@@ -122,7 +122,7 @@ function Card({ card }: CardProps) {
         )}
         {offered && (
           <div className="hidden md:block my-1.5">
-            <h3 className="text-black font-extrabold text-md tracking-tight">
+            <h3 className="text-paragraph font-semibold text-md tracking-tight">
               Your offer:
             </h3>
             <span
