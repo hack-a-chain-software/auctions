@@ -15,7 +15,7 @@ function Auction() {
   function renderDefautOfferState() {
     return (
       <div
-        className={`mt-8 border-solid border-[1px] rounded-lg border-outline bg-white ml-auto h-[429px]`}
+        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto h-[429px] md:max-w-full xl:max-w-[761px]`}
       >
         <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
           <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
@@ -25,7 +25,7 @@ function Auction() {
         <div
           className={`p-6 flex justify-between max-h-[350px] overflow-y-auto`}
         >
-          <div className="flex flex-col justify-between gap-8">
+          <div className="flex flex-col justify-between gap-7">
             <span className="text-md font-medium tracking-teight">Price</span>
             {[1, 2, 3, 4, 5].map((item) => {
               return (
@@ -39,8 +39,11 @@ function Auction() {
             <span className="text-md font-medium tracking-tight">From</span>
             {[1, 2, 3, 4, 5].map((item) => {
               return (
-                <p className="md:text-xl font-medium tracking-tight text-black w-[90px] ">
-                  @Usertal
+                <p
+                  className="md:text-xl font-medium tracking-tight text-black w-[100px] truncate"
+                  title="@Userta12348545"
+                >
+                  @Usertal1354645
                 </p>
               );
             })}
@@ -53,7 +56,7 @@ function Auction() {
   function renderFirstPlaceOfferState() {
     return (
       <div
-        className={`mt-8 border-solid border-[1px] rounded-lg border-outline bg-white ml-auto h-[429px]`}
+        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto h-[429px] xl:max-w-[761px]`}
       >
         <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
           <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
@@ -86,14 +89,20 @@ function Auction() {
             {[1, 2, 3, 4, 5].map((item) => {
               if (item === 1) {
                 return (
-                  <p className="md:text-xl font-semibold tracking-tight text-black flex items-center gap-1">
-                    @Usertal
+                  <p
+                    className="md:text-xl font-semibold tracking-tight text-black truncate w-[100px]"
+                    title="@Usertal1354645"
+                  >
+                    @Usertal1354645
                   </p>
                 );
               }
               return (
-                <p className="md:text-xl font-medium tracking-tight text-black w-[90px] ">
-                  @Usertal
+                <p
+                  className="md:text-xl font-medium tracking-tight text-black w-[100px] truncate"
+                  title="@Usertal1354645"
+                >
+                  @Usertal1354645
                 </p>
               );
             })}
@@ -106,7 +115,7 @@ function Auction() {
   function renderOffersWinState() {
     return (
       <div
-        className={`mt-8 border-solid border-[1px] rounded-lg border-outline bg-white ml-auto h-[498px]`}
+        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto h-[498px] xl:max-w-[761px]`}
       >
         <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
           <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
@@ -151,22 +160,29 @@ function Auction() {
                   <p
                     className={`md:text-xl ${
                       isWon || closedAuction ? "font-semibold" : "font-medium"
-                    } tracking-tight text-green-500 flex gap-3`}
+                    } tracking-tight text-green-500 w-[100px] truncate`}
+                    title="@Usertal1354645"
                   >
-                    @Usertal
+                    @Usertal1354645
                   </p>
                 );
               }
               if (item === 1) {
                 return (
-                  <p className="md:text-xl font-semibold tracking-tight text-black flex items-center gap-1">
-                    @Usertal
+                  <p
+                    className="md:text-xl font-semibold tracking-tight text-black w-[100px] truncate"
+                    title="@Usertal1354645"
+                  >
+                    @Usertal1354645
                   </p>
                 );
               }
               return (
-                <p className="md:text-xl font-medium tracking-tight text-black w-[90px] ">
-                  @Usertal
+                <p
+                  className="md:text-xl font-medium tracking-tight text-black w-[100px] truncate"
+                  title="@Usertal1354645"
+                >
+                  @Usertal1354645
                 </p>
               );
             })}
@@ -178,15 +194,15 @@ function Auction() {
 
   return (
     <PageContainer>
-      <div className="flex gap-1 items-center w-[95%] max-w-[200px] m-auto mt-4 px-3 md:ml-6 md:px-2 xl:px-0 xl:mx-0 mb-[.4rem]">
+      <div className="flex gap-1 items-center w-[95%] mx-auto mt-4 px-3 md:ml-6 md:px-2 xl:px-0 xl:mx-0 mb-[.4rem]">
         <ChevronLeftIcon className="w-[15px] h-5" />
         <button className="text-black font-semibold text-sm tracking-tight">
           Back to all acutions
         </button>
       </div>
       <section className="flex flex-col mt-10 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-28 md:items-start mx-auto md:mt-6 xl:w-full">
-        <div className="row-span-3 max-w-[413px] flex flex-col items-center md:items-start">
-          <div className="w-[95%] max-w-[411px] h-[300px] md:h-[300px] md:w-full xl:h-[411px] relative">
+        <div className="row-span-3 w-full flex flex-col items-center md:items-start md:max-w-[413px]">
+          <div className="w-[95%] max-w-[413px] h-[300px] md:h-[300px] md:w-full xl:h-[411px] relative">
             <img
               src="https://www.bitmag.com.br/wp-content/uploads/2022/03/monkey-7009603_1920.jpg"
               alt=""
@@ -204,7 +220,7 @@ function Auction() {
               </span>
             </div>
           </div>
-          <div className="w-full max-w-[411px] mt-5">
+          <div className="w-[95%] mt-5 max-w-[413px]">
             <h3 className="text-black text-xl font-semibold tracking-tight">
               Description
             </h3>
@@ -216,7 +232,7 @@ function Auction() {
               system.
             </p>
           </div>
-          <div className="hidden md:block mt-[3.3rem] w-full max-w-[420px] border-solid border-[1px] rounded-lg border-outline bg-white xl:h-[360px]">
+          <div className="hidden md:block mt-[3.3rem] w-full max-w-[420px] border-solid border-[1px] rounded-lg border-outline bg-white md:h-[360px]">
             <div className="flex items-center h-[52px] border-b-[1px]">
               <h3 className="px-7 text-md font-semibold text-black tracking-tight">
                 Details
@@ -254,7 +270,7 @@ function Auction() {
             </div>
           </div>
         </div>
-        <div className="col-span-2 w-full max-w-[411px] md:max-w-[761px] xl:pl-0">
+        <div className="col-span-2 w-full md:max-w-[761px] xl:pl-0">
           <div className="hidden md:flex flex-col mb-10 w-full">
             <div className="flex justify-between pr-28">
               <span className="flex gap-[.4rem] items-center text-xl font-medium tracking-tight">
@@ -277,7 +293,7 @@ function Auction() {
               By <strong>@johnsnow</strong>
             </span>
           </div>
-          <div className="flex flex-col mt-9 gap-3 mx-auto w-full max-w-[411px] md:max-w-[761px] md:mx-0">
+          <div className="flex flex-col mt-9 gap-3 mx-auto max-w-[413px] md:max-w-[761px] md:mx-0">
             {isWon ? (
               <>
                 <span className="mt-6 max-w-[419px] text-green-500 flex gap-3 py-1 text-xl font-semibold items-center">
@@ -321,8 +337,8 @@ function Auction() {
             )}
           </div>
         </div>
-        <div className="row-span-2 col-span-2 w-[95%] xl:w-[761px] mt-6 xl:mt-[.4rem]">
-          <div className="mt-2 w-full border-solid border-[1px] rounded-lg border-outline bg-white ml-auto xl:h-[202px]">
+        <div className="row-span-2 col-span-2 w-[95%] mx-auto xl:w-[761px] mt-6 xl:mt-[.4rem]">
+          <div className="mt-2 w-full max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto xl:h-[202px] md:max-w-[761px]">
             <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
               <h3 className="px-8 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
                 <ListBulletIcon className="w-6" /> Your offers
@@ -344,7 +360,7 @@ function Auction() {
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2 items-start justify-between xl:mr-6">
+                  <div className="flex flex-col gap-2 items-stfirstPlaceart justify-between xl:mr-6">
                     <span className="text-md text-black font-medium tracking-tight">
                       Date
                     </span>
@@ -365,7 +381,7 @@ function Auction() {
             : isWon || closedAuction
             ? renderOffersWinState()
             : renderDefautOfferState()}
-          <div className="mt-8 w-full max-w-[469px] border-solid border-[1px] rounded-lg border-outline m-auto bg-white md:hidden">
+          <div className="mt-8 w-full max-w-[413px] border-solid border-[1px] rounded-lg border-outline m-auto bg-white md:hidden">
             <div className="flex items-center h-[52px] border-b-[1px]">
               <h3 className="px-8 text-md font-semibold text-black tracking-tight">
                 Details
