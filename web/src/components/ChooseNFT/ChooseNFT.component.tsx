@@ -51,7 +51,7 @@ function ChooseNFT({
                     <img
                       src="https://assets-global.website-files.com/5e73a1e3ba24f2cd5dd2232a/62f66985e6fa143898ba6762_Como%20criar%20um%20NFT%20(1)%20(1).jpg"
                       alt=""
-                      className="w-[171px] h-[170px] object-cover rounded-[10px] hover:drop-shadow-xl outline-none"
+                      className="w-[171px] h-[175px] object-cover rounded-[10px] hover:drop-shadow-xl outline-none"
                     />
                   </div>
                   <div className="flex flex-col justify-center absolute backdrop-blur-cover bg-white/80 bottom-3 rounded h-[46px] w-[149px] left-[.8rem]">
