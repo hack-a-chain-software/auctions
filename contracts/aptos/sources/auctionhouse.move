@@ -28,21 +28,18 @@ module auctionhouse::AuctionHouse {
     const ERROR_WRONG_COIN_PASSED: u64 = 4;
     const ERROR_OWNER_RESTRICTED_FUNCTION: u64 = 5;
     const ERROR_INSTANCE_DOES_NOT_HAVE_USER_ALLOWLIST: u64 = 6;
-
-    const ERROR_INVALID_BUYER: u64 = 0;
-    const ERROR_INSUFFICIENT_BID: u64 = 1;
-    const ERROR_AUCTION_INACTIVE: u64 = 2;
-    const ERROR_AUCTION_NOT_COMPLETE: u64 = 3;
-    const ERROR_NOT_CLAIMABLE: u64 = 4;
-    const ERROR_CLAIM_COINS_FIRST: u64 = 5;
-    const ERROR_ALREADY_CLAIMED: u64 = 6;
+    const ERROR_INSUFFICIENT_BID: u64 = 7;
+    const ERROR_AUCTION_INACTIVE: u64 = 8;
+    const ERROR_AUCTION_NOT_COMPLETE: u64 = 9;
+    const ERROR_NOT_CLAIMABLE: u64 = 10;
+    const ERROR_ALREADY_CLAIMED: u64 = 11;
 
     // System consts
     
     /// Each bid must run for at least 10 minutes before ending the auction
     const MINIMUM_TIME_AFTER_BID: u64 = 600000000;
 
-    /// Auction representatio to be stored
+    /// Auction representation to be stored
     struct Auction has store {
         creator: address,
         start_time: u64,
@@ -52,7 +49,7 @@ module auctionhouse::AuctionHouse {
         min_increment: u64,
         current_bid: u64,
         current_bidder: address,
-        bid_events: EventHandle<BidEvent>,
+        bid_events: TableVector<BidEvent>,
         locked_token_id: TokenId,
         locked_token: Option<Token>,
         coins_claimed: bool,
@@ -103,6 +100,8 @@ module auctionhouse::AuctionHouse {
         bid_auctions: Table<address, TableVector<u64>>,
     }
 
+    /// Internal function to initialize query helper struct
+    /// if account doesn't have it yet
     fun create_query_helper(sender: &signer, sender_addr: address) {
         if (!exists<UserQueryHelper>(sender_addr)) {
             move_to(sender, UserQueryHelper {
@@ -147,7 +146,7 @@ module auctionhouse::AuctionHouse {
     }
 
     // Set of data sent to the event stream during a bidding for a token
-    struct BidEvent has store, drop {
+    struct BidEvent has store, drop, copy {
         id: u64,
         timestamp: u64,
         bid: u64,
@@ -184,6 +183,7 @@ module auctionhouse::AuctionHouse {
         claim_token_events: EventHandle<ClaimTokenEvent>,
     }
     
+    /// Used to initialize contract to a new account
     public entry fun initialize_auction_house(
         sender: &signer, 
         restrict_users: bool
@@ -212,11 +212,10 @@ module auctionhouse::AuctionHouse {
         });
     }
 
-    public entry fun create_auction(
+    public entry fun create_auction<CoinType>(
         sender: &signer, 
         auction_house_address: address,
         end_time: u64,
-        auction_coin: TypeInfo,
         min_selling_price: u64,
         min_increment: u64,
         creator: address,
@@ -225,6 +224,7 @@ module auctionhouse::AuctionHouse {
         property_version: u64
     ): u64 acquires AuctionHouse, UserQueryHelper {
         let sender_addr = signer::address_of(sender);
+        let auction_coin = type_info::type_of<CoinType>();
         let auction_house = borrow_global_mut<AuctionHouse>(auction_house_address);
         let start_time = timestamp::now_microseconds();
 
@@ -270,7 +270,7 @@ module auctionhouse::AuctionHouse {
             min_increment,
             current_bid: 0,
             current_bidder: sender_addr,
-            bid_events: account::new_event_handle<BidEvent>(sender),
+            bid_events: table_vector::new<BidEvent>(),
             locked_token_id: token_id,
             locked_token: option::some(token),
             coins_claimed: false,
@@ -369,7 +369,7 @@ module auctionhouse::AuctionHouse {
             },
         );
 
-        event::emit_event<BidEvent>(
+        table_vector::push<BidEvent>(
             &mut auction_item.bid_events,
             BidEvent { 
                 id, 
@@ -592,6 +592,9 @@ module auctionhouse::AuctionHouse {
             if (current >= len) { break };
             let item = table_vector::get_borrow(auction_items, current);
             vector::push_back(&mut response, to_consumable_auction(current, item));
+
+            counter = counter + 1;
+            current = current + 1;
         };
         response
     }
@@ -635,11 +638,14 @@ module auctionhouse::AuctionHouse {
             let auction_id = *table_vector::get_borrow(user_items, current);
             let item = table_vector::get_borrow(all_items, auction_id);
             vector::push_back(&mut response, to_consumable_auction(current, item));
+
+            counter = counter + 1;
+            current = current + 1;
         };
         response
     }
 
-     public entry fun get_auctions_bid_by_account_len(auction_house_address: address, user: address): u64 acquires UserQueryHelper {
+    public entry fun get_auctions_bid_by_account_len(auction_house_address: address, user: address): u64 acquires UserQueryHelper {
         let helper = borrow_global<UserQueryHelper>(user);
         if (!table::contains(&helper.bid_auctions, auction_house_address)) {
             0
@@ -678,6 +684,42 @@ module auctionhouse::AuctionHouse {
             let auction_id = *table_vector::get_borrow(user_items, current);
             let item = table_vector::get_borrow(all_items, auction_id);
             vector::push_back(&mut response, to_consumable_auction(current, item));
+
+            counter = counter + 1;
+            current = current + 1;
+        };
+        response
+    }
+
+    public entry fun get_auction_bids_len(auction_house_address: address, id: u64): u64 acquires AuctionHouse {
+        let auction_house = borrow_global<AuctionHouse>(auction_house_address);
+        let auction = table_vector::get_borrow(&auction_house.auctions, id);
+        table_vector::len(&auction.bid_events) 
+    }
+
+    public entry fun get_auction_bids_paginated(
+        auction_house_address: address,
+        id: u64,
+        start: u64,
+        limit: u64
+    ): vector<BidEvent> acquires AuctionHouse {
+        let auction_house = borrow_global<AuctionHouse>(auction_house_address);
+        let auction = table_vector::get_borrow(&auction_house.auctions, id);
+        let bid_events = &auction.bid_events;
+        let len = table_vector::len(bid_events);
+
+        let response = vector::empty<BidEvent>();
+        
+        let counter = 0;
+        let current = start;
+        
+        while (counter < limit) {
+            if (current >= len) { break };
+            let item = table_vector::get_borrow(bid_events, current);
+            vector::push_back(&mut response, *item);
+
+            counter = counter + 1;
+            current = current + 1;
         };
         response
     }
