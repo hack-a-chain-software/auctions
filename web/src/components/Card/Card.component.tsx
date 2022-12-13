@@ -44,7 +44,7 @@ function Card({ card }: CardProps) {
       )}
       <Image
         src="https://nextdrop.s3.amazonaws.com/8287doodles-nft.png"
-        className="w-full h-auto  rounded-lg md:w-[280px] md:h-[270px] md:max-w-full object-cover md:rounded-md"
+        className="w-full h-auto rounded-lg md:w-[280px] md:h-[270px] md:max-w-full object-cover md:rounded-md"
       />
       <div className="flex flex-col w-full ml-3 md:gap-[.8rem] md:ml-0">
         <div className="mt-[4px] ml-[1px] md:flex flex-col md:mt-[.7rem]">
