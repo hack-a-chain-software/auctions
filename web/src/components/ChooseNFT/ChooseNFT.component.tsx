@@ -33,7 +33,7 @@ function ChooseNFT({
           as="ul"
           className="grid grid-cols-auto-fit pt-[1.9rem] px-6 justify-items-center gap-1 h-[323px] max-h-[323px] mb-2 overflow-y-auto"
         >
-          {[1, 2, 3].map((item) => (
+          {[1, 2, 3,4].map((item) => (
             <RadioGroup.Option
               as="li"
               className="h-[180px] relative cursor-pointer outline-none rounded-md hover:bg-space transition-all outline-none"
@@ -54,8 +54,8 @@ function ChooseNFT({
                       className="w-[171px] h-[175px] object-cover rounded-[10px] hover:drop-shadow-xl outline-none"
                     />
                   </div>
-                  <div className="flex flex-col justify-center absolute backdrop-blur-cover bg-white/80 bottom-3 rounded h-[46px] w-[149px] left-[0.8rem]">
-                    <h3 className="text-black font-bold text-sm ml-4 tracking-tight ">
+                  <div className="flex flex-col justify-center absolute backdrop-blur-cover bg-white/80 bottom-3 rounded h-[46px] w-[149px] left-[.8rem]">
+                    <h3 className="text-black font-bold text-sm ml-4 tracking-tight">
                       Doodles
                     </h3>
                     <span className="text-black font-bold text-sm ml-4 tracking-tight">
