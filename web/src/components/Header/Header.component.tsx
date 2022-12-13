@@ -14,7 +14,7 @@ function Header() {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <header className="bg-white flex flex-col justify-between items-center w-full mb-2 md:h-20 sticky top-0 backdrop-blur-sm bg-white/50 xl:px-14 xl:pl-20 xl:py-2">
+    <header className="bg-white flex flex-col justify-between items-center w-full mb-2 md:h-20 sticky top-0 z-[1] backdrop-blur-sm bg-white/50 xl:px-14 xl:pl-20 xl:py-2">
       <div className="flex justify-between items-center p-3 pr-7 pl-5 w-full">
         <Bars3Icon
           className="text-black w-6 md:hidden"
@@ -85,7 +85,7 @@ function Header() {
           </ul>
         </nav>
         <Transition.Root show={open} as={Fragment}>
-          <Dialog as="div" className="relative md:hidden" onClose={setOpen}>
+          <Dialog as="div" className="relative z-[2] md:hidden" onClose={setOpen}>
             <Transition.Child
               as={Fragment}
               enter="ease-in-out duration-500"
@@ -112,7 +112,7 @@ function Header() {
                   >
                     <Dialog.Panel
                       className="
-                      w-[258px]
+                      w-[260px]
                       shadow
                       shadow-sw-navbar
                       pointer-events-auto
@@ -133,7 +133,7 @@ function Header() {
                       </div>
                       <nav>
                         <ul className="flex flex-col gap-3 mt-4 justify-center tracking-tight">
-                          <li className="h-[35px] border-b-[2px] w-full px-6">
+                          <li className="h-[35px] border-b-[2px] w-full px-[1.6rem]">
                             <a
                               href="/"
                               className="text-black font-semibold text-sm"
@@ -143,7 +143,8 @@ function Header() {
                           </li>
                           <Popover
                             as="li"
-                            className="h-[33px] border-b-[2px] w-full px-6"
+                            className="h-[33px] border-b-[2px] w-full px-7"
+
                           >
                             {({ open }) => (
                               <>
@@ -193,7 +194,7 @@ function Header() {
         <nav className="md:hidden">
           <ul className="flex items-center gap-14">
             <li>
-              <a href="/" className="text-black text-sm font-semibold">
+              <a href="/" className="text-black text-sm font-semibold tracking-tight">
                 Explore auctions
               </a>
             </li>
