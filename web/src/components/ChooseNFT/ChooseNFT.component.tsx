@@ -36,22 +36,22 @@ function ChooseNFT({
           {[1, 2, 3].map((item) => (
             <RadioGroup.Option
               as="li"
-              className="h-[175px] relative cursor-pointer outline-none rounded-md shadow shadow-transparent hover:bg-space hover:shadow-[#474eff40] transition-all outline-none"
+              className="h-[180px] relative cursor-pointer outline-none rounded-md hover:bg-space transition-all outline-none"
               value={item}
               key={item}
             >
               {({ checked }) => (
                 <>
                   <div
-                    className={`p-[.17rem] w-[173px] h-[175px] ${
-                      checked ? "bg-space" : "bg-transparent"
-                    } rounded-md`}
+                    className={`p-[.17rem] w-[175px] h-[180px] shadow shadow-transparent ${
+                      checked ? "bg-space shadow-button/[.25]" : "bg-transparent"
+                    } rounded-md hover:shadow-button/[.25]`}
                     // onClick={() => setSelectedNFT()}
                   >
                     <img
                       src="https://assets-global.website-files.com/5e73a1e3ba24f2cd5dd2232a/62f66985e6fa143898ba6762_Como%20criar%20um%20NFT%20(1)%20(1).jpg"
                       alt=""
-                      className="w-[171px] h-[170px] object-cover rounded-[10px] hover:drop-shadow-xl outline-none"
+                      className="w-[171px] h-[175px] object-cover rounded-[10px] hover:drop-shadow-xl outline-none"
                     />
                   </div>
                   <div className="flex flex-col justify-center absolute backdrop-blur-cover bg-white/80 bottom-3 rounded h-[46px] w-[149px] left-[0.8rem]">
