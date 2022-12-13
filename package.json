@@ -6,7 +6,7 @@
     "scripts": {},
     "workspaces": {
         "packages": [
-            "web/*",
+            "web",
             "contracts/*"
         ],
         "nohoist": [

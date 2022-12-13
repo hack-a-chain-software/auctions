@@ -14,7 +14,6 @@ module auctionhouse::AuctionHouse {
 
     use std::option::{Self, Option};
     use std::event::{Self, EventHandle};
-    use std::error;
     use std::signer;
     use std::string::String;
     use std::vector;
@@ -222,7 +221,7 @@ module auctionhouse::AuctionHouse {
         collection_name: String,
         name: String,
         property_version: u64
-    ): u64 acquires AuctionHouse, UserQueryHelper {
+    ) acquires AuctionHouse, UserQueryHelper {
         let sender_addr = signer::address_of(sender);
         let auction_coin = type_info::type_of<CoinType>();
         let auction_house = borrow_global_mut<AuctionHouse>(auction_house_address);
@@ -300,9 +299,6 @@ module auctionhouse::AuctionHouse {
         // add created auction to query helper
         insert_helper_created(query_helper, auction_house_address, auction_id);
         
-        // return auction_id
-        auction_id
-        
     }
 
     fun is_auction_active(auction: &Auction): bool {
@@ -354,9 +350,12 @@ module auctionhouse::AuctionHouse {
         insert_helper_bid(query_helper, auction_house_address, id);
 
         // return previous high bid to previous high bidder
-        let current_bidder_locked_coins = &mut borrow_global_mut<CoinEscrow<CoinType>>(auction_item.current_bidder).locked_coins;
-        let coins = table::remove(current_bidder_locked_coins, id);
-        coin::deposit<CoinType>(auction_item.current_bidder, coins);
+        // does not execute if there are no current bids (current_bid == 0)
+        if (auction_item.current_bid > 0) {
+            let current_bidder_locked_coins = &mut borrow_global_mut<CoinEscrow<CoinType>>(auction_item.current_bidder).locked_coins;
+            let coins = table::remove(current_bidder_locked_coins, id);
+            coin::deposit<CoinType>(auction_item.current_bidder, coins);
+        };
 
         // emit bid events
         event::emit_event<BidEvent>(
