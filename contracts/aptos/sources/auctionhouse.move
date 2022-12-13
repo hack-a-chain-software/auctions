@@ -99,15 +99,15 @@ module auctionhouse::AuctionHouse {
     /// stored in each user's account to facilitate querying
     /// data that might be relevant for them
     struct UserQueryHelper has key {
-        created_auctions: Table<address, TableSet<u64>>,
-        bid_auctions: Table<address, TableSet<u64>>,
+        created_auctions: Table<address, TableVector<u64>>,
+        bid_auctions: Table<address, TableVector<u64>>,
     }
 
     fun create_query_helper(sender: &signer, sender_addr: address) {
         if (!exists<UserQueryHelper>(sender_addr)) {
             move_to(sender, UserQueryHelper {
-                created_auctions: table::new<address, TableSet<u64>>(),
-                bid_auctions: table::new<address, TableSet<u64>>(),
+                created_auctions: table::new<address, TableVector<u64>>(),
+                bid_auctions: table::new<address, TableVector<u64>>(),
             });
         };
     }
@@ -118,10 +118,10 @@ module auctionhouse::AuctionHouse {
         id: u64
     ) {
         if (!table::contains(&helper.created_auctions, auction_house_account)) {
-            table::add(&mut helper.created_auctions, auction_house_account, table_set::new<u64>());
+            table::add(&mut helper.created_auctions, auction_house_account, table_vector::new<u64>());
         };
         let house_set = table::borrow_mut(&mut helper.created_auctions, auction_house_account);
-        table_set::insert(house_set, id);
+        table_vector::push(house_set, id);
     }
 
     fun insert_helper_bid(
@@ -130,10 +130,10 @@ module auctionhouse::AuctionHouse {
         id: u64
     ) {
         if (!table::contains(&helper.bid_auctions, auction_house_account)) {
-            table::add(&mut helper.bid_auctions, auction_house_account, table_set::new<u64>());
+            table::add(&mut helper.bid_auctions, auction_house_account, table_vector::new<u64>());
         };
         let house_set = table::borrow_mut(&mut helper.bid_auctions, auction_house_account);
-        table_set::insert(house_set, id);
+        table_vector::push(house_set, id);
     }
 
     // Set of data sent to the event stream during a auctioning a token
@@ -596,29 +596,90 @@ module auctionhouse::AuctionHouse {
         response
     }
 
-    // public entry fun get_auctions_created_by_account_len(auction_house_address: address, user: address): u64 acquires UserQueryHelper {
-    //     let auction_house = borrow_global<AuctionHouse>(auction_house_address);
-    //     table_vector::len(&auction_house.auctions)
-    // }
+    public entry fun get_auctions_created_by_account_len(auction_house_address: address, user: address): u64 acquires UserQueryHelper {
+        let helper = borrow_global<UserQueryHelper>(user);
+        if (!table::contains(&helper.created_auctions, auction_house_address)) {
+            0
+        } else {
+            let created_set = table::borrow(&helper.created_auctions, auction_house_address);
+            table_vector::len(created_set)
+        }
+    }
 
-    // public entry fun get_auctions_paginated(
-    //     auction_house_address: address,
-    //     start: u64,
-    //     limit: u64
-    // ): vector<ConsumableAuction> acquires AuctionHouse {
-    //     let auction_house = borrow_global<AuctionHouse>(auction_house_address);
-    //     let auction_items = &auction_house.auctions;
-    //     let len = table_vector::len(auction_items);
+    public entry fun get_auctions_created_by_account_paginated(
+        auction_house_address: address,
+        user: address,
+        start: u64,
+        limit: u64
+    ): vector<ConsumableAuction> acquires AuctionHouse, UserQueryHelper 
+    {
+        let auction_house = borrow_global<AuctionHouse>(auction_house_address);
+        let helper = borrow_global<UserQueryHelper>(user);
+
+        let response = vector::empty<ConsumableAuction>();
+
+        if (!table::contains(&helper.created_auctions, auction_house_address)) {
+            return response
+        };
+
+        let user_items = table::borrow(&helper.created_auctions, auction_house_address);
+        let user_len = table_vector::len(user_items);
+
+        let all_items = &auction_house.auctions;
         
-    //     let counter = 0;
-    //     let current = start;
-    //     let response = vector::empty<ConsumableAuction>();
-    //     while (counter < limit) {
-    //         if (current >= len) { break };
-    //         let item = table_vector::get_borrow(auction_items, current);
-    //         vector::push_back(&mut response, to_consumable_auction(current, item));
-    //     };
-    //     response
-    // }
+        let counter = 0;
+        let current = start;
+        
+        while (counter < limit) {
+            if (current >= user_len) { break };
+            let auction_id = *table_vector::get_borrow(user_items, current);
+            let item = table_vector::get_borrow(all_items, auction_id);
+            vector::push_back(&mut response, to_consumable_auction(current, item));
+        };
+        response
+    }
+
+     public entry fun get_auctions_bid_by_account_len(auction_house_address: address, user: address): u64 acquires UserQueryHelper {
+        let helper = borrow_global<UserQueryHelper>(user);
+        if (!table::contains(&helper.bid_auctions, auction_house_address)) {
+            0
+        } else {
+            let created_set = table::borrow(&helper.bid_auctions, auction_house_address);
+            table_vector::len(created_set)
+        }
+    }
+
+    public entry fun get_auctions_bid_by_account_paginated(
+        auction_house_address: address,
+        user: address,
+        start: u64,
+        limit: u64
+    ): vector<ConsumableAuction> acquires AuctionHouse, UserQueryHelper 
+    {
+        let auction_house = borrow_global<AuctionHouse>(auction_house_address);
+        let helper = borrow_global<UserQueryHelper>(user);
+
+        let response = vector::empty<ConsumableAuction>();
+
+        if (!table::contains(&helper.bid_auctions, auction_house_address)) {
+            return response
+        };
+
+        let user_items = table::borrow(&helper.bid_auctions, auction_house_address);
+        let user_len = table_vector::len(user_items);
+
+        let all_items = &auction_house.auctions;
+        
+        let counter = 0;
+        let current = start;
+        
+        while (counter < limit) {
+            if (current >= user_len) { break };
+            let auction_id = *table_vector::get_borrow(user_items, current);
+            let item = table_vector::get_borrow(all_items, auction_id);
+            vector::push_back(&mut response, to_consumable_auction(current, item));
+        };
+        response
+    }
 }
 
