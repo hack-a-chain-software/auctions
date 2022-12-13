@@ -5,6 +5,7 @@ import {
 } from "@heroicons/react/24/solid";
 import CrownIcon from "../../assets/svg/CrownIcon";
 import PageContainer from "../../components/PageContainer";
+import "./Auction.styles.less";
 
 function Auction() {
   const offered = false;
@@ -202,7 +203,7 @@ function Auction() {
           Back to all acutions
         </a>
       </div>
-      <section className="flex flex-col mt-10 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-20 md:items-start mx-auto md:mt-6 xl:w-full">
+      <section className="Auction flex flex-col mt-10 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-20 md:items-start mx-auto md:mt-6 xl:w-full">
         <div className="row-span-3 flex flex-col w-full items-center md:items-start md:max-w-[419px] xl:w-[410px]">
           <div className="w-[95%] max-w-[419px] md:w-full relative">
             <img
@@ -282,7 +283,7 @@ function Auction() {
             <h3 className="font-bold text-[28px] tracking-normal pl-1 mt-1">
               Doodles #3366
             </h3>
-            <span className="text-md font-medium text-black tracking-tight mt-1">
+            <span className="text-md font-medium text-black tracking-tight mt-1 ml-1">
               By <strong>@johnsnow</strong>
             </span>
           </div>
@@ -303,9 +304,11 @@ function Auction() {
                   Minimum bid: 0,3 ETH
                 </p>
                 <input
-                  type="text"
+                  type="number"
+                  min={0}
+                  step={0.01}
                   placeholder="Type your bid"
-                  className={`w-full h-10 text-sm bg-bid rounded placeholder-paragraph px-4 outline-none max-w-[440px] xl:mb-1 xl:max-w-[340px] ${
+                  className={`Price w-full h-10 text-sm bg-bid rounded placeholder-paragraph px-4 outline-none max-w-[440px] xl:mb-1 xl:max-w-[340px] ${
                     closedAuction && "cursor-not-allowed"
                   }`}
                   disabled={closedAuction}
