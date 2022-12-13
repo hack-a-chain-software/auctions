@@ -15,36 +15,34 @@ function Auction() {
   function renderDefautOfferState() {
     return (
       <div
-        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto h-[429px] md:max-w-full xl:max-w-[761px]`}
+        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto  md:max-w-full xl:max-w-[761px]`}
       >
         <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
           <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
             <ListBulletIcon className="w-6" /> Offers
           </h3>
         </div>
-        <div
-          className={`p-6 flex justify-between max-h-[350px] overflow-y-auto`}
-        >
-          <div className="flex flex-col justify-between gap-7">
-            <span className="text-md font-medium tracking-teight">Price</span>
+        <div className={`p-6 flex justify-between overflow-y-auto`}>
+          <div>
+            <p className="text-md font-medium tracking-tight mb-7">Price</p>
             {[1, 2, 3, 4, 5].map((item) => {
               return (
-                <span className="md:text-xl font-medium tracking-tight text-black">
+                <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
                   0,32 ETH
-                </span>
+                </p>
               );
             })}
           </div>
-          <div className="flex flex-col justify-between xl:w-[270px]">
-            <span className="text-md font-medium tracking-tight">From</span>
+          <div className="xl:w-[270px]">
+            <p className="text-md font-medium tracking-tight mb-7">From</p>
             {[1, 2, 3, 4, 5].map((item) => {
               return (
-                <span
-                  className="md:text-xl font-medium tracking-tight text-black w-[100px] truncate"
+                <p
+                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
                   title="@Userta12348545"
                 >
                   @Usertal1354645
-                </span>
+                </p>
               );
             })}
           </div>
@@ -56,41 +54,43 @@ function Auction() {
   function renderFirstPlaceOfferState() {
     return (
       <div
-        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto h-[429px] xl:max-w-[761px]`}
+        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto xl:max-w-[761px]`}
       >
         <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
           <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
             <ListBulletIcon className="w-7" /> Offers
           </h3>
         </div>
-        <div
-          className={`p-6 flex justify-between max-h-[350px] overflow-y-auto`}
-        >
-          <div className="flex flex-col justify-between gap-8">
-            <span className="text-md font-medium tracking-teight">Price</span>
+        <div className={`p-6 flex justify-between overflow-y-auto`}>
+          <div>
+            <span className="text-md font-medium tracking-teight mb-7">
+              Price
+            </span>
             {[1, 2, 3, 4, 5].map((item) => {
               if (item === 1) {
                 return (
-                  <span className="md:text-xl font-bold tracking-tight text-black flex items-center gap-4">
+                  <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
                     0,32 ETH <CrownIcon />
-                  </span>
+                  </p>
                 );
               }
 
               return (
-                <span className="md:text-xl font-medium tracking-tight text-black">
+                <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
                   0,32 ETH
-                </span>
+                </p>
               );
             })}
           </div>
-          <div className="flex flex-col justify-between gap-8 xl:w-[270px]">
-            <span className="text-md font-medium tracking-tight">From</span>
+          <div className="xl:w-[270px]">
+            <span className="text-md font-medium tracking-tight mb-7">
+              From
+            </span>
             {[1, 2, 3, 4, 5].map((item) => {
               if (item === 1) {
                 return (
                   <p
-                    className="md:text-xl font-semibold tracking-tight text-black truncate w-[100px]"
+                    className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
                     title="@Usertal1354645"
                   >
                     @Usertal1354645
@@ -99,7 +99,7 @@ function Auction() {
               }
               return (
                 <p
-                  className="md:text-xl font-medium tracking-tight text-black w-[100px] truncate"
+                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
                   title="@Usertal1354645"
                 >
                   @Usertal1354645
@@ -115,52 +115,54 @@ function Auction() {
   function renderOffersWinState() {
     return (
       <div
-        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto h-[498px] xl:max-w-[761px]`}
+        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto  xl:max-w-[761px]`}
       >
         <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
           <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
             <ListBulletIcon className="w-7" /> Offers
           </h3>
         </div>
-        <div
-          className={`p-6 flex justify-between max-h-[440px] overflow-y-auto`}
-        >
-          <div className="flex flex-col justify-between gap-8">
-            <span className="text-md font-medium tracking-teight">Price</span>
+        <div className={`p-6 flex justify-between`}>
+          <div>
+            <span className="text-md font-medium tracking-teight mb-7">
+              Price
+            </span>
             {[1, 2, 3, 4, 5, 6].map((item) => {
               // item === 1 (primeiro lugar ate puxar os dados corretos)
               if ((item === 1 && isWon) || (item === 1 && closedAuction)) {
                 return (
                   <div className="relative mt-1">
-                    <span className="absolute bottom-7 text-transparent bg-clip-text bg-space max-w-[419px] flex gap-2 text-sm font-semibold items-center">
+                    <p className="absolute bottom-7 text-transparent bg-clip-text bg-space max-w-[419px] flex gap-2 text-sm font-semibold items-center">
                       <CrownIcon /> Winner
-                    </span>
-                    <span
+                    </p>
+                    <p
                       className={`md:text-xl ${
-                        isWon || closedAuction ? "font-semibold" : "font-medium"
-                      } tracking-tight text-green-500`}
+                        isWon || closedAuction ? "font-bold" : "font-semibold"
+                      } tracking-tight text-success h-[3.75rem]`}
                     >
                       0,35 ETH
-                    </span>
+                    </p>
                   </div>
                 );
               }
               return (
-                <span className="md:text-xl font-medium tracking-tight text-black">
+                <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
                   0,32 ETH
-                </span>
+                </p>
               );
             })}
           </div>
-          <div className="flex flex-col justify-between gap-8 xl:w-[270px]">
-            <span className="text-md font-medium tracking-tight">From</span>
+          <div className="xl:w-[270px]">
+            <span className="text-md font-medium tracking-tight mb-7">
+              From
+            </span>
             {[1, 2, 3, 4, 5, 6].map((item) => {
               if ((item === 1 && isWon) || (item === 1 && closedAuction)) {
                 return (
                   <p
                     className={`md:text-xl ${
-                      isWon || closedAuction ? "font-semibold" : "font-medium"
-                    } tracking-tight text-green-500 w-[100px] truncate`}
+                      isWon || closedAuction ? "font-bold" : "font-semibold"
+                    } tracking-tight text-green-500 w-[100px] truncate leading-6`}
                     title="@Usertal1354645"
                   >
                     @Usertal1354645
@@ -170,7 +172,7 @@ function Auction() {
               if (item === 1) {
                 return (
                   <p
-                    className="md:text-xl font-semibold tracking-tight text-black w-[100px] truncate"
+                    className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
                     title="@Usertal1354645"
                   >
                     @Usertal1354645
@@ -179,7 +181,7 @@ function Auction() {
               }
               return (
                 <p
-                  className="md:text-xl font-medium tracking-tight text-black w-[100px] truncate"
+                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
                   title="@Usertal1354645"
                 >
                   @Usertal1354645
@@ -194,21 +196,21 @@ function Auction() {
 
   return (
     <PageContainer>
-      <div className="flex gap-1 items-center w-[95%] mx-auto mt-4 px-3 md:ml-6 md:px-2 xl:px-0 xl:mx-0 mb-[.4rem]">
+      <div className="flex gap-1 items-center w-[95%] mx-auto mt-[1.1rem] px-4 md:ml-6 md:px-2 xl:px-0 xl:mx-[-5px] mb-[.4rem]">
         <ChevronLeftIcon className="w-[15px] h-5" />
         <a href="/" className="text-black font-semibold text-sm tracking-tight">
           Back to all acutions
         </a>
       </div>
-      <section className="flex flex-col mt-10 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-28 md:items-start mx-auto md:mt-6 xl:w-full">
-        <div className="row-span-3 w-full flex flex-col items-center md:items-start md:max-w-[413px]">
-          <div className="w-[95%] max-w-[413px] h-[300px] md:h-[300px] md:w-full xl:h-[411px] relative">
+      <section className="flex flex-col mt-10 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-20 md:items-start mx-auto md:mt-6 xl:w-full">
+        <div className="row-span-3 flex flex-col w-full items-center md:items-start md:max-w-[419px] xl:w-[410px]">
+          <div className="w-[95%] max-w-[419px] md:w-full relative">
             <img
-              src="https://www.bitmag.com.br/wp-content/uploads/2022/03/monkey-7009603_1920.jpg"
+              src="https://gamefiinfo.com/uploads/202111/12/ece6842cd730141699e4c0bf7f2d57e9-413x413.png"
               alt=""
-              className="w-full h-full rounded-sm object-cover"
+              className="w-full rounded-sm"
             />
-            <div className="absolute top-44 w-[95%] mx-[.6rem] bg-white/70 rounded-lg p-4 md:hidden">
+            <div className="absolute bottom-3 w-[95%] mx-[.6rem] bg-white/70 rounded-lg p-4 md:hidden">
               <span className="flex gap-4 items-center text-md font-medium tracking-tight">
                 Doodles <CheckCircleIcon className="w-4 text-success" />
               </span>
@@ -232,71 +234,62 @@ function Auction() {
               system.
             </p>
           </div>
-          <div className="hidden md:block mt-[3.3rem] w-full max-w-[420px] border-solid border-[1px] rounded-lg border-outline bg-white md:h-[360px]">
+          <div className="hidden md:block mt-[4.3rem] w-full max-w-[421px] border-solid border-[1px] rounded-lg border-outline bg-white pb-14">
             <div className="flex items-center h-[52px] border-b-[1px]">
               <h3 className="px-7 text-md font-semibold text-black tracking-tight">
                 Details
               </h3>
             </div>
-            <div className="flex justify-between px-6 mt-5">
-              <div className="flex flex-col justify-between gap-[.9rem]">
-                {[
-                  "Medium",
-                  "Dimensions",
-                  "File size",
-                  "Contract address",
-                  "Token standard",
-                  "Chain",
-                ].map((label) => (
-                  <span className="font-medium text-black text-md py-[.1rem]">
-                    {label}
-                  </span>
-                ))}
-              </div>
-              <div className="flex flex-col items-end justify-between gap-[.9rem]">
-                {[
-                  "GIF",
-                  "200x200",
-                  "20 MB",
-                  "123kj789...",
-                  "ERC-741",
-                  "Ethereum",
-                ].map((label) => (
-                  <span className="font-bold text-black text-md py-[.1rem]">
-                    {label}
-                  </span>
-                ))}
+            <div className="flex justify-between px-6">
+              <div className="flex justify-between w-full">
+                <div className="flex flex-col w-full mt-6 gap-4">
+                  {[
+                    { label: "Medium", value: "GIF" },
+                    { label: "Dimensions", value: "200 x 200" },
+                    { label: "File size", value: "20 MB" },
+                    { label: "Contract address", value: "123kj78945454545" },
+                    { label: "Token standard", value: "ERC - 741" },
+                    { label: "Chain", value: "Ethereum" },
+                  ].map(({ label, value }) => (
+                    <div className="flex justify-between">
+                      <p className="font-medium text-black text-md">{label}</p>
+                      <p className="font-bold text-black text-end text-md max-w-[10ch] truncate">
+                        {value}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div className="col-span-2 w-full md:max-w-[761px] xl:pl-0">
-          <div className="hidden md:flex flex-col mb-10 w-full">
-            <div className="flex justify-between pr-28">
-              <span className="flex gap-[.4rem] items-center text-xl font-medium tracking-tight">
+          <div className="hidden md:flex flex-col mb-10 mt-[-8px] ml-7 w-full">
+            <div className="flex justify-between mt-[3px]">
+              <span className="flex gap-[.6rem] items-center text-xl font-medium tracking-normal pl-1">
                 Doodles <CheckCircleIcon className="w-5 text-success" />
               </span>
               <span
                 className={`hidden md:flex ${
                   closedAuction || isWon ? "" : "w-[208px]"
-                } px-5 items-center text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight h-8`}
+                } px-5 items-center text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight h-[1.88rem] mr-1 mt-1`}
               >
                 {closedAuction || isWon
                   ? "Auction closed"
                   : "Auction ends in: 2h 10m 15s"}
               </span>
             </div>
-            <h3 className="font-bold text-[28px] tracking-tight">
+            <h3 className="font-bold text-[28px] tracking-normal pl-1 mt-1">
               Doodles #3366
             </h3>
-            <span className="text-md font-medium text-black tracking-tight">
+            <span className="text-md font-medium text-black tracking-tight mt-1">
               By <strong>@johnsnow</strong>
             </span>
           </div>
-          <div className="flex flex-col mt-9 gap-3 mx-auto max-w-[413px] md:max-w-[761px] md:mx-0">
+          <div className="flex flex-col mt-9 gap-3 mx-2 max-w-[413px] md:max-w-[761px] md:mx-0 xl:ml-8 xl:mt-[-5px]">
             {isWon ? (
               <>
-                <span className="mt-6 max-w-[419px] text-green-500 flex gap-3 py-1 text-xl font-semibold items-center">
+                <span className="mt-6 max-w-[419px] text-success flex gap-3 py-1 text-xl font-semibold items-center">
                   {" "}
                   <CrownIcon /> You won!
                 </span>
@@ -306,13 +299,13 @@ function Auction() {
               </>
             ) : (
               <>
-                <p className="w-[173px] p-[.4rem] text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight xl:mt-8 xl:h-8">
+                <p className="w-[173px] p-[.4rem] text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-normal xl:mt-8 xl:h-8">
                   Minimum bid: 0,3 ETH
                 </p>
                 <input
                   type="text"
                   placeholder="Type your bid"
-                  className={`w-full h-10 text-sm bg-bid rounded placeholder-paragraph px-4 outline-none max-w-[440px] xl:mt-1 xl:max-w-[340px] ${
+                  className={`w-full h-10 text-sm bg-bid rounded placeholder-paragraph px-4 outline-none max-w-[440px] xl:mb-1 xl:max-w-[340px] ${
                     closedAuction && "cursor-not-allowed"
                   }`}
                   disabled={closedAuction}
@@ -337,7 +330,7 @@ function Auction() {
             )}
           </div>
         </div>
-        <div className="row-span-2 col-span-2 w-[95%] mx-auto xl:w-[761px] mt-6 xl:mt-[.4rem]">
+        <div className="row-span-2 col-span-2 w-[95%] mx-auto xl:w-[761px] mt-6 xl:mt-9 xl:ml-7">
           <div className="mt-2 w-full max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto xl:h-[202px] md:max-w-[761px]">
             <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
               <h3 className="px-8 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
@@ -370,7 +363,7 @@ function Auction() {
                   </div>
                 </div>
               ) : (
-                <h3 className="p-[3.4rem] text-center text-paragraph text-xl font-medium tracking-tight xl:mr-1">
+                <h3 className="p-[3.4rem] text-center text-paragraph text-xl font-medium tracking-normal xl:mr-3">
                   You don't have offers yet
                 </h3>
               )}
@@ -388,30 +381,21 @@ function Auction() {
               </h3>
             </div>
             <div className="flex justify-between">
-              <div className="flex flex-col px-8 h-[305px] mt-7 gap-4">
+              <div className="flex flex-col w-full px-8 h-[305px] mt-7 gap-4">
                 {[
-                  "Medium",
-                  "Dimensions",
-                  "File size",
-                  "Contract address",
-                  "Token standard",
-                  "Chain",
-                ].map((label) => (
-                  <span className="font-medium text-black text-md">
-                    {label}
-                  </span>
-                ))}
-              </div>
-              <div className="flex flex-col items-end px-8 h-[305px] mt-7 gap-4">
-                {[
-                  "GIF",
-                  "200x200",
-                  "20 MB",
-                  "123kj789...",
-                  "ERC-741",
-                  "Ethereum",
-                ].map((label) => (
-                  <span className="font-bold text-black text-md">{label}</span>
+                  { label: "Medium", value: "GIF" },
+                  { label: "Dimensions", value: "200 x 200" },
+                  { label: "File size", value: "20 MB" },
+                  { label: "Contract address", value: "123kj78945454545" },
+                  { label: "Token standard", value: "ERC - 741" },
+                  { label: "Chain", value: "Ethereum" },
+                ].map(({ label, value }) => (
+                  <div className="flex justify-between">
+                    <p className="font-medium text-black text-md">{label}</p>
+                    <p className="font-bold text-black text-end text-md max-w-[10ch] truncate">
+                      {value}
+                    </p>
+                  </div>
                 ))}
               </div>
             </div>
