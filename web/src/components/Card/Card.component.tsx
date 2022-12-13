@@ -16,12 +16,12 @@ function Card({ card }: CardProps) {
 
   return (
     <li
-      className={`rounded-[29px] h-auto drop-shadow-navbar p-2 md:drop-shadow-none list-none md:w-[302px] ${
+      className={`rounded-[29px] h-auto shadow-sm shadow-tab/[.15] p-2 md:shadow-none list-none md:w-[302px] ${
         isOwner || offered ? "md:h-[537px]" : "md:h-[472px]"
       } md:p-4 bg-white border-solid border-outline border-[1px] rounded-large flex flex-col items-center relative`}
     >
       {isWon && (
-        <div className="w-20 h-5 md:w-[105px] h-[34px] flex justify-center items-center absolute gap-2 bg-white border-solid border-[1px] border-purple-500 rounded-sm z-[1] top-6 right-4 top-[1.93rem] right-[1.79rem]">
+        <div className="w-20 h-5 md:w-[105px] h-[34px] top-4 right-4 flex justify-center items-center absolute gap-2 bg-white border-solid border-[1px] border-purple-500 rounded-sm z-[1] md:top-[1.93rem] md:right-[1.79rem]">
           <CrownIcon />
           <span className="text-transparent bg-clip-text bg-space items-center justify-around font-semibold text-sm tracking-tight">
             Winner
@@ -29,14 +29,14 @@ function Card({ card }: CardProps) {
         </div>
       )}
       {firstPlace && offered && !outbid && (
-        <div className="w-20 h-[19px] md:w-[103px] md:h-[30px] flex justify-center items-center absolute gap-2 bg-space rounded-[30px] z-[1] top-6 right-[1.40rem] md:top-[1.93rem] right-[1.80rem]">
+        <div className="w-20 h-[19px] top-4 right-[.9rem] md:w-[103px] md:h-[30px] flex justify-center items-center absolute gap-2 bg-space rounded-[30px] z-[1] md:top-[1.93rem] right-[1.9rem]">
           <span className="text-white justify-around font-medium text-3.5 md:text-sm pr-1 tracking-tight">
             Highest bid
           </span>
         </div>
       )}
       {outbid && offered && (
-        <div className="w-20 h-[19px] md:w-[76px] md:h-[30px] flex justify-center items-center absolute gap-2 bg-error rounded-[30px] z-[1] top-[1.3rem] right-[1.40rem] md:top-[1.93rem] md:right-[1.79rem]">
+        <div className="w-20 h-[19px] md:w-[76px] md:h-[30px] flex justify-center items-center absolute gap-2 bg-error rounded-[30px] z-[1] top-[1.3rem] right-4 md:top-[1.93rem] md:right-7">
           <span className="text-white justify-around font-semibold text-sm pr-1 tracking-tight">
             Outbid
           </span>
@@ -47,24 +47,24 @@ function Card({ card }: CardProps) {
         className="w-full h-auto  rounded-lg md:w-[280px] md:h-[270px] md:max-w-full object-cover md:rounded-md"
       />
       <div className="flex flex-col w-full ml-3 md:gap-[.8rem] md:ml-0">
-        <div className="mt-[2px] md:flex flex-col md:mt-[.7rem]">
+        <div className="mt-[4px] ml-[1px] md:flex flex-col md:mt-[.7rem]">
           <h3
             className="text-sm break-keep text-paragraph font-medium md:text-base tracking-tight"
             title="Bored Ape Yatch Club"
           >
-            Bored Ape Yatch Club
+            TRIP GENISIS
           </h3>
           <p className="text-sm md:text-black font-extrabold md:text-base h-[15px] mt-[-4px] tracking-tight xl:mt-[-8px]">
             #3040
           </p>
         </div>
         {isWon ? (
-          <h3 className="text-success text-center mt-5 font-bold text-md tracking-tight">
+          <h3 className="text-success mt-5 text-center mb-2 font-bold text-md tracking-tight pr-4 md:pr-0 md:mb-0">
             You won!
           </h3>
         ) : (
           <div className="flex justify-between mt-2 mb-[-4px] md:mt-1">
-            <div className="mt-[.2rem]">
+            <div className="mt-[.2rem] pb-3 md:pb-0">
               <h3 className="text-sm font-semibold text-paragraph md:text-4 tracking-tight">
                 {isOwner && isClose
                   ? "Auction ends in:"
@@ -74,8 +74,8 @@ function Card({ card }: CardProps) {
               </h3>
               <span
                 className={`${
-                  isClose ? "text-error" : "text-black tracking-tight"
-                } text-sm font-extrabold md:text-base tracking-tight`}
+                  isClose ? "text-error" : "text-black tracking"
+                } text-sm font-extrabold md:text-base tracking`}
               >
                 {isClose && isOwner
                   ? "Closed auction"
@@ -111,24 +111,24 @@ function Card({ card }: CardProps) {
           </div>
         )}
         {isOwner && (
-          <div className="hidden md:block mb-5 mt-[-2px]">
+          <div className="mb-5 mt-[-2px]">
             <h3 className="text-paragraph font-semibold text-md tracking-tight">
               Created:
             </h3>
-            <span className="text-black font-extrabold text-md tracking-tight">
+            <span className="text-black font-extrabold text-sm tracking-tight md:text-4">
               01/12/2022
             </span>
           </div>
         )}
         {offered && (
-          <div className="hidden md:block my-1.5">
-            <h3 className="text-paragraph font-semibold text-md tracking-tight">
+          <div className="my-2 mt-3">
+            <h3 className="text-sm text-paragraph font-semibold md:text-4 tracking-tight">
               Your offer:
             </h3>
             <span
               className={`${
                 outbid ? "text-error" : "text-success"
-              } font-extrabold text-md tracking-tight`}
+              } text-sm font-extrabold md:text-4 tracking-tight`}
             >
               0,54 BTH
             </span>
