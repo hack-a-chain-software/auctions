@@ -21,7 +21,7 @@ function ChooseNFT({
     >
       <Dialog.Backdrop className="fixed inset-0 bg-black/50 z-50" />
       <Dialog.Panel className="relative bg-white rounded-lg shadow shadow-sw overflow-hidden w-[95%] max-w-[620px] h-[443px]">
-        <div className="w-full flex justify-between items-center px-9 pr-8 h-12 border-b-[1px] ">
+        <div className="w-full flex justify-between items-center px-9 pr-8 h-12 border-b-[1px]">
           <Dialog.Title className="text-black w-[76px] mt-1 text-sm font-semibold tracking-tight">
             Select NFTs
           </Dialog.Title>
