@@ -14,7 +14,7 @@ function Header() {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <header className="bg-white flex flex-col justify-between items-center w-full mb-2 md:h-20 sticky top-0 z-[1] backdrop-blur-sm bg-white/50 xl:px-14 xl:pl-20 xl:py-2">
+    <header className="bg-white flex flex-col justify-between items-center w-full mb-2 md:h-20 sticky top-0 z-[11] backdrop-blur-sm bg-white/50 xl:px-14 xl:pl-20 xl:py-2">
       <div className="flex justify-between items-center p-3 pr-7 pl-5 w-full">
         <Bars3Icon
           className="text-black w-6 md:hidden"
@@ -36,43 +36,38 @@ function Header() {
                 Explore auctions
               </a>
             </li>
-            <li className="flex items-center gap-2">
-              <a
-                href="/my-auctions"
-                className="text-black font-semibold text-sm tracking-tight"
-              >
-                My auctions
-              </a>
-              <Popover as="li" className="relative pr-8">
-                <Popover.Button className="text-black font-semibold text-sm flex items-center tracking-tight outline-none">
-                  <ChevronDownIcon className="text-black w-4" />
-                </Popover.Button>
+            <Popover as="li" className="relative pr-8">
+              <Popover.Button className="text-black font-semibold text-sm flex items-center tracking-tight outline-none gap-3">
+                <span className="text-black font-semibold text-sm tracking-tight">
+                  My auctions
+                </span>
+                <ChevronDownIcon className="text-black w-4" />
+              </Popover.Button>
 
-                <Transition
-                  enter="transition duration-100 ease-out"
-                  enterFrom="transform scale-95 opacity-0"
-                  enterTo="transform scale-100 opacity-100"
-                  leave="transition duration-75 ease-out"
-                  leaveFrom="transform scale-100 opacity-100"
-                  leaveTo="transform scale-95 opacity-0"
-                >
-                  <Popover.Panel className="flex flex-col bg-white items-start justify-center w-[179px] h-[141px] rounded-lg shadow shadow-sw-sm p-3 absolute top-2 right-0">
-                    <a
-                      href="/my-auctions/offers"
-                      className="text-black font-semibold text-sm w-full p-3 border-b-[1px] tracking-tight"
-                    >
-                      My offers
-                    </a>
-                    <a
-                      href="/my-auctions/created"
-                      className="text-black font-semibold text-sm w-full p-3 tracking-tight"
-                    >
-                      Create auction
-                    </a>
-                  </Popover.Panel>
-                </Transition>
-              </Popover>
-            </li>
+              <Transition
+                enter="transition duration-100 ease-out"
+                enterFrom="transform scale-95 opacity-0"
+                enterTo="transform scale-100 opacity-100"
+                leave="transition duration-75 ease-out"
+                leaveFrom="transform scale-100 opacity-100"
+                leaveTo="transform scale-95 opacity-0"
+              >
+                <Popover.Panel className="flex flex-col bg-white items-start justify-center w-[179px] h-[141px] rounded-lg shadow shadow-sw-sm p-3 absolute top-2 right-0">
+                  <a
+                    href="/my-auctions/offers"
+                    className="text-black font-semibold text-sm w-full p-3 border-b-[1px] tracking-tight"
+                  >
+                    My offers
+                  </a>
+                  <a
+                    href="/my-auctions/created"
+                    className="text-black font-semibold text-sm w-full p-3 tracking-tight"
+                  >
+                    Create auction
+                  </a>
+                </Popover.Panel>
+              </Transition>
+            </Popover>
 
             <li className="pr-7">
               <button
@@ -85,7 +80,11 @@ function Header() {
           </ul>
         </nav>
         <Transition.Root show={open} as={Fragment}>
-          <Dialog as="div" className="relative z-[2] md:hidden" onClose={setOpen}>
+          <Dialog
+            as="div"
+            className="relative z-[12] md:hidden"
+            onClose={setOpen}
+          >
             <Transition.Child
               as={Fragment}
               enter="ease-in-out duration-500"
@@ -112,7 +111,7 @@ function Header() {
                   >
                     <Dialog.Panel
                       className="
-                      w-[260px]
+                      w-[257px]
                       shadow
                       shadow-sw-navbar
                       pointer-events-auto
@@ -143,12 +142,11 @@ function Header() {
                           </li>
                           <Popover
                             as="li"
-                            className="h-[33px] border-b-[2px] w-full px-7"
-
+                            className="h-[35px] border-b-[2px] w-full px-6"
                           >
                             {({ open }) => (
                               <>
-                                <Popover.Button className="text-black font-semibold text-sm flex items-center gap-4 outline-none tracking-tight">
+                                <Popover.Button className="text-black font-semibold text-sm flex items-center gap-5 outline-none tracking-tight mt-[.1rem]">
                                   My auctions
                                   <ChevronRightIcon
                                     className={`text-black w-[13px] ${
@@ -194,7 +192,10 @@ function Header() {
         <nav className="md:hidden">
           <ul className="flex items-center gap-14">
             <li>
-              <a href="/" className="text-black text-sm font-semibold tracking-tight">
+              <a
+                href="/"
+                className="text-paragraph text-sm font-semibold tracking-normal"
+              >
                 Explore auctions
               </a>
             </li>
