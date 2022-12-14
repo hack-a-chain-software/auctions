@@ -39,6 +39,7 @@ module auctionhouse::AuctionHouse {
 
     /// Auction representation to be stored
     struct Auction has store {
+        id: u64,
         creator: address,
         start_time: u64,
         end_time: u64,
@@ -227,7 +228,11 @@ module auctionhouse::AuctionHouse {
         let token = token::withdraw_token(sender, token_id, 1);
 
         // build auction object
+        let auctions_collection = &mut auction_house.auctions;
+        let auction_id = table_vector::len(freeze(auctions_collection));
+
         let auction = Auction {
+            id: auction_id,
             creator: sender_addr,
             start_time,
             end_time,
@@ -243,8 +248,6 @@ module auctionhouse::AuctionHouse {
         };
 
         // insert auction in table_vector
-        let auctions_collection = &mut auction_house.auctions;
-        let auction_id = table_vector::len(freeze(auctions_collection));
         table_vector::push(auctions_collection, auction);
 
         // emit event

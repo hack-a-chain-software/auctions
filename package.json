@@ -7,7 +7,7 @@
     "workspaces": {
         "packages": [
             "web",
-            "contracts/*"
+            "contracts/aptos"
         ],
         "nohoist": [
             "**/tailwindcss",

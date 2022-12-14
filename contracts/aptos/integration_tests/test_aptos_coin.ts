@@ -12,7 +12,7 @@ import fs from "fs";
 import path from "path";
 import sh from "shelljs";
 
-import { AuctionHouseClient } from "./auctionHouseClient";
+import { AuctionHouseClient } from "../ts_client/auctionHouseClient";
 import { NODE_URL } from "./env";
 
 
@@ -51,7 +51,7 @@ export async function testAptosCoin(
 
     // deploy module
     console.log(`moduleAddress is ${moduleAddress.address().hex()}`)
-    
+
     sh.exec(`
         aptos move compile --named-addresses auctionhouse=${moduleAddress.address().hex()} --included-artifacts all --save-metadata
     `);
@@ -63,7 +63,7 @@ export async function testAptosCoin(
     const moduleData3 = fs.readFileSync(path.join(modulePath, "build", "AuctionHouse", "bytecode_modules", "AuctionHouse.mv"));
 
     let txnHash = await client.publishPackage(
-        moduleAddress, 
+        moduleAddress,
         new HexString(packageMetadata.toString("hex")).toUint8Array(),
         [
             new TxnBuilderTypes.Module(new HexString(moduleData1.toString("hex")).toUint8Array()),
@@ -178,8 +178,13 @@ export async function testAptosCoin(
     console.log(allAuctions);
     assert(allAuctions.length == 1);
 
-    console.log(await auctionHouseClient.getCreatedByUserAuctionsLen(ownerAccount.address().hex()));
-    console.log(await auctionHouseClient.getCreatedByUserAuctions(ownerAccount.address().hex(),0, 1));
+    const createdByUserLen = await auctionHouseClient.getCreatedByUserAuctionsLen(ownerAccount.address().hex());
+    assert(createdByUserLen == 1);
+
+    const createdByUserLen2 = await auctionHouseClient.getCreatedByUserAuctionsLen(bidder1.address().hex());
+    assert(createdByUserLen2 == 0);
+
+    const createdByUser = auctionHouseClient.getCreatedByUserAuctions(ownerAccount.address().hex(), 0, 10);
 
     // bid
     await client.waitForTransaction(
@@ -192,11 +197,15 @@ export async function testAptosCoin(
         { checkSuccess: true }
     );
 
-    console.log(await auctionHouseClient.getBidByUserAuctionsLen(bidder1.address().hex()));
-    console.log(await auctionHouseClient.getBidByUserAuctions(bidder1.address().hex(), 0, 10));
-    
-    console.log(await auctionHouseClient.getBidsAuction("0"));
+    const bidByUserLen = await auctionHouseClient.getBidByUserAuctionsLen(bidder1.address().hex());
+    assert(bidByUserLen == 1);
+    const bidByUser = await auctionHouseClient.getBidByUserAuctions(bidder1.address().hex(), 0, 10);
 
+    const bidsAuction0 = await auctionHouseClient.getBidsAuction("0");
+    assert(bidsAuction0.length == 1);
+
+    const bidsAuction1 = await auctionHouseClient.getBidsAuction("1");
+    assert(bidsAuction1.length == 0);
 }
 
 

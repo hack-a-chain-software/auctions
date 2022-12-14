@@ -8,7 +8,6 @@ import {
 } from 'aptos';
 
 import { NODE_URL, FAUCET_URL } from "./env";
-import { AuctionHouseClient } from './auctionHouseClient';
 
 import { testAptosCoin } from './test_aptos_coin';
 

@@ -2,14 +2,16 @@
   "name": "contract_aptos",
   "private": true,
   "version": "0.0.0",
+  "main": "ts_client/index.ts",
   "scripts": {
     "test:integration": "tsc && node integration_tests/index.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "aptos": "^1.4.0"
+  },
   "devDependencies": {
     "@types/node": "^18.11.14",
     "@types/shelljs": "^0.8.11",
-    "aptos": "^1.4.0",
     "shelljs": "^0.8.5"
   }
 }
