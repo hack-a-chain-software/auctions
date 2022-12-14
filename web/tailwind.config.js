@@ -1,4 +1,4 @@
-const env = require("dotenv").config({ path: `./.env` }).parsed;
+const env = require('dotenv').config({ path: `./.env` }).parsed;
 
 module.exports = {
   content: ['./src/**/*.{html,js,jsx,ts,tsx}'],
@@ -144,7 +144,7 @@ function colorParse(color) {
       color = hexToRgb(color);
       return `rgba(${color.r},${color.g},${color.b},${color.a ? color.a/255 : opacity ? opacity : 1})`;
     }
-    return "transparent";
+    return 'transparent';
   };
 }
 
