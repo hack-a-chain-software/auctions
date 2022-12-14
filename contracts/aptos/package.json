@@ -7,10 +7,10 @@
     "test:integration": "tsc && node integration_tests/index.js"
   },
   "dependencies": {
+    "@types/node": "^18.11.14",
     "aptos": "^1.4.0"
   },
   "devDependencies": {
-    "@types/node": "^18.11.14",
     "@types/shelljs": "^0.8.11",
     "shelljs": "^0.8.5"
   }

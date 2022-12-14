@@ -733,8 +733,6 @@ export class AuctionHouseClient extends AptosClient {
 
 }
 
-
-
 function convertHexToUtf8(hex: string): string {
     return Buffer.from(hex.slice(2), "hex").toString("utf-8");
 }
