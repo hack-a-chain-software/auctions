@@ -8,6 +8,26 @@ on:
   pull_request
 
 jobs:
+  contracts_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Yarn Globally
+        run: npm install -g yarn
+
+      - name: Install Aptos Tooling
+        working-directory: ./.github/utilities
+        run: sh dev_setup.sh
+
+      - name: Installing Dependencies
+        working-directory: ./contracts/aptos
+        run: yarn
+
+      - name: Run tests
+        working-directory: ./contracts/aptos
+        run: yarn test:integration
+      
   vercel_preview_deploy:
     runs-on: ubuntu-latest
     steps:
