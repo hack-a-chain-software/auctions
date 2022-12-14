@@ -13,7 +13,8 @@ const path = require('path');
 const { parse } = require('dotenv');
 
 // Script can be run in preview or test mode
-const production = sh.env["PRODUCTION"]
+const production = sh.env["PRODUCTION"] === "true"
+console.log(production);
 
 // For the duration of this script, we want to operate from within the
 // Rust project's folder. Let's change into that directory.
@@ -44,6 +45,8 @@ sh.cd(__dirname);
         console.log("-----------------");
         console.log(`Deploying ${file}`);
         console.log("-----------------");
+
+        console.log(production ? "--prod" : "");
 
         // execute prebuild and deploy
         sh.exec(`
