@@ -196,7 +196,7 @@ module auctionhouse::AuctionHouse {
         let start_time = timestamp::now_microseconds();
 
         // assert that user is authorized to create auctions
-        if (option::is_none<TableSet<address>>(&auction_house.allowed_users)) {
+        if (option::is_some<TableSet<address>>(&auction_house.allowed_users)) {
             assert!(
                 table_set::contains(
                     option::borrow<TableSet<address>>(&auction_house.allowed_users), 

@@ -9,7 +9,7 @@ import {
 
 import { NODE_URL, FAUCET_URL } from "./env";
 
-import { testAptosCoin } from './test_aptos_coin';
+import { testBasicFlow } from './test_basic_flow';
 
 // Initialize clients
 const client = new AptosClient(NODE_URL);
@@ -19,5 +19,5 @@ const tokenClient = new TokenClient(client);
 
 // Run tests
 (async () => {
-    await testAptosCoin(client, faucetClient, coinClient, tokenClient);
+    await testBasicFlow(client, faucetClient, coinClient, tokenClient);
 })()
