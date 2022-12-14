@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
     AptosClient,
     CoinClient,
@@ -15,6 +16,16 @@ import sh from "shelljs";
 import { AuctionHouseClient } from "../ts_client/auctionHouseClient";
 import { NODE_URL } from "./env";
 
+=======
+import { 
+    AptosClient, 
+    CoinClient, 
+    FaucetClient, 
+    TokenClient,
+    AptosAccount,
+ } from "aptos";
+import { AuctionHouseClient } from "./auctionHouseClient";
+>>>>>>> 220dae8 (checkpoint integration tests)
 
 /* This test:
  * 1. Creates an NFT collection
@@ -25,28 +36,42 @@ import { NODE_URL } from "./env";
  * 5. Final winner claims prize
  * 6. Auction owner claims coins
 */
+<<<<<<< HEAD
 const BASE_FUNDS = 500_000_000;
 const aptosCoin = "0x1::aptos_coin::AptosCoin";
+=======
+const BASE_FUNDS = 100_000_000;
+>>>>>>> 220dae8 (checkpoint integration tests)
 
 export async function testAptosCoin(
     client: AptosClient,
     faucetClient: FaucetClient,
     coinClient: CoinClient,
     tokenClient: TokenClient,
+<<<<<<< HEAD
 ): Promise<void> {
     // create and fund base accounts
     const moduleAddress = new AptosAccount();
+=======
+    auctionHouseClient: AuctionHouseClient
+): Promise<void> {
+    // create and fund base accounts
+>>>>>>> 220dae8 (checkpoint integration tests)
     const ownerAccount = new AptosAccount();
     const bidder1 = new AptosAccount();
     const bidder2 = new AptosAccount();
     const bidder3 = new AptosAccount();
 
+<<<<<<< HEAD
     await faucetClient.fundAccount(moduleAddress.address(), BASE_FUNDS);
+=======
+>>>>>>> 220dae8 (checkpoint integration tests)
     await faucetClient.fundAccount(ownerAccount.address(), BASE_FUNDS);
     await faucetClient.fundAccount(bidder1.address(), BASE_FUNDS);
     await faucetClient.fundAccount(bidder2.address(), BASE_FUNDS);
     await faucetClient.fundAccount(bidder3.address(), BASE_FUNDS);
 
+<<<<<<< HEAD
     const auctionHouseClient = new AuctionHouseClient(NODE_URL, moduleAddress.address().hex(), ownerAccount.address().hex());
 
     // deploy module
@@ -100,16 +125,27 @@ export async function testAptosCoin(
     assert(!(await auctionHouseClient.isUserAuthorized(bidder2.address().hex())))
 
 
+=======
+    // initialize AuctionHouse
+    await client.waitForTransaction(
+        await auctionHouseClient.initializeAuctionHouse(ownerAccount, false),
+        { checkSuccess: true }
+    );
+    
+>>>>>>> 220dae8 (checkpoint integration tests)
     // create NFT collection and token for auctioning
     const collectionName = "A dumb name";
     const tokenName = "1st dumb token";
     const tokenPropertyVersion = 0;
 
+<<<<<<< HEAD
     const nftCollection = {
         creator: ownerAccount.address().hex(),
         collectionName
     };
 
+=======
+>>>>>>> 220dae8 (checkpoint integration tests)
     const tokenId = {
         token_data_id: {
             creator: ownerAccount.address().hex(),
@@ -143,6 +179,7 @@ export async function testAptosCoin(
         { checkSuccess: true }
     );
 
+<<<<<<< HEAD
     // Authorize NFT Collection
     await client.waitForTransaction(
         await auctionHouseClient.addAuthorizedCollection(ownerAccount, nftCollection),
@@ -211,4 +248,8 @@ export async function testAptosCoin(
 
 function toMicroseconds(time: number): string {
     return time.toString() + "000";
+=======
+
+
+>>>>>>> 220dae8 (checkpoint integration tests)
 }
