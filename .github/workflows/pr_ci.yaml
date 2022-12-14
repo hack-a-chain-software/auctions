@@ -18,7 +18,7 @@ jobs:
 
       - name: Install Aptos Tooling
         working-directory: ./.github/utilities
-        run: ./dev_setup.sh -v
+        run: chmod u+x dev_setup.sh; ./dev_setup.sh -v
 
       - name: Installing Dependencies
         working-directory: ./contracts/aptos
