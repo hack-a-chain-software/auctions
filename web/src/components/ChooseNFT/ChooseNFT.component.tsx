@@ -1,6 +1,5 @@
 import { Dialog, RadioGroup } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
 
 type ChooseNFTProps = {
   openNFTSelector: boolean;
