@@ -33,7 +33,7 @@ function ChooseNFT({
           as="ul"
           className="grid grid-cols-auto-fit pt-[1.9rem] px-6 justify-items-center gap-1 h-[323px] max-h-[323px] mb-2 overflow-y-auto"
         >
-          {[1, 2, 3,4].map((item) => (
+          {[1, 2, 3, 4].map((item) => (
             <RadioGroup.Option
               as="li"
               className="h-[180px] relative cursor-pointer outline-none rounded-md hover:bg-space transition-all outline-none"
@@ -44,7 +44,9 @@ function ChooseNFT({
                 <>
                   <div
                     className={`p-[.17rem] w-[175px] h-[180px] shadow shadow-transparent ${
-                      checked ? "bg-space shadow-button/[.25]" : "bg-transparent"
+                      checked
+                        ? "bg-space shadow-button/[.25]"
+                        : "bg-transparent"
                     } rounded-md hover:shadow-button/[.25]`}
                     // onClick={() => setSelectedNFT()}
                   >
@@ -68,7 +70,10 @@ function ChooseNFT({
           ))}
         </RadioGroup>
         <footer className="absolute w-full bottom-0 border-t-[1px] h-[73px] px-[1.9rem] py-4 flex justify-between">
-          <button className="w-[120px] h-10 border-solid border-outline border-[1px] rounded-md p-2 tracking-tight text-text text-sm font-semibold hover:scale-[102%] transition">
+          <button
+            className="w-[120px] h-10 border-solid border-outline border-[1px] rounded-md p-2 tracking-tight text-text text-sm font-semibold hover:scale-[102%] transition"
+            onClick={() => setOpenNFTSelector(false)}
+          >
             Cancel
           </button>
           <button className="w-[112px] h-[35px] mt-1 bg-button rounded text-highlight text-sm hover:scale-[102%] transition-all">
