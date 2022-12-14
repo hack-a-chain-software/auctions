@@ -1,0 +1,4 @@
+build
+.aptos
+integration_tests/**.js
+ts_client/**.js
