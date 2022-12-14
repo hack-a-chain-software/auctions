@@ -3,7 +3,9 @@ import {
   ListBulletIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
-import CrownIcon from "../../assets/svg/CrownIcon";
+import CrownIcon16 from "../../assets/svg/CrownIcon16";
+import CrownIcon20 from "../../assets/svg/CrownIcon20";
+import CrownIcon24 from "../../assets/svg/CrownIcon24";
 import PageContainer from "../../components/PageContainer";
 import "./Auction.styles.less";
 
@@ -16,43 +18,92 @@ function Auction() {
   function renderDefautOfferState() {
     return (
       <div
-        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto  md:max-w-full xl:max-w-[761px]`}
+        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto md:max-w-[761px]`}
       >
         <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
           <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
             <ListBulletIcon className="w-6" /> Offers
           </h3>
         </div>
-        <div className={`p-6 flex justify-between overflow-y-auto`}>
-          <div>
+        <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
+          <div className="flex justify-between w-full mb-1">
             <p className="text-md font-medium tracking-tight mb-7">Price</p>
-            {[1, 2, 3, 4, 5].map((item) => {
-              return (
-                <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                  0,32 ETH
-                </p>
-              );
-            })}
+            <p className="text-md font-medium tracking-tight mb-7 w-[100px]">
+              From
+            </p>
           </div>
-          <div className="xl:w-[270px]">
-            <p className="text-md font-medium tracking-tight mb-7">From</p>
-            {[1, 2, 3, 4, 5].map((item) => {
-              return (
-                <p
-                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
-                  title="@Userta12348545"
-                >
-                  @Usertal1354645
-                </p>
-              );
-            })}
-          </div>
+          {[
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+          ].map(({ bid, account }) => (
+            <div className="flex justify-between  w-full">
+              <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
+                {bid}
+              </p>
+              <p
+                className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
+                title={account}
+              >
+                {account}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     );
   }
 
   function renderFirstPlaceOfferState() {
+    return (
+      <div
+        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto md:max-w-[761px]`}
+      >
+        <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
+          <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
+            <ListBulletIcon className="w-7" /> Offers
+          </h3>
+        </div>
+        <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
+          <div className="flex justify-between w-full mb-1">
+            <p className="text-md font-medium tracking-tight mb-7">Price</p>
+            <p className="text-md font-medium tracking-tight mb-7 w-[110px]">
+              From
+            </p>
+          </div>
+          {[
+            { bid: "0,32 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+          ].map(({ bid, account }) => (
+            <div className="flex justify-between  w-full">
+              {bid === "0,32 BTH" ? (
+                <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem] flex gap-5">
+                  {bid} <CrownIcon24 />
+                </p>
+              ) : (
+                <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
+                  {bid}
+                </p>
+              )}
+              <p
+                className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[110px] truncate leading-6"
+                title={account}
+              >
+                {account}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function renderOffersWinState() {
     return (
       <div
         className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto xl:max-w-[761px]`}
@@ -62,79 +113,27 @@ function Auction() {
             <ListBulletIcon className="w-7" /> Offers
           </h3>
         </div>
-        <div className={`p-6 flex justify-between overflow-y-auto`}>
-          <div>
-            <span className="text-md font-medium tracking-teight mb-7">
-              Price
-            </span>
-            {[1, 2, 3, 4, 5].map((item) => {
-              if (item === 1) {
-                return (
-                  <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                    0,32 ETH <CrownIcon />
-                  </p>
-                );
-              }
-
-              return (
-                <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                  0,32 ETH
-                </p>
-              );
-            })}
-          </div>
-          <div className="xl:w-[270px]">
-            <span className="text-md font-medium tracking-tight mb-7">
+        <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
+          <div className="flex justify-between w-full mb-1">
+            <p className="text-md font-medium tracking-tight mb-7">Price</p>
+            <p className="text-md font-medium tracking-tight mb-7 w-[110px]">
               From
-            </span>
-            {[1, 2, 3, 4, 5].map((item) => {
-              if (item === 1) {
-                return (
-                  <p
-                    className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
-                    title="@Usertal1354645"
-                  >
-                    @Usertal1354645
-                  </p>
-                );
-              }
-              return (
-                <p
-                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
-                  title="@Usertal1354645"
-                >
-                  @Usertal1354645
-                </p>
-              );
-            })}
+            </p>
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  function renderOffersWinState() {
-    return (
-      <div
-        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto  xl:max-w-[761px]`}
-      >
-        <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
-          <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
-            <ListBulletIcon className="w-7" /> Offers
-          </h3>
-        </div>
-        <div className={`p-6 flex justify-between`}>
-          <div>
-            <span className="text-md font-medium tracking-teight mb-7">
-              Price
-            </span>
-            {[1, 2, 3, 4, 5, 6].map((item) => {
-              // item === 1 (primeiro lugar ate puxar os dados corretos)
-              if ((item === 1 && isWon) || (item === 1 && closedAuction)) {
-                return (
+          {[
+            { bid: "0,32 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+            { bid: "0,30 BTH", account: "@Usertal1354645" },
+          ].map(({ bid, account }) => (
+            <div className="flex justify-between w-full">
+              {bid === "0,32 BTH" ? (
+                <>
                   <div className="relative mt-1">
-                    <p className="absolute bottom-7 text-transparent bg-clip-text bg-space max-w-[419px] flex gap-2 text-sm font-semibold items-center">
-                      <CrownIcon /> Winner
+                    <p className="absolute bottom-16 text-transparent bg-clip-text bg-space max-w-[419px] flex gap-2 text-sm font-semibold items-center">
+                      <CrownIcon16 /> Winner
                     </p>
                     <p
                       className={`md:text-xl ${
@@ -144,52 +143,28 @@ function Auction() {
                       0,35 ETH
                     </p>
                   </div>
-                );
-              }
-              return (
-                <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                  0,32 ETH
-                </p>
-              );
-            })}
-          </div>
-          <div className="xl:w-[270px]">
-            <span className="text-md font-medium tracking-tight mb-7">
-              From
-            </span>
-            {[1, 2, 3, 4, 5, 6].map((item) => {
-              if ((item === 1 && isWon) || (item === 1 && closedAuction)) {
-                return (
                   <p
-                    className={`md:text-xl ${
-                      isWon || closedAuction ? "font-bold" : "font-semibold"
-                    } tracking-tight text-green-500 w-[100px] truncate leading-6`}
-                    title="@Usertal1354645"
+                    className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-success w-[110px] truncate leading-6"
+                    title={account}
                   >
-                    @Usertal1354645
+                    {account}
                   </p>
-                );
-              }
-              if (item === 1) {
-                return (
+                </>
+              ) : (
+                <>
+                  <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
+                    {bid}
+                  </p>
                   <p
-                    className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
-                    title="@Usertal1354645"
+                    className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[110px] truncate leading-6"
+                    title={account}
                   >
-                    @Usertal1354645
+                    {account}
                   </p>
-                );
-              }
-              return (
-                <p
-                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
-                  title="@Usertal1354645"
-                >
-                  @Usertal1354645
-                </p>
-              );
-            })}
-          </div>
+                </>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -197,7 +172,7 @@ function Auction() {
 
   return (
     <PageContainer>
-      <div className="flex gap-1 items-center w-[95%] mx-auto mt-[1.1rem] px-4 md:ml-6 md:px-2 xl:px-0 xl:mx-[-5px] mb-[.4rem]">
+      <div className="flex gap-1 items-center w-[95%] max-w-[413px] mx-auto mt-[1.1rem] md:ml-6 md:px-2 xl:px-0 xl:mx-[-5px] mb-[.4rem]">
         <ChevronLeftIcon className="w-[15px] h-5" />
         <a href="/" className="text-black font-semibold text-sm tracking-tight">
           Back to all acutions
@@ -264,8 +239,8 @@ function Auction() {
             </div>
           </div>
         </div>
-        <div className="col-span-2 w-full md:max-w-[761px] xl:pl-0">
-          <div className="hidden md:flex flex-col mb-10 mt-[-8px] ml-7 w-full">
+        <div className="col-span-2 w-full flex justify-center md:max-w-[761px] md:block xl:pl-0">
+          <div className="hidden md:flex flex-col mb-10 mt-[-8px] md:ml-3 xl:ml-7 w-full">
             <div className="flex justify-between mt-[3px]">
               <span className="flex gap-[.6rem] items-center text-xl font-medium tracking-normal pl-1">
                 Doodles <CheckCircleIcon className="w-5 text-success" />
@@ -287,14 +262,14 @@ function Auction() {
               By <strong>@johnsnow</strong>
             </span>
           </div>
-          <div className="flex flex-col mt-9 gap-3 mx-2 max-w-[413px] md:max-w-[761px] md:mx-0 xl:ml-8 xl:mt-[-5px]">
+          <div className="flex flex-col mt-9 gap-3 mx-2 w-[95%] max-w-[413px] md:max-w-[761px] md:mx-0 md:ml-3 xl:ml-8 xl:mt-[-5px]">
             {isWon ? (
               <>
-                <span className="mt-6 max-w-[419px] text-success flex gap-3 py-1 text-xl font-semibold items-center">
+                <span className="mt-14 pl-5 max-w-[419px] text-success flex gap-3 py-1 text-xl font-semibold items-center">
                   {" "}
-                  <CrownIcon /> You won!
+                  <CrownIcon20 /> You won!
                 </span>
-                <button className="w-full h-10 bg-space mt-4 text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px]">
+                <button className="w-full h-10 ml-5 bg-space mt-4 text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px]">
                   Claim rewards
                 </button>
               </>
@@ -314,11 +289,12 @@ function Auction() {
                   disabled={closedAuction}
                 />
                 <button
+                  type="button"
                   className={`w-full h-10 ${
                     closedAuction
                       ? "bg-paragraph cursor-not-allowed"
                       : "bg-space"
-                  } text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px]`}
+                  } text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px] xl:mt-1`}
                   disabled={closedAuction}
                 >
                   {closedAuction ? "Auction closed" : "Make offer"}
@@ -327,27 +303,33 @@ function Auction() {
                   Your balance: 10 ETH
                 </strong>
                 <span className="w-[228px] p-[.4rem] px-4 text-center rounded-[50px] text-white font-medium text-sm bg-paragraph md:hidden">
-                  Auction ends in: 2h 10m 15s
+                  {isWon || closedAuction
+                    ? "Auction closed"
+                    : "Auction ends in: 2h 10m 15s"}
                 </span>
               </>
             )}
           </div>
         </div>
-        <div className="row-span-2 col-span-2 w-[95%] mx-auto xl:w-[761px] mt-6 xl:mt-9 xl:ml-7">
-          <div className="mt-2 w-full max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto xl:h-[202px] md:max-w-[761px]">
+        <div
+          className={`row-span-2 col-span-2 w-[95%] mx-auto xl:w-[761px] mt-6 xl:mt-${
+            isWon ? "2rem" : "9"
+          } xl:ml-7`}
+        >
+          <div className="mt-2 w-full max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto xl:h-[202px] md:max-w-[761px] xl:mt-[-5px]">
             <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
               <h3 className="px-8 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
                 <ListBulletIcon className="w-6" /> Your offers
               </h3>
             </div>
-            <div className="">
+            <div>
               {offered || isWon ? (
                 <div className="p-8 flex justify-between xl:p-5 ml-3">
                   <div className="flex flex-col gap-5">
                     <span className="text-md font-medium tracking-tight text-black">
                       Price
                     </span>
-                    <div className="flex gap-6">
+                    <div className="flex gap-7 items-center">
                       <span className="md:text-xl font-semibold tracking-tight text-black">
                         0,32 ETH
                       </span>
@@ -356,7 +338,7 @@ function Auction() {
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-2 items-stfirstPlaceart justify-between xl:mr-6">
+                  <div className="flex flex-col gap-2 items-stfirstPlaceart justify-between xl:mr-9">
                     <span className="text-md text-black font-medium tracking-tight">
                       Date
                     </span>
