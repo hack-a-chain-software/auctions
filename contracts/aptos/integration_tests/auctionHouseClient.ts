@@ -11,8 +11,6 @@ import {
 
 import { NODE_URL, CONTRACT_MODULE, moduleName } from './env';
 
-const contractModule = `${CONTRACT_MODULE}::${moduleName}`;
-
 type NftCollection = {
     creator: string;
     collectionName: string;
@@ -41,11 +39,13 @@ type Bid = {
 
 export class AuctionHouseClient extends AptosClient {
 
-    auctionHouseAddress: AptosAccount
+    auctionHouseAddress: string
+    contractModule: string
 
-    constructor(node_url: string, auctionHouseAddress: AptosAccount) {
+    constructor(node_url: string, moduleAddress: string, auctionHouseAddress: string) {
         super(node_url);
         this.auctionHouseAddress = auctionHouseAddress;
+        this.contractModule = `${moduleAddress}::${moduleName}`
     }
 
     /** Initialize new instance of AuctionHouse */
@@ -56,7 +56,7 @@ export class AuctionHouseClient extends AptosClient {
         const rawTxn = await this.generateTransaction(
             sender.address(),
             {
-                function: `${contractModule}::initialize_auction_house`,
+                function: `${this.contractModule}::initialize_auction_house`,
                 type_arguments: [],
                 arguments: [restrictUsersCreateAuctions]
             }
@@ -83,10 +83,10 @@ export class AuctionHouseClient extends AptosClient {
         const rawTxn = await this.generateTransaction(
             sender.address(),
             {
-                function: `${contractModule}::create_auction`,
+                function: `${this.contractModule}::create_auction`,
                 type_arguments: [coinType],
                 arguments: [
-                    this.auctionHouseAddress.address(),
+                    this.auctionHouseAddress,
                     endTime,
                     minSellingPrice,
                     minIncrement,
@@ -114,10 +114,10 @@ export class AuctionHouseClient extends AptosClient {
         const rawTxn = await this.generateTransaction(
             sender.address(),
             {
-                function: `${contractModule}::bid`,
+                function: `${this.contractModule}::bid`,
                 type_arguments: [coinType],
                 arguments: [
-                    this.auctionHouseAddress.address(),
+                    this.auctionHouseAddress,
                     id,
                     bid,
                 ]
@@ -138,10 +138,10 @@ export class AuctionHouseClient extends AptosClient {
         const rawTxn = await this.generateTransaction(
             sender.address(),
             {
-                function: `${contractModule}::claim_prize`,
+                function: `${this.contractModule}::claim_prize`,
                 type_arguments: [],
                 arguments: [
-                    this.auctionHouseAddress.address(),
+                    this.auctionHouseAddress,
                     id,
                 ]
             }
@@ -161,10 +161,10 @@ export class AuctionHouseClient extends AptosClient {
         const rawTxn = await this.generateTransaction(
             sender.address(),
             {
-                function: `${contractModule}::claim_coins`,
+                function: `${this.contractModule}::claim_coins`,
                 type_arguments: [],
                 arguments: [
-                    this.auctionHouseAddress.address(),
+                    this.auctionHouseAddress,
                     id,
                 ]
             }
@@ -176,152 +176,392 @@ export class AuctionHouseClient extends AptosClient {
         return pendingTxn.hash;
     }
 
+    // ADMIN METHODS - Will abort if not called by owner
+
+    async addAuthorizedUser(
+        sender: AptosAccount,
+        user: string
+    ): Promise<string> {
+        const rawTxn = await this.generateTransaction(
+            sender.address(),
+            {
+                function: `${this.contractModule}::add_authorized_users`,
+                type_arguments: [],
+                arguments: [ 
+                    this.auctionHouseAddress,
+                    user
+                ]
+            }
+        );
+
+        const bcsTxn = await this.signTransaction(sender, rawTxn);
+        const pendingTxn = await this.submitTransaction(bcsTxn);
+        console.log(pendingTxn.hash);
+        return pendingTxn.hash;
+    }
+
+    async removeAuthorizedUser(
+        sender: AptosAccount,
+        user: string
+    ): Promise<string> {
+        const rawTxn = await this.generateTransaction(
+            sender.address(),
+            {
+                function: `${this.contractModule}::remove_authorized_users`,
+                type_arguments: [],
+                arguments: [ 
+                    this.auctionHouseAddress,
+                    user
+                ]
+            }
+        );
+
+        const bcsTxn = await this.signTransaction(sender, rawTxn);
+        const pendingTxn = await this.submitTransaction(bcsTxn);
+        console.log(pendingTxn.hash);
+        return pendingTxn.hash;
+    }
+
+    async addAuthorizedCollection(
+        sender: AptosAccount,
+        collection: NftCollection
+    ): Promise<string> {
+        const rawTxn = await this.generateTransaction(
+            sender.address(),
+            {
+                function: `${this.contractModule}::add_authorized_nft_collections`,
+                type_arguments: [],
+                arguments: [ 
+                    this.auctionHouseAddress,
+                    collection.creator,
+                    collection.collectionName
+                ]
+            }
+        );
+
+        const bcsTxn = await this.signTransaction(sender, rawTxn);
+        const pendingTxn = await this.submitTransaction(bcsTxn);
+        console.log(pendingTxn.hash);
+        return pendingTxn.hash;
+    }
+
+    async removeAuthorizedCollection(
+        sender: AptosAccount,
+        collection: NftCollection
+    ): Promise<string> {
+        const rawTxn = await this.generateTransaction(
+            sender.address(),
+            {
+                function: `${this.contractModule}::remove_authorized_nft_collections`,
+                type_arguments: [],
+                arguments: [ 
+                    this.auctionHouseAddress,
+                    collection.creator,
+                    collection.collectionName
+                ]
+            }
+        );
+
+        const bcsTxn = await this.signTransaction(sender, rawTxn);
+        const pendingTxn = await this.submitTransaction(bcsTxn);
+        console.log(pendingTxn.hash);
+        return pendingTxn.hash;
+    }
+
+    async addAuthorizedCoin(
+        sender: AptosAccount,
+        coinType: string
+    ): Promise<string> {
+        const rawTxn = await this.generateTransaction(
+            sender.address(),
+            {
+                function: `${this.contractModule}::add_authorized_coins`,
+                type_arguments: [ coinType ],
+                arguments: [ 
+                    this.auctionHouseAddress
+                ]
+            }
+        );
+
+        const bcsTxn = await this.signTransaction(sender, rawTxn);
+        const pendingTxn = await this.submitTransaction(bcsTxn);
+        console.log(pendingTxn.hash);
+        return pendingTxn.hash;
+    }
+
+    async removeAuthorizedCoin(
+        sender: AptosAccount,
+        coinType: string
+    ): Promise<string> {
+        const rawTxn = await this.generateTransaction(
+            sender.address(),
+            {
+                function: `${this.contractModule}::remove_authorized_coins`,
+                type_arguments: [ coinType ],
+                arguments: [ 
+                    this.auctionHouseAddress
+                ]
+            }
+        );
+
+        const bcsTxn = await this.signTransaction(sender, rawTxn);
+        const pendingTxn = await this.submitTransaction(bcsTxn);
+        console.log(pendingTxn.hash);
+        return pendingTxn.hash;
+    }
+
     // READ METHODS
-    async isUserAuthorized(): Promise<boolean> {}
+    async isUserAuthorized(
+        user: string
+    ): Promise<boolean> {
+        const resource: any = await this.getAccountResource(
+            this.auctionHouseAddress,
+            `${this.contractModule}::AuctionHouse`,
+        );
+        const optionVec: Array<any> = resource.data.allowed_users.vec;
+        if (optionVec.length > 0) {
+            const { handle } = optionVec[0].table;
+            try {
+                let authorized: boolean = await this.getTableItem(
+                    handle,
+                    {
+                        key_type: "address",
+                        value_type: "bool",
+                        key: user
+                    }
+                );
+                return authorized;
+            } catch (e) {
+                if ((e!.toString()).includes("Table Item not found by Table handle")) {
+                    return false
+                }
+                throw e;
+            }
+        
+        }
+        return true
+    
+    }
     
     // figure how to fetch all in contract
-    async getAuthorizedTokens(): Promise<Array<string>> {
+    async getAuthorizedCoins(): Promise<Array<string>> {
         const resource: any = await this.getAccountResource(
-            this.auctionHouseAddress.address().hex(),
-            `${contractModule}::AuctionHouse`,
+            this.auctionHouseAddress,
+            `${this.contractModule}::AuctionHouse`,
         );
-        const { handle }: { handle: string } = resource.data.coin_allowlist.table;
+        const coinAllowlist = resource.data.coin_allowlist;
+        
+        const { handle: vectorHandle } = coinAllowlist.aux_vector.table;
+        const { len: vectorLen } = coinAllowlist.aux_vector
+        const { handle } = coinAllowlist.table;
+        
+        let returnValue = [];
+        let counter = 0;
+        while (counter < vectorLen) {
+            let typeInfo: any = await this.getTableItem(
+                vectorHandle,
+                {
+                    key_type: "u64",
+                    value_type: "0x1::type_info::TypeInfo",
+                    key: counter.toString()
+                }
+            );
+            let authorized: boolean = await this.getTableItem(
+                handle,
+                {
+                    key_type: "0x1::type_info::TypeInfo",
+                    value_type: "bool",
+                    key: typeInfo
+                }
+            );
+            if (authorized) {
+                const moduleName = Buffer.from(typeInfo.module_name.slice(2), "hex").toString("utf-8");
+                const structName = Buffer.from(typeInfo.struct_name.slice(2), "hex").toString("utf-8");
+                returnValue.push(
+                    `${typeInfo.account_address}::${moduleName}::${structName}`
+                );
+            }
+            counter += 1;
+        }
+        return returnValue;
     }
 
     // figure how to fetch all in contract
-    async getAuthorizedNftCollections(
-        start: number,
-        limit: number,
-    ): Promise<Array<NftCollection>> {
-        const resources = await this.getAccountResource(
-            this.auctionHouseAddress.address().hex(),
-                
-        )
-    }
-
-    async getBidsAuction(
-        auctionId: number
-    ): Promise<Array<Bid>> {
+    async getAuthorizedNftCollections(): Promise<Array<NftCollection>> {
         const resource: any = await this.getAccountResource(
-            this.auctionHouseAddress.address().hex(),
-            `${contractModule}::AuctionHouse`,
+            this.auctionHouseAddress,
+            `${this.contractModule}::AuctionHouse`,
         );
-    }
-
-    async getAllAuctionsLen(): Promise<number> {
-        const resource: any = await this.getAccountResource(
-            this.auctionHouseAddress.address().hex(),
-            `${contractModule}::AuctionHouse`,
-        );
-        return resource.data["auctions"]["len"]
-    }
-
-    async getAllAuctions(
-        start: number,
-        limit: number,
-    ): Promise<Auction> {
-        const resource: any = await this.getAccountResource(
-            this.auctionHouseAddress.address().hex(),
-            `${contractModule}::AuctionHouse`,
-        );
-        const { handle }: { handle: string } = resource.data.auctions;
+        const nftAllowlist = resource.data.nft_allowlist;
+        
+        const { handle: vectorHandle } = nftAllowlist.aux_vector.table;
+        const { len: vectorLen } = nftAllowlist.aux_vector
+        const { handle } = nftAllowlist.table;
         
         let returnValue = [];
         let counter = 0;
-        while (counter < limit) {
-            let auction: Auction = await this.getTableItem(
-                handle,
+        while (counter < vectorLen) {
+            let nftCollection: any = await this.getTableItem(
+                vectorHandle,
                 {
-                    key_type: "",
-                    value_type: "",
-                    key: start + counter
+                    key_type: "u64",
+                    value_type: `${this.contractModule}::NftCollection`,
+                    key: counter.toString()
                 }
             );
-            returnValue.push(auction);
+            console.log(nftCollection);
+            let authorized: boolean = await this.getTableItem(
+                handle,
+                {
+                    key_type: `${this.contractModule}::NftCollection`,
+                    value_type: "bool",
+                    key: nftCollection
+                }
+            );
+            if (authorized) {
+                returnValue.push(
+                    {
+                        creator: nftCollection.creator,
+                        collectionName: nftCollection.collection_name
+                    }
+                );
+            }
             counter += 1;
         }
         return returnValue;
     }
 
-    async getCreatedByUserAuctionsLen(
-        user: AptosAccount
-    ): Promise<number> {
-        const resource: any = await this.getAccountResource(
-            user.address().hex(),
-            `${contractModule}::UserQueryHelper`,
-        );
-        const { handle }: { handle: string } = resource.data.created_auctions;
-        const getTableElementRequest = {}
-        return resource.data["auctions"]["len"]
-    }
-
-    async getCreatedByUserAuctions(
-        start: number,
-        limit: number,
-    ): Promise<Auction> {
-        const resource: any = await this.getAccountResource(
-            this.auctionHouseAddress.address().hex(),
-            `${contractModule}::AuctionHouse`,
-        );
-        const { handle }: { handle: string } = resource.data.auctions;
+    // async getBidsAuction(
+    //     auctionId: number
+    // ): Promise<Array<Bid>> {
+    //     const resource: any = await this.getAccountResource(
+    //         this.auctionHouseAddress.address().hex(),
+    //         `${this.contractModule}::AuctionHouse`,
+    //     );
+    //     const { handle }: { handle: string } = resource.data.auctions;
         
-        let returnValue = [];
-        let counter = 0;
-        while (counter < limit) {
-            let auction: Auction = await this.getTableItem(
-                handle,
-                {
-                    key_type: "",
-                    value_type: "",
-                    key: start + counter
-                }
-            );
-            returnValue.push(auction);
-            counter += 1;
-        }
-        return returnValue;
-    }
+    //     let auction: Auction = await this.getTableItem(
+    //         handle,
+    //         {
+    //             key_type: "",
+    //             value_type: "",
+    //             key: start + counter
+    //         }
+    //     );
 
-    async getBidByUserAuctionsLen(
-        user: AptosAccount
-    ): Promise<number> {
-        const resource: any = await this.getAccountResource(
-            user.address().hex(),
-            `${contractModule}::UserQueryHelper`,
-        );
-        const { handle }: { handle: string } = resource.data.bid_auctions;
-        const getTableElementRequest = {}
-        return resource.data["auctions"]["len"]
-    }
+    // }
 
-    async getBidByUserAuctions(
-        start: number,
-        limit: number,
-    ): Promise<Auction> {
-        const resource: any = await this.getAccountResource(
-            this.auctionHouseAddress.address().hex(),
-            `${contractModule}::AuctionHouse`,
-        );
-        const { handle }: { handle: string } = resource.data.auctions;
+    // async getAllAuctionsLen(): Promise<number> {
+    //     const resource: any = await this.getAccountResource(
+    //         this.auctionHouseAddress.address().hex(),
+    //         `${this.contractModule}::AuctionHouse`,
+    //     );
+    //     return resource.data["auctions"]["len"]
+    // }
+
+    // async getAllAuctions(
+    //     start: number,
+    //     limit: number,
+    // ): Promise<Auction> {
+    //     const resource: any = await this.getAccountResource(
+    //         this.auctionHouseAddress.address().hex(),
+    //         `${this.contractModule}::AuctionHouse`,
+    //     );
+    //     const { handle }: { handle: string } = resource.data.auctions;
         
-        let returnValue = [];
-        let counter = 0;
-        while (counter < limit) {
-            let auction: Auction = await this.getTableItem(
-                handle,
-                {
-                    key_type: "",
-                    value_type: "",
-                    key: start + counter
-                }
-            );
-            returnValue.push(auction);
-            counter += 1;
-        }
-        return returnValue;
-    }
+    //     let returnValue = [];
+    //     let counter = 0;
+    //     while (counter < limit) {
+    //         let auction: Auction = await this.getTableItem(
+    //             handle,
+    //             {
+    //                 key_type: "",
+    //                 value_type: "",
+    //                 key: start + counter
+    //             }
+    //         );
+    //         returnValue.push(auction);
+    //         counter += 1;
+    //     }
+    //     return returnValue;
+    // }
 
+    // async getCreatedByUserAuctionsLen(
+    //     user: AptosAccount
+    // ): Promise<number> {
+    //     const resource: any = await this.getAccountResource(
+    //         user.address().hex(),
+    //         `${this.contractModule}::UserQueryHelper`,
+    //     );
+    //     const { handle }: { handle: string } = resource.data.created_auctions;
+    //     const getTableElementRequest = {}
+    //     return resource.data["auctions"]["len"]
+    // }
 
+    // async getCreatedByUserAuctions(
+    //     start: number,
+    //     limit: number,
+    // ): Promise<Auction> {
+    //     const resource: any = await this.getAccountResource(
+    //         this.auctionHouseAddress.address().hex(),
+    //         `${this.contractModule}::AuctionHouse`,
+    //     );
+    //     const { handle }: { handle: string } = resource.data.auctions;
+        
+    //     let returnValue = [];
+    //     let counter = 0;
+    //     while (counter < limit) {
+    //         let auction: Auction = await this.getTableItem(
+    //             handle,
+    //             {
+    //                 key_type: "",
+    //                 value_type: "",
+    //                 key: start + counter
+    //             }
+    //         );
+    //         returnValue.push(auction);
+    //         counter += 1;
+    //     }
+    //     return returnValue;
+    // }
 
+    // async getBidByUserAuctionsLen(
+    //     user: AptosAccount
+    // ): Promise<number> {
+    //     const resource: any = await this.getAccountResource(
+    //         user.address().hex(),
+    //         `${this.contractModule}::UserQueryHelper`,
+    //     );
+    //     const { handle }: { handle: string } = resource.data.bid_auctions;
+    //     const getTableElementRequest = {}
+    //     return resource.data["auctions"]["len"]
+    // }
+
+    // async getBidByUserAuctions(
+    //     start: number,
+    //     limit: number,
+    // ): Promise<Auction> {
+    //     const resource: any = await this.getAccountResource(
+    //         this.auctionHouseAddress.address().hex(),
+    //         `${this.contractModule}::AuctionHouse`,
+    //     );
+    //     const { handle }: { handle: string } = resource.data.auctions;
+        
+    //     let returnValue = [];
+    //     let counter = 0;
+    //     while (counter < limit) {
+    //         let auction: Auction = await this.getTableItem(
+    //             handle,
+    //             {
+    //                 key_type: "",
+    //                 value_type: "",
+    //                 key: start + counter
+    //             }
+    //         );
+    //         returnValue.push(auction);
+    //         counter += 1;
+    //     }
+    //     return returnValue;
+    // }
 
 }

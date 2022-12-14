@@ -12,6 +12,7 @@
   "devDependencies": {
     "@types/node": "^18.11.14",
     "@types/shelljs": "^0.8.11",
+    "aptos": "^1.4.0",
     "shelljs": "^0.8.5"
   }
 }
