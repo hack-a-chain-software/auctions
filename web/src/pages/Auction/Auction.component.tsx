@@ -7,6 +7,8 @@ import CrownIcon16 from "../../assets/svg/CrownIcon16";
 import CrownIcon20 from "../../assets/svg/CrownIcon20";
 import CrownIcon24 from "../../assets/svg/CrownIcon24";
 import PageContainer from "../../components/PageContainer";
+import { useAuction } from "../../hooks/useAuction";
+import { useBid } from "../../hooks/useBid";
 import "./Auction.styles.less";
 
 function Auction() {
@@ -14,6 +16,8 @@ function Auction() {
   const firstPlace = false;
   const closedAuction = false;
   const isWon = false;
+
+  const { bids } = useBid("1");
 
   function renderDefautOfferState() {
     return (
