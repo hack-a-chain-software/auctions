@@ -260,7 +260,7 @@ export class AuctionHouseClient extends AptosClient {
                     }
                 );
                 return authorized;
-            } catch (e) {
+            } catch (e: any) {
                 if ((e!.toString()).includes("Table Item not found by Table handle")) {
                     return false
                 }
@@ -485,7 +485,7 @@ export class AuctionHouseClient extends AptosClient {
                 user,
                 `${this.contractModule}::UserQueryHelper`,
             );
-        } catch (e) {
+        } catch (e: any) {
             if ((e!.toString()).includes("Resource not found by Address")) {
                 return 0
             }
@@ -520,7 +520,7 @@ export class AuctionHouseClient extends AptosClient {
                 user,
                 `${this.contractModule}::UserQueryHelper`,
             );
-        } catch (e) {
+        } catch (e: any) {
             if ((e!.toString()).includes("Resource not found by Address")) {
                 return []
             }
@@ -604,7 +604,7 @@ export class AuctionHouseClient extends AptosClient {
                 user,
                 `${this.contractModule}::UserQueryHelper`,
             );
-        } catch (e) {
+        } catch (e: any) {
             if ((e!.toString()).includes("Resource not found by Address")) {
                 return 0
             }
@@ -638,7 +638,7 @@ export class AuctionHouseClient extends AptosClient {
                 user,
                 `${this.contractModule}::UserQueryHelper`,
             );
-        } catch (e) {
+        } catch (e: any) {
             if ((e!.toString()).includes("Resource not found by Address")) {
                 return []
             }

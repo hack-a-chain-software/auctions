@@ -28,7 +28,7 @@ import { NODE_URL } from "./env";
 const BASE_FUNDS = 500_000_000;
 const aptosCoin = "0x1::aptos_coin::AptosCoin";
 
-export async function testAptosCoin(
+export async function testBasicFlow(
     client: AptosClient,
     faucetClient: FaucetClient,
     coinClient: CoinClient,
@@ -41,6 +41,9 @@ export async function testAptosCoin(
     const bidder2 = new AptosAccount();
     const bidder3 = new AptosAccount();
 
+    console.log("module address is: " + moduleAddress.address().hex());
+    console.log("contract address is: " + ownerAccount.address().hex());
+
     await faucetClient.fundAccount(moduleAddress.address(), BASE_FUNDS);
     await faucetClient.fundAccount(ownerAccount.address(), BASE_FUNDS);
     await faucetClient.fundAccount(bidder1.address(), BASE_FUNDS);
@@ -50,8 +53,6 @@ export async function testAptosCoin(
     const auctionHouseClient = new AuctionHouseClient(NODE_URL, moduleAddress.address().hex(), ownerAccount.address().hex());
 
     // deploy module
-    console.log(`moduleAddress is ${moduleAddress.address().hex()}`)
-
     sh.exec(`
         aptos move compile --named-addresses auctionhouse=${moduleAddress.address().hex()} --included-artifacts all --save-metadata
     `);
@@ -75,7 +76,7 @@ export async function testAptosCoin(
 
     // initialize AuctionHouse
     await client.waitForTransaction(
-        await auctionHouseClient.initializeAuctionHouse(ownerAccount, true),
+        await auctionHouseClient.initializeAuctionHouse(ownerAccount, false),
         { checkSuccess: true }
     );
 
@@ -175,7 +176,6 @@ export async function testAptosCoin(
     assert(auctionsLen == 1);
 
     const allAuctions = await auctionHouseClient.getAllAuctions(0, auctionsLen);
-    console.log(allAuctions);
     assert(allAuctions.length == 1);
 
     const createdByUserLen = await auctionHouseClient.getCreatedByUserAuctionsLen(ownerAccount.address().hex());

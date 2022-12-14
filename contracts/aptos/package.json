@@ -4,14 +4,21 @@
   "version": "0.0.0",
   "main": "ts_client/index.ts",
   "scripts": {
+    "seed:devnet": "tsc && node integration_tests/seed_devnet.js",
     "test:integration": "tsc && node integration_tests/index.js"
   },
   "dependencies": {
-    "aptos": "^1.4.0"
+    "aptos": "^1.4.0",
+    "dotenv": "^16.0.3"
   },
   "devDependencies": {
     "@types/node": "^18.11.14",
     "@types/shelljs": "^0.8.11",
     "shelljs": "^0.8.5"
+  },
+  "workspaces": {
+    "nohoist": [
+      "*"
+    ]
   }
 }
