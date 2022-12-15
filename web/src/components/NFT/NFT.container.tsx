@@ -1,25 +1,22 @@
 import NFTComponent from './NFT.component';
 import { useEffect, useState } from 'react';
-import { TokenDataId, useNFTData } from '../../hooks';
+import { TokenTypes } from 'aptos';
+import { useNFTData } from '../../hooks/useNFTData';
 
-type NFTProps = TokenDataId & {
+type NFTProps = TokenTypes.TokenDataId & {
   checked?: boolean
 }
 
 function NFT(props: NFTProps) {
+  const { creator, collection, name } = props;
   const [image, setImage] = useState<string>('');
-  let loading = false;
+  const { data } = useNFTData(creator, collection, name);
 
   useEffect(() => {
-    if(loading)
+    if(!data)
       return;
-    const { creator, collection, name } = props;
-
-    loading = true;
-    useNFTData(creator, collection, name)
-      .then(data => setImage(data.uri))
-      .then(() => loading = false);
-  }, []);
+    setImage(data.uri);
+  }, [data]);
 
   const chooseNFTComponentProps = {
     checked: !!props.checked,

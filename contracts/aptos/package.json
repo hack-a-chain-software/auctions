@@ -18,6 +18,7 @@
     "yarn": "^1.22.19"
   },
   "devDependencies": {
+    "typescript": "^4.9.3",
     "@types/node": "^18.11.14",
     "@types/shelljs": "^0.8.11",
     "isomorphic-unfetch": "^3.1.0",
