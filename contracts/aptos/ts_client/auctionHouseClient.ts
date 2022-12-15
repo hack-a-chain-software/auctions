@@ -44,7 +44,27 @@ export type CoinInfo = {
     supply: any,
 }
 
+export type SignAndSendFunction = (
+    payload: Types.TransactionPayload
+) => Promise<{ hash: Types.HexEncodedBytes }>
+
+/** This type is either the AptosAccount type from
+ *  aptos typescript SDK or a function that takes a 
+ *  transaction payload, signs it and sends the transaction
+ *  to the blockchain, returning the transaction hash.
+ *  In the hippospace aptos-wallet-adapter, this is 
+ *  the signAndSubmitTransaction method.
+ */
+export type GenericSender = AptosAccount | SignAndSendFunction;
+
 interface TransactionParameters {
+    sender: GenericSender,
+    functionName: string,
+    typeArguments: Array<any>,
+    regularArguments: Array<any>
+}
+
+interface AptosClientTransactionParameters {
     sender: AptosAccount,
     functionName: string,
     typeArguments: Array<any>,
@@ -66,22 +86,25 @@ export class AuctionHouseClient extends AptosClient {
 
     /** Initialize new instance of AuctionHouse */
     async initializeAuctionHouse(
-        sender: AptosAccount,
+        sender: GenericSender,
         restrictUsersCreateAuctions: boolean,
     ): Promise<string> {
+        const functionName = `${this.contractModule}::initialize_auction_house`;
+        const typeArguments: any[] = [];
+        const regularArguments = [
+            restrictUsersCreateAuctions
+        ];
         return await this.performTransaction({
             sender,
-            functionName: `${this.contractModule}::initialize_auction_house`,
-            typeArguments: [],
-            regularArguments: [
-                restrictUsersCreateAuctions
-            ],
+            functionName,
+            typeArguments,
+            regularArguments,
         });
     }
 
     /** Creates a new auction inside auctionhouse by locking an NFT */
     async createAuction(
-        sender: AptosAccount,
+        sender: GenericSender,
         endTime: string,
         minSellingPrice: string,
         minIncrement: string,
@@ -91,158 +114,189 @@ export class AuctionHouseClient extends AptosClient {
         propertyVersion: string,
         coinType: string
     ): Promise<string> {
+        const functionName = `${this.contractModule}::create_auction`;
+        const typeArguments = [coinType];
+        const regularArguments = [
+            this.auctionHouseAddress,
+            endTime,
+            minSellingPrice,
+            minIncrement,
+            creator,
+            collectionName,
+            name,
+            propertyVersion
+        ];
         return await this.performTransaction({
-            sender,
-            functionName: `${this.contractModule}::create_auction`,
-            typeArguments: [coinType],
-            regularArguments: [
-                this.auctionHouseAddress,
-                endTime,
-                minSellingPrice,
-                minIncrement,
-                creator,
-                collectionName,
-                name,
-                propertyVersion
-            ],
+            sender, functionName, typeArguments, regularArguments
         });
     }
 
     /** Bids on auction of passed id using coinType */
     async bid(
-        sender: AptosAccount,
+        sender: GenericSender,
         id: string,
         bid: string,
         coinType: string,
     ): Promise<string> {
+        const functionName = `${this.contractModule}::bid`;
+        const typeArguments: any[] = [coinType];
+        const regularArguments = [
+            this.auctionHouseAddress,
+            id,
+            bid,
+        ];
         return await this.performTransaction({
             sender,
-            functionName: `${this.contractModule}::bid`,
-            typeArguments: [coinType],
-            regularArguments: [
-                this.auctionHouseAddress,
-                id,
-                bid,
-            ],
+            functionName,
+            typeArguments,
+            regularArguments
         });
     }
 
     /** After auction is over, highest bidder can claim the nft prize */
     async claimPrize(
-        sender: AptosAccount,
+        sender: GenericSender,
         id: number,
     ): Promise<string> {
+        const functionName = `${this.contractModule}::claim_prize`;
+        const typeArguments: any[] = [];
+        const regularArguments = [
+            this.auctionHouseAddress,
+            id
+        ];
         return await this.performTransaction({
             sender,
-            functionName: `${this.contractModule}::claim_prize`,
-            typeArguments: [],
-            regularArguments: [
-                this.auctionHouseAddress,
-                id
-            ],
+            functionName,
+            typeArguments,
+            regularArguments
         });
     }
 
     /** After auction is over, creator can claim coins bid */
     async claimCoins(
-        sender: AptosAccount,
+        sender: GenericSender,
         id: number,
     ): Promise<string> {
+        const functionName = `${this.contractModule}::claim_coins`;
+        const typeArguments: any[] = [];
+        const regularArguments = [
+            this.auctionHouseAddress,
+            id
+        ];
         return await this.performTransaction({
             sender,
-            functionName: `${this.contractModule}::claim_coins`,
-            typeArguments: [],
-            regularArguments: [
-                this.auctionHouseAddress,
-                id
-            ],
+            functionName,
+            typeArguments,
+            regularArguments
         });
     }
 
     // ADMIN METHODS - Will abort if not called by owner
     async addAuthorizedUser(
-        sender: AptosAccount,
+        sender: GenericSender,
         user: string
     ): Promise<string> {
+        const functionName = `${this.contractModule}::add_authorized_users`;
+        const typeArguments: any[] = [];
+        const regularArguments = [
+            this.auctionHouseAddress,
+            user
+        ];
         return await this.performTransaction({
             sender,
-            functionName: `${this.contractModule}::add_authorized_users`,
-            typeArguments: [],
-            regularArguments: [
-                this.auctionHouseAddress,
-                user
-            ],
+            functionName,
+            typeArguments,
+            regularArguments
         });
     }
 
     async removeAuthorizedUser(
-        sender: AptosAccount,
+        sender: GenericSender,
         user: string
     ): Promise<string> {
+        const functionName = `${this.contractModule}::remove_authorized_users`;
+        const typeArguments: any[] = [];
+        const regularArguments = [
+            this.auctionHouseAddress,
+            user
+        ];
         return await this.performTransaction({
             sender,
-            functionName: `${this.contractModule}::remove_authorized_users`,
-            typeArguments: [],
-            regularArguments: [
-                this.auctionHouseAddress,
-                user
-            ],
+            functionName,
+            typeArguments,
+            regularArguments
         });
     }
 
     async addAuthorizedCollection(
-        sender: AptosAccount,
+        sender: GenericSender,
         collection: NftCollection
     ): Promise<string> {
+        const functionName = `${this.contractModule}::add_authorized_nft_collections`;
+        const typeArguments: any[] = [];
+        const regularArguments = [
+            this.auctionHouseAddress,
+            collection.creator,
+            collection.collectionName
+        ];
         return await this.performTransaction({
             sender,
-            functionName: `${this.contractModule}::add_authorized_nft_collections`,
-            typeArguments: [],
-            regularArguments: [
-                this.auctionHouseAddress,
-                collection.creator,
-                collection.collectionName
-            ],
+            functionName,
+            typeArguments,
+            regularArguments
         });
     }
 
     async removeAuthorizedCollection(
-        sender: AptosAccount,
+        sender: GenericSender,
         collection: NftCollection
     ): Promise<string> {
+        const functionName = `${this.contractModule}::remove_authorized_nft_collections`;
+        const typeArguments: any[] = [];
+        const regularArguments = [
+            this.auctionHouseAddress,
+            collection.creator,
+            collection.collectionName
+        ];
         return await this.performTransaction({
             sender,
-            functionName: `${this.contractModule}::remove_authorized_nft_collections`,
-            typeArguments: [],
-            regularArguments: [
-                this.auctionHouseAddress,
-                collection.creator,
-                collection.collectionName
-            ],
+            functionName,
+            typeArguments,
+            regularArguments
         });
     }
 
     async addAuthorizedCoin(
-        sender: AptosAccount,
+        sender: GenericSender,
         coinType: string
     ): Promise<string> {
+        const functionName = `${this.contractModule}::add_authorized_coins`;
+        const typeArguments: any[] = [ coinType ];
+        const regularArguments = [
+            this.auctionHouseAddress,
+        ];
         return await this.performTransaction({
             sender,
-            functionName: `${this.contractModule}::add_authorized_coins`,
-            typeArguments: [coinType],
-            regularArguments: [this.auctionHouseAddress],
+            functionName,
+            typeArguments,
+            regularArguments
         });
     }
 
     async removeAuthorizedCoin(
-        sender: AptosAccount,
+        sender: GenericSender,
         coinType: string
     ): Promise<string> {
+        const functionName = `${this.contractModule}::remove_authorized_coins`;
+        const typeArguments: any[] = [ coinType ];
+        const regularArguments = [
+            this.auctionHouseAddress,
+        ];
         return await this.performTransaction({
             sender,
-            functionName: `${this.contractModule}::remove_authorized_coins`,
-            typeArguments: [coinType],
-            regularArguments: [this.auctionHouseAddress],
+            functionName,
+            typeArguments,
+            regularArguments
         });
     }
 
@@ -498,7 +552,7 @@ export class AuctionHouseClient extends AptosClient {
             }
             throw e;
         }
-        
+
         const { handle }: { handle: string } = resource.data.created_auctions;
         const innerSet = await this.getTableItem(
             handle,
@@ -734,23 +788,33 @@ export class AuctionHouseClient extends AptosClient {
         typeArguments,
         regularArguments,
     }: TransactionParameters): Promise<string> {
-        const rawTxn = await this.generateTransaction(
-            sender.address(),
-            {
+        if (typeof sender === "function") {
+            const payload: Types.TransactionPayload = {
+                type: 'entry_function_payload',
                 function: functionName,
                 type_arguments: typeArguments,
                 arguments: regularArguments
-            }
-        );
+            };
+            const { hash } = await sender(payload);
+            return hash;
 
-        const bcsTxn = await this.signTransaction(sender, rawTxn);
-        const pendingTxn = await this.submitTransaction(bcsTxn);
-        return pendingTxn.hash;
+        } else {
+            const rawTxn = await this.generateTransaction(
+                sender.address(),
+                {
+                    function: functionName,
+                    type_arguments: typeArguments,
+                    arguments: regularArguments
+                }
+            );
+    
+            const bcsTxn = await this.signTransaction(sender, rawTxn);
+            const pendingTxn = await this.submitTransaction(bcsTxn);
+            return pendingTxn.hash;
+        }
     }
 
 }
-
-
 
 function convertHexToUtf8(hex: string): string {
     return Buffer.from(hex.slice(2), "hex").toString("utf-8");

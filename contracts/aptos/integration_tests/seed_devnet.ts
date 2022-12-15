@@ -38,6 +38,8 @@ export async function testBasicFlow(): Promise<void> {
     const bidder2 = new AptosAccount();
     const bidder3 = new AptosAccount();
 
+    const bidders = [bidder1, bidder2, bidder3];
+
     const mintAddress = process.argv[1];
 
     console.log("module address is: " + moduleAddress.address().hex());
@@ -200,6 +202,22 @@ export async function testBasicFlow(): Promise<void> {
             ),
             { checkSuccess: true }
         );
+
+        if (counter == 7) {
+            let bid = 10000
+            for (const account of bidders) {
+                await client.waitForTransaction(
+                    await auctionHouseClient.bid(
+                        account,
+                        "7",
+                        bid.toString(),
+                        aptosCoin
+                    ),
+                    { checkSuccess: true }
+                );
+                bid += 500;
+            }
+        }
 
         counter += 1;
     }
