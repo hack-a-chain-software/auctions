@@ -3,31 +3,87 @@ import {
   ListBulletIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
+import { Buffer } from "buffer";
+import { Auction, Bid } from "contract_aptos";
+import { useNftDetails } from "../../hooks/useNtfDetails";
+import { countDown } from "../../hooks/useTimer";
+import { useState } from "react";
 import CrownIcon16 from "../../assets/svg/CrownIcon16";
 import CrownIcon20 from "../../assets/svg/CrownIcon20";
 import CrownIcon24 from "../../assets/svg/CrownIcon24";
 import PageContainer from "../../components/PageContainer";
-import { useAuction } from "../../hooks/useAuction";
-import { useBid } from "../../hooks/useBid";
-import { useClaimPrize } from "../../hooks/useClaimPrize";
-import { useNftDetails } from "../../hooks/useNtfDetails";
-import { useCoinBalance } from "../../hooks/useCoinBalance";
-import { Buffer } from "buffer";
+import Countdown, { zeroPad } from "react-countdown";
 import "./Auction.styles.less";
-import { useParams } from "react-router";
 
 window.Buffer = window.Buffer || Buffer;
 
-function Auction() {
-  const { id } = useParams<{ id: string }>();
-  const offered = false;
-  const firstPlace = false;
-  const closedAuction = false;
+type AuctionProps = {
+  auction: Auction;
+  allBids: Bid[];
+  yourBids: Bid[];
+};
+
+type CountDownProps = {
+  hours: number;
+  minutes: number;
+  seconds: number;
+  days: number;
+};
+
+function AuctionComponent(props: AuctionProps) {
+  const [closedAuction, setClosedAuction] = useState<boolean>(false);
+  const allbids = props.allBids.slice(0).reverse();
   const isWon = false;
 
-  const { auction, loading } = useAuction(Number(id));
-  const { allBids, yourBids } = useBid(id, `1`);
+  const { tokenData, tokenProperties } = useNftDetails(
+    props.auction.lockedTokenId.token_data_id.creator,
+    props.auction.lockedTokenId.token_data_id.collection,
+    props.auction.lockedTokenId.token_data_id.name
+  );
+  const { endDate } = countDown(Number(props.auction.endTime));
 
+  const rendererDesk = ({ hours, minutes, seconds, days }: CountDownProps) => {
+    if (closedAuction) {
+      return (
+        <span
+          className={`hidden md:flex px-5 items-center text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight h-[1.88rem] mr-1 mt-1`}
+        >
+          Auction closed
+        </span>
+      );
+    } else {
+      return (
+        <span className="hidden md:flex  px-5 items-center text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight h-[1.88rem] mr-1 mt-1">
+          Auction ends in: {days > 0 ? `${zeroPad(days)}d` : ""}{" "}
+          {hours > 0 ? `${zeroPad(hours)}h` : ""}{" "}
+          {minutes > 0 ? `${zeroPad(minutes)}m` : ""} {zeroPad(seconds)}s
+        </span>
+      );
+    }
+  };
+
+  const rendererMobile = ({
+    hours,
+    minutes,
+    seconds,
+    days,
+  }: CountDownProps) => {
+    if (closedAuction) {
+      return (
+        <span className="p-[.4rem] px-4 text-center rounded-[50px] text-white font-medium text-sm bg-paragraph md:hidden">
+          Auction closed
+        </span>
+      );
+    } else {
+      return (
+        <span className="p-[.4rem] px-4 text-center rounded-[50px] text-white font-medium text-sm bg-paragraph md:hidden">
+          Auction ends in: {days > 0 ? `${zeroPad(days)}d` : ""}{" "}
+          {hours > 0 ? `${zeroPad(hours)}h` : ""}{" "}
+          {minutes > 0 ? `${zeroPad(minutes)}m` : ""} {zeroPad(seconds)}s
+        </span>
+      );
+    }
+  };
 
   function renderDefautOfferState() {
     return (
@@ -46,7 +102,7 @@ function Auction() {
               From
             </p>
           </div>
-          {allBids.map(({ bid, account }) => (
+          {allbids.map(({ bid, account }) => (
             <div className="flex justify-between  w-full">
               <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
                 {bid}
@@ -81,9 +137,9 @@ function Auction() {
               From
             </p>
           </div>
-          {allBids.map(({ bid, account }) => (
-            <div className="flex justify-between  w-full">
-              {bid === "0,32 BTH" ? (
+          {allbids.map(({ bid, account }, i) => (
+            <div className="flex justify-between w-full">
+              {i === 0 ? (
                 <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem] flex gap-5">
                   {bid} <CrownIcon24 />
                 </p>
@@ -122,9 +178,9 @@ function Auction() {
               From
             </p>
           </div>
-          {allBids.map(({ bid, account }) => (
+          {allbids.map(({ bid, account }, i) => (
             <div className="flex justify-between w-full">
-              {bid === "0,32 BTH" ? (
+              {i === 0 ? (
                 <>
                   <div className="relative mt-1">
                     <p className="absolute bottom-16 text-transparent bg-clip-text bg-space max-w-[419px] flex gap-2 text-sm font-semibold items-center">
@@ -135,7 +191,7 @@ function Auction() {
                         isWon || closedAuction ? "font-bold" : "font-semibold"
                       } tracking-tight text-success h-[3.75rem]`}
                     >
-                      0,35 ETH
+                      {bid}
                     </p>
                   </div>
                   <p
@@ -179,18 +235,21 @@ function Auction() {
             <img src={tokenData?.uri} alt="" className="w-full rounded-sm" />
             <div className="absolute bottom-3 w-[95%] mx-[.6rem] bg-white/70 rounded-lg p-4 md:hidden">
               <span className="flex gap-4 items-center text-md font-medium tracking-tight">
-                {auction?.lockedTokenId.token_data_id.collection}{" "}
+                {props.auction?.lockedTokenId.token_data_id.collection}{" "}
                 <CheckCircleIcon className="w-4 text-success" />
               </span>
               <h3 className="font-bold text-xl tracking-tight">
-                {auction?.lockedTokenId.token_data_id.name}
+                {props.auction?.lockedTokenId.token_data_id.name}
               </h3>
               <p
                 className="text-md font-medium text-black tracking-tight w-[41ch] truncate"
-                title={auction?.lockedTokenId.token_data_id.creator}
+                title={props.auction?.lockedTokenId.token_data_id.creator}
               >
                 By{" "}
-                <strong> {auction?.lockedTokenId.token_data_id.creator}</strong>
+                <strong>
+                  {" "}
+                  {props.auction?.lockedTokenId.token_data_id.creator}
+                </strong>
               </p>
             </div>
           </div>
@@ -235,30 +294,39 @@ function Auction() {
           <div className="hidden md:flex flex-col mb-10 mt-[-8px] md:ml-3 xl:ml-7 w-full">
             <div className="flex justify-between mt-[3px]">
               <span className="flex gap-[.6rem] items-center text-xl font-medium tracking-normal pl-1">
-                {auction?.lockedTokenId.token_data_id.collection}{" "}
+                {props.auction?.lockedTokenId.token_data_id.collection}{" "}
                 <CheckCircleIcon className="w-5 text-success" />
               </span>
-              <span
-                className={`hidden md:flex ${
-                  closedAuction || isWon ? "" : "w-[208px]"
-                } px-5 items-center text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight h-[1.88rem] mr-1 mt-1`}
-              >
-                {closedAuction || isWon
-                  ? "Auction closed"
-                  : "Auction ends in: 2h 10m 15s"}
-              </span>
+              {isWon ? (
+                <span
+                  className={`hidden md:flex px-5 items-center text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-tight h-[1.88rem] mr-1 mt-1`}
+                >
+                  Auction closed
+                </span>
+              ) : (
+                <Countdown
+                  date={endDate}
+                  renderer={rendererDesk}
+                  onComplete={(completedOnStart) =>
+                    setClosedAuction(completedOnStart.completed)
+                  }
+                />
+              )}
             </div>
             <h3 className="font-bold text-[28px] tracking-normal pl-1 mt-1">
-              {auction?.lockedTokenId.token_data_id.name}
+              {props.auction?.lockedTokenId.token_data_id.name}
             </h3>
-            <p className="text-md font-medium text-black tracking-tight mt-1 ml-1 truncate w-[40ch] xl:w-[100ch]">
-              By <strong>{auction?.lockedTokenId.token_data_id.creator}</strong>
+            <p className="text-md font-medium text-black tracking-tight mt-1 ml-1 truncate w-[40ch] xl:w-[70ch]">
+              By{" "}
+              <strong>
+                {props.auction?.lockedTokenId.token_data_id.creator}
+              </strong>
             </p>
           </div>
           <div className="flex flex-col mt-9 gap-3 mx-2 w-[95%] max-w-[413px] md:max-w-[761px] md:mx-0 md:ml-3 xl:ml-8 xl:mt-[-5px]">
             {isWon ? (
               <>
-                <span className="mt-14 pl-5 max-w-[419px] text-success flex gap-3 py-1 text-xl font-semibold items-center">
+                <span className="mt-14 pl-5 max-w-[419px] text-success flex justify-center gap-3 py-1 text-xl font-semibold items-center md:justify-start">
                   <CrownIcon20 /> You won!
                 </span>
                 <button className="w-full h-10 ml-5 bg-space mt-4 text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px]">
@@ -294,11 +362,13 @@ function Auction() {
                 <strong className="font-semibold text-sm tracking-tight text-black/70">
                   Your balance: 10 ETH
                 </strong>
-                <span className="w-[228px] p-[.4rem] px-4 text-center rounded-[50px] text-white font-medium text-sm bg-paragraph md:hidden">
-                  {isWon || closedAuction
-                    ? "Auction closed"
-                    : "Auction ends in: 2h 10m 15s"}
-                </span>
+                <Countdown
+                  date={endDate}
+                  renderer={rendererMobile}
+                  onComplete={(completedOnStart) =>
+                    setClosedAuction(completedOnStart.completed)
+                  }
+                />
               </>
             )}
           </div>
@@ -308,36 +378,34 @@ function Auction() {
             isWon ? "2rem" : "9"
           } xl:ml-7`}
         >
-          <div className="mt-2 w-full max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto xl:h-[202px] md:max-w-[761px] xl:mt-[-5px]">
+          <div className="mt-2 w-full max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto md:max-w-[761px] xl:mt-[-5px]">
             <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
               <h3 className="px-8 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
                 <ListBulletIcon className="w-6" /> Your offers
               </h3>
             </div>
             <div>
-              {offered || isWon ? (
-                <div className="p-8 flex justify-between xl:p-5 ml-3">
-                  <div className="flex flex-col gap-5">
-                    <span className="text-md font-medium tracking-tight text-black">
-                      Price
-                    </span>
-                    <div className="flex gap-7 items-center">
-                      <span className="md:text-xl font-semibold tracking-tight text-black">
-                        0,32 ETH
-                      </span>
-                      <span className="text-white tracking-tight text-md flex items-center justify-center font-medium bg-green-500 rounded-[30px] w-[114px] xl:h-8">
-                        Highest bid
-                      </span>
-                    </div>
+              {props.yourBids.length > 0 && isWon ? (
+                <div className="p-8 flex flex-col justify-between gap-3 xl:p-5 ml-3">
+                  <div className="flex justify-between w-full xl:w-[575px]">
+                    <p>Price</p>
+                    <p>Date</p>
                   </div>
-                  <div className="flex flex-col gap-2 items-stfirstPlaceart justify-between xl:mr-9">
-                    <span className="text-md text-black font-medium tracking-tight">
-                      Date
-                    </span>
-                    <span className="font-semibold tracking-tight text-black xl:text-xl">
-                      06/12/2022
-                    </span>
-                  </div>
+                  {props.yourBids.map(({ bid, timestamp, account }) => (
+                    <>
+                      <div className="flex justify-between xl:w-[575px]">
+                        <p className="flex gap-4 items-center">
+                          {bid}
+                          {account === allbids[0].account && (
+                            <span className="text-white tracking-tight text-md flex items-center justify-center font-medium bg-green-500 rounded-[30px] w-[114px] xl:h-8">
+                              Highest bid
+                            </span>
+                          )}
+                        </p>
+                        <p>{new Date(timestamp).toLocaleDateString()}</p>
+                      </div>
+                    </>
+                  ))}
                 </div>
               ) : (
                 <h3 className="p-[3.4rem] text-center text-paragraph text-xl font-medium tracking-normal xl:mr-3">
@@ -346,7 +414,7 @@ function Auction() {
               )}
             </div>
           </div>
-          {firstPlace
+          {allbids.length > 1
             ? renderFirstPlaceOfferState()
             : isWon || closedAuction
             ? renderOffersWinState()
@@ -383,4 +451,4 @@ function Auction() {
   );
 }
 
-export default Auction;
+export default AuctionComponent;

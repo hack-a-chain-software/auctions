@@ -1,19 +1,22 @@
+import { useWallet } from "@manahippo/aptos-wallet-adapter";
 import { useEffect, useState } from "react";
 import { AuctionClient } from "../config/aptosClient";
 
-export const useClaimPrize = (sender: number, id: number) => {
+export const useClaimPrize = (sender: any, id: number) => {
   const [loading, setLoading] = useState<boolean>(true);
+  const { account } = useWallet();
 
   useEffect(() => {
+    if (!account) return;
+
     const claimRewards = async () => {
-      //   await AuctionClient.claimPrize(sender, id);
-      console.log("rodei");
+      // await AuctionClient.claimPrize(account.address, id);
     };
 
     claimRewards();
 
     return () => setLoading(false);
-  }, [sender]);
+  }, []);
 
   return { loading };
 };
