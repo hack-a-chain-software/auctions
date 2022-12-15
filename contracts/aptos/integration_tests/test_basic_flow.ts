@@ -76,7 +76,7 @@ export async function testBasicFlow(
 
     // initialize AuctionHouse
     await client.waitForTransaction(
-        await auctionHouseClient.initializeAuctionHouse(ownerAccount, false),
+        await auctionHouseClient.initializeAuctionHouse(ownerAccount, true),
         { checkSuccess: true }
     );
 

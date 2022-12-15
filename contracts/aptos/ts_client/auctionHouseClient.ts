@@ -37,6 +37,13 @@ export type Bid = {
     account: string,
 }
 
+export type CoinInfo = {
+    name: string,
+    symbol: string,
+    decimals: number,
+    supply: any,
+}
+
 interface TransactionParameters {
     sender: AptosAccount,
     functionName: string,
@@ -709,6 +716,16 @@ export class AuctionHouseClient extends AptosClient {
             returnValue.push(returnAuction);
         }
         return returnValue;
+    }
+
+    async getCoinInfo(coinType: string): Promise<CoinInfo> {
+        const splitType = coinType.split("::");
+        const address = splitType[0];
+        const resource: any = await this.getAccountResource(
+            address,
+            `0x1::coin::CoinInfo<${coinType}>`,
+        );
+        return resource.data as CoinInfo;
     }
 
     async performTransaction({

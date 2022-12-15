@@ -1,1 +1,2 @@
-export { AuctionHouseClient, NftCollection, Auction, Bid } from "./auctionHouseClient";
+export { AuctionHouseClient, NftCollection } from "./auctionHouseClient";
+export type { Auction, Bid, CoinInfo} from "./auctionHouseClient";
