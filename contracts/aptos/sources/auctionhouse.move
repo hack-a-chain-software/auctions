@@ -31,6 +31,8 @@ module auctionhouse::AuctionHouse {
     const ERROR_AUCTION_NOT_COMPLETE: u64 = 9;
     const ERROR_NOT_CLAIMABLE: u64 = 10;
     const ERROR_ALREADY_CLAIMED: u64 = 11;
+    const ERROR_END_TIME_LESS_THAN_NOW: u64 = 12;
+    const ERROR_MIN_SELLING_PRICE_CANNOT_BE_ZERO: u64 = 13;
 
     // System consts
     
@@ -195,6 +197,9 @@ module auctionhouse::AuctionHouse {
         let auction_house = borrow_global_mut<AuctionHouse>(auction_house_address);
         let start_time = timestamp::now_microseconds();
 
+        assert!(end_time > start_time, ERROR_END_TIME_LESS_THAN_NOW);
+        assert!(min_selling_price > 0, ERROR_MIN_SELLING_PRICE_CANNOT_BE_ZERO);
+
         // assert that user is authorized to create auctions
         if (option::is_some<TableSet<address>>(&auction_house.allowed_users)) {
             assert!(
@@ -298,7 +303,11 @@ module auctionhouse::AuctionHouse {
         assert!(is_auction_active(freeze(auction_item)), ERROR_AUCTION_INACTIVE);
 
         // assert bid is greater than current highest bid
-        assert!(bid > auction_item.current_bid, ERROR_INSUFFICIENT_BID);
+        assert!(
+            bid > auction_item.current_bid &&
+            bid >= auction_item.current_bid + auction_item.min_increment, 
+            ERROR_INSUFFICIENT_BID
+        );
 
         // assert sender is providing the correct coin
         assert!(
