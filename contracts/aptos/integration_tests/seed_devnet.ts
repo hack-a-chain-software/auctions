@@ -7,7 +7,6 @@ import {
     TxnBuilderTypes,
     HexString
 } from "aptos";
-import assert from "assert";
 import fs from "fs";
 import path from "path";
 import sh from "shelljs";
@@ -27,7 +26,7 @@ const aptosCoin = "0x1::aptos_coin::AptosCoin";
 testBasicFlow();
 
 export async function testBasicFlow(): Promise<void> {
-    
+
     const client = new AptosClient(NODE_URL);
     const faucetClient = new FaucetClient(NODE_URL, FAUCET_URL);
     const tokenClient = new TokenClient(client);
@@ -43,6 +42,8 @@ export async function testBasicFlow(): Promise<void> {
 
     console.log("module address is: " + moduleAddress.address().hex());
     console.log("contract address is: " + ownerAccount.address().hex());
+
+    console.log("owner private key is: " + ownerAccount.toPrivateKeyObject().privateKeyHex);
     if (mintAddress != undefined) {
         // console.log("minting 5 extra NFTs to address: " + mintAddress);
     }
@@ -136,7 +137,7 @@ export async function testBasicFlow(): Promise<void> {
     let promiseArray = [];
     let counter = 0;
     while (counter < totalNfts) {
-        const tokenName = `Token name #${counter+1}`;
+        const tokenName = `Token name #${counter + 1}`;
         await client.waitForTransaction(
             await tokenClient.createToken(
                 ownerAccount,
@@ -145,6 +146,41 @@ export async function testBasicFlow(): Promise<void> {
                 "Another description here",
                 1,
                 `https://api.therealbirds.com/metadata/${counter + 1}.png`
+            ),
+            { checkSuccess: true }
+        );
+
+        // Create auction
+        await client.waitForTransaction(
+            await auctionHouseClient.createAuction(
+                ownerAccount,
+                toMicroseconds(Date.now() + (5 * 60 * 1000)),
+                "100000000",
+                "50000000",
+                nftCollection.creator,
+                nftCollection.collectionName,
+                tokenName,
+                tokenPropertyVersion.toString(),
+                aptosCoin
+            ),
+            { checkSuccess: true }
+        );
+
+        counter += 1;
+    }
+
+    // create NFTs on wallet
+    counter = 0;
+    while (counter < totalNfts) {
+        const tokenName = `Token name #${counter + 1 + totalNfts}`;
+        await client.waitForTransaction(
+            await tokenClient.createToken(
+                ownerAccount,
+                collectionName,
+                tokenName,
+                "Another description here",
+                1,
+                `https://api.therealbirds.com/metadata/${counter + 1 + totalNfts}.png`
             ),
             { checkSuccess: true }
         );
