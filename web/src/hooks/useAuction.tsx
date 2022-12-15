@@ -4,20 +4,18 @@ import { AuctionClient } from "../config/aptosClient";
 
 export const useAuction = (auctionId: number) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [auctions, setAuctions] = useState<Auction[]>([]);
-  const [auction, setAuction] = useState<Auction>({} as Auction);
+  const [auction, setAuction] = useState<Auction | null>();
 
   useEffect(() => {
     const fetchAuctions = async () => {
-      const data = await AuctionClient.getAllAuctions(1, 2);
-      setAuctions(data);
+      const data: Auction[] = await AuctionClient.getAllAuctions(auctionId, 1);
+
+      if (data.length > 0) {
+        setAuction(data[0]);
+      }
     };
 
     fetchAuctions();
-
-    // const res = auctions.find(({ id }) => id === auctionId);
-
-    // if (res) setAuction(res);
 
     return () => setLoading(false);
   }, []);

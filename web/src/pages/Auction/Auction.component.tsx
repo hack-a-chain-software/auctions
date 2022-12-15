@@ -10,13 +10,24 @@ import PageContainer from "../../components/PageContainer";
 import { useAuction } from "../../hooks/useAuction";
 import { useBid } from "../../hooks/useBid";
 import { useClaimPrize } from "../../hooks/useClaimPrize";
+import { useNftDetails } from "../../hooks/useNtfDetails";
+import { useCoinBalance } from "../../hooks/useCoinBalance";
+import { Buffer } from "buffer";
 import "./Auction.styles.less";
+import { useParams } from "react-router";
+
+window.Buffer = window.Buffer || Buffer;
 
 function Auction() {
+  const { id } = useParams<{ id: string }>();
   const offered = false;
   const firstPlace = false;
   const closedAuction = false;
   const isWon = false;
+
+  const { auction, loading } = useAuction(Number(id));
+  const { allBids, yourBids } = useBid(id, `1`);
+
 
   function renderDefautOfferState() {
     return (
@@ -35,13 +46,7 @@ function Auction() {
               From
             </p>
           </div>
-          {[
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-          ].map(({ bid, account }) => (
+          {allBids.map(({ bid, account }) => (
             <div className="flex justify-between  w-full">
               <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
                 {bid}
@@ -76,13 +81,7 @@ function Auction() {
               From
             </p>
           </div>
-          {[
-            { bid: "0,32 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-          ].map(({ bid, account }) => (
+          {allBids.map(({ bid, account }) => (
             <div className="flex justify-between  w-full">
               {bid === "0,32 BTH" ? (
                 <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem] flex gap-5">
@@ -123,14 +122,7 @@ function Auction() {
               From
             </p>
           </div>
-          {[
-            { bid: "0,32 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-            { bid: "0,30 BTH", account: "@Usertal1354645" },
-          ].map(({ bid, account }) => (
+          {allBids.map(({ bid, account }) => (
             <div className="flex justify-between w-full">
               {bid === "0,32 BTH" ? (
                 <>
@@ -184,21 +176,22 @@ function Auction() {
       <section className="Auction flex flex-col mt-10 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-20 md:items-start mx-auto md:mt-6 xl:w-full">
         <div className="row-span-3 flex flex-col w-full items-center md:items-start md:max-w-[419px] xl:w-[410px]">
           <div className="w-[95%] max-w-[419px] md:w-full relative">
-            <img
-              src="https://gamefiinfo.com/uploads/202111/12/ece6842cd730141699e4c0bf7f2d57e9-413x413.png"
-              alt=""
-              className="w-full rounded-sm"
-            />
+            <img src={tokenData?.uri} alt="" className="w-full rounded-sm" />
             <div className="absolute bottom-3 w-[95%] mx-[.6rem] bg-white/70 rounded-lg p-4 md:hidden">
               <span className="flex gap-4 items-center text-md font-medium tracking-tight">
-                Doodles <CheckCircleIcon className="w-4 text-success" />
+                {auction?.lockedTokenId.token_data_id.collection}{" "}
+                <CheckCircleIcon className="w-4 text-success" />
               </span>
               <h3 className="font-bold text-xl tracking-tight">
-                Doodles #3366
+                {auction?.lockedTokenId.token_data_id.name}
               </h3>
-              <span className="text-md font-medium text-black tracking-tight">
-                By <strong>@johnsnow</strong>
-              </span>
+              <p
+                className="text-md font-medium text-black tracking-tight w-[41ch] truncate"
+                title={auction?.lockedTokenId.token_data_id.creator}
+              >
+                By{" "}
+                <strong> {auction?.lockedTokenId.token_data_id.creator}</strong>
+              </p>
             </div>
           </div>
           <div className="w-[95%] mt-5 max-w-[413px]">
@@ -206,11 +199,7 @@ function Auction() {
               Description
             </h3>
             <p className="w-full text-paragraph font-medium leading-4 mt-3">
-              Once upon a time, there was a young girl. She was 9 years old and
-              her name was Wende. Wende was incredibly intelligent, yet she had
-              a hard time learning things by heart. No matter how hard she
-              tried, she just could not memorize the planets of the solar
-              system.
+              {tokenData?.description}
             </p>
           </div>
           <div className="hidden md:block mt-[4.3rem] w-full max-w-[421px] border-solid border-[1px] rounded-lg border-outline bg-white pb-14">
@@ -246,7 +235,8 @@ function Auction() {
           <div className="hidden md:flex flex-col mb-10 mt-[-8px] md:ml-3 xl:ml-7 w-full">
             <div className="flex justify-between mt-[3px]">
               <span className="flex gap-[.6rem] items-center text-xl font-medium tracking-normal pl-1">
-                Doodles <CheckCircleIcon className="w-5 text-success" />
+                {auction?.lockedTokenId.token_data_id.collection}{" "}
+                <CheckCircleIcon className="w-5 text-success" />
               </span>
               <span
                 className={`hidden md:flex ${
@@ -259,17 +249,16 @@ function Auction() {
               </span>
             </div>
             <h3 className="font-bold text-[28px] tracking-normal pl-1 mt-1">
-              Doodles #3366
+              {auction?.lockedTokenId.token_data_id.name}
             </h3>
-            <span className="text-md font-medium text-black tracking-tight mt-1 ml-1">
-              By <strong>@johnsnow</strong>
-            </span>
+            <p className="text-md font-medium text-black tracking-tight mt-1 ml-1 truncate w-[40ch] xl:w-[100ch]">
+              By <strong>{auction?.lockedTokenId.token_data_id.creator}</strong>
+            </p>
           </div>
           <div className="flex flex-col mt-9 gap-3 mx-2 w-[95%] max-w-[413px] md:max-w-[761px] md:mx-0 md:ml-3 xl:ml-8 xl:mt-[-5px]">
             {isWon ? (
               <>
                 <span className="mt-14 pl-5 max-w-[419px] text-success flex gap-3 py-1 text-xl font-semibold items-center">
-                  {" "}
                   <CrownIcon20 /> You won!
                 </span>
                 <button className="w-full h-10 ml-5 bg-space mt-4 text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px]">

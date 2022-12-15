@@ -1141,6 +1141,7 @@ contract_aptos@./contracts/aptos/:
   version "0.0.0"
   dependencies:
     aptos "^1.4.0"
+    dotenv "^16.0.3"
 
 convert-source-map@^1.7.0:
   version "1.9.0"

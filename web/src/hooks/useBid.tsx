@@ -2,8 +2,9 @@ import { Bid } from "contract_aptos";
 import { useEffect, useState } from "react";
 import { AuctionClient } from "../config/aptosClient";
 
-export const useBid = (auctionId: string) => {
+export const useBid = (auctionId: string, user: string | null) => {
   const [allBids, setAllBids] = useState<Bid[]>([]);
+  const [yourBids, setYourBids] = useState<Bid[]>([]);
 
   useEffect(() => {
     const fetchBids = async () => {
@@ -14,11 +15,8 @@ export const useBid = (auctionId: string) => {
     fetchBids();
   }, []);
 
-  const bids = allBids.sort((a, b) => {
-    if (a.bid < b.bid) return 1;
-    if (a.bid > b.bid) return -1;
-    return 0;
-  });
+  if (user)
+    setYourBids(() => allBids.filter(({ account }) => account === user));
 
-  return { bids };
+  return { allBids, yourBids };
 };
