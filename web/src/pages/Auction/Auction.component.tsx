@@ -7,12 +7,14 @@ import { Buffer } from "buffer";
 import { Auction, Bid } from "contract_aptos";
 import { useNftDetails } from "../../hooks/useNtfDetails";
 import { countDown } from "../../hooks/useTimer";
+import { useCoinBalance } from "../../hooks/useCoinBalance";
 import { useState } from "react";
 import CrownIcon16 from "../../assets/svg/CrownIcon16";
 import CrownIcon20 from "../../assets/svg/CrownIcon20";
 import CrownIcon24 from "../../assets/svg/CrownIcon24";
 import PageContainer from "../../components/PageContainer";
 import Countdown, { zeroPad } from "react-countdown";
+import Big from "big.js";
 import "./Auction.styles.less";
 
 window.Buffer = window.Buffer || Buffer;
@@ -40,6 +42,9 @@ function AuctionComponent(props: AuctionProps) {
     props.auction.lockedTokenId.token_data_id.collection,
     props.auction.lockedTokenId.token_data_id.name
   );
+
+  const { balance, coinInfo } = useCoinBalance("1", props.auction.auctionCoin);
+
   const { endDate } = countDown(Number(props.auction.endTime));
 
   const rendererDesk = ({ hours, minutes, seconds, days }: CountDownProps) => {
@@ -336,7 +341,7 @@ function AuctionComponent(props: AuctionProps) {
             ) : (
               <>
                 <p className="w-[173px] p-[.4rem] text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-normal xl:mt-8 xl:h-8">
-                  Minimum bid: 0,3 ETH
+                  Minimum bid: 0,3 {coinInfo?.symbol}
                 </p>
                 <input
                   type="number"
@@ -360,7 +365,10 @@ function AuctionComponent(props: AuctionProps) {
                   {closedAuction ? "Auction closed" : "Make offer"}
                 </button>
                 <strong className="font-semibold text-sm tracking-tight text-black/70">
-                  Your balance: 10 ETH
+                  Your balance:{" "}
+                  {Big(balance)
+                    .div(Big(10).pow(Big(coinInfo?.decimals)))
+                    .toFixed(2)}
                 </strong>
                 <Countdown
                   date={endDate}
