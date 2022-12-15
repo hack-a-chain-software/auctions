@@ -8,7 +8,8 @@ import './CreateAuction.styles.less';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import ChooseNFT from '../ChooseNFT';
 import Big from 'big.js';
-import { TokenDataId } from '../../hooks';
+import { TokenTypes } from 'aptos';
+import { CoinInfo } from 'contract_aptos';
 
 type CreateAuctionComponentProps = {
   creatable: boolean,
@@ -22,19 +23,19 @@ type CreateAuctionComponentProps = {
   setMinOfferIncrement: (value: Big) => void,
   initialPrice: Big,
   setInitialPrice: (value: Big) => void,
-  initialPriceAvailableCurrencies: string[],
-  initialPriceCurrency: string,
+  initialPriceAvailableCurrencies: CoinInfo[],
+  initialPriceCurrency?: CoinInfo,
   initialPriceCurrencySelector: boolean,
   setInitialPriceCurrencySelector: (open: boolean) => void,
-  setInitialPriceCurrency: (value: string) => void,
-  queryCurrencies: string[],
+  setInitialPriceCurrency: (value: CoinInfo) => void,
+  queryCurrencies: CoinInfo[],
   onQueryCurrencies: (value: string) => void,
   onCreateAuction: () => void,
   inputFail: InputValid,
   setInputFail: (status: InputValid) => void,
-  selectedNFT: TokenDataId|null,
+  selectedNFT: TokenTypes.TokenDataId|null,
   selectedNFTImage: string,
-  setSelectedNFT: (nft: TokenDataId) => void
+  setSelectedNFT: (nft: TokenTypes.TokenDataId) => void
 }
 
 function CreateAuctionComponent(props: CreateAuctionComponentProps) {
@@ -175,10 +176,10 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
                 onChange={ ({ target: { value: currency } }) => onQueryCurrencies(currency) }
               />
               <Combobox.Options className="List" static>
-                { queryCurrencies.map(value => (
-                  <Combobox.Option className="Item" key={ value } value={ value }>
+                { queryCurrencies.map((value, key) => (
+                  <Combobox.Option className="Item" key={ key } value={ value }>
                     { () => <div>
-                      { value }
+                      { value.symbol }
                     </div> }
                   </Combobox.Option>
                 )) }
@@ -189,7 +190,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
         <Popover.Button className="Button border-l-[1px]"
                         onClick={() => setInitialPriceCurrencySelector(true)}>
           <ChevronDownIcon className="h-3 w-3"/>
-          { initialPriceCurrency }
+          { initialPriceCurrency?.symbol ? initialPriceCurrency.symbol : '' }
         </Popover.Button>
       </>}
     </Popover>

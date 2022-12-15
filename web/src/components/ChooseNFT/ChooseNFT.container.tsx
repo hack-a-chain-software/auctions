@@ -1,29 +1,28 @@
 import ChooseNFTComponent from './ChooseNFT.component';
-import { useEffect, useState } from 'react';
-import { TokenDataId, useOnAccountNFTs } from '../../hooks';
+import { useEffect, useMemo, useState } from 'react';
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
+import { TokenTypes } from 'aptos';
+import { useOnAccountNFTs } from '../../hooks/useOnAccountNFTs';
 
 type ChooseNFTProps = {
   openNFTSelector: boolean;
   setOpenNFTSelector: (open: boolean) => void;
-  setSelectedNFT: (nft: TokenDataId) => void;
+  setSelectedNFT: (nft: TokenTypes.TokenDataId) => void;
 };
 
 function ChooseNFT(props: ChooseNFTProps) {
   const { openNFTSelector, setOpenNFTSelector, setSelectedNFT } = props;
-  const [listOfNFTs, setListOfNFTs] = useState<TokenDataId[]>([]);
+  const [listOfNFTs, setListOfNFTs] = useState<TokenTypes.TokenDataId[]>([]);
   const { account } = useWallet();
-  let loading = false;
+  const { list } = useMemo(() => {
+    if(!account?.address)
+      return { list: [] };
+    return useOnAccountNFTs(account.address);
+  }, [account?.address]);
 
   useEffect(() => {
-    if(!account?.address || loading)
-      return;
-
-    loading = true;
-    useOnAccountNFTs(account.address)
-      .then(setListOfNFTs)
-      .then(() => loading = false);
-  }, []);
+      setListOfNFTs(list);
+  }, [list]);
 
   const chooseNFTComponentProps = {
     openNFTSelector,
