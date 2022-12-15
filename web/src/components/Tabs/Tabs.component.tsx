@@ -1,5 +1,5 @@
 import { Tab } from '@headlessui/react';
-import { ReactNode } from 'react';
+import { Fragment, ReactNode } from 'react';
 
 type TabsProps = {
   tabList: string[],
@@ -13,13 +13,16 @@ function Tabs(props: TabsProps) {
   const { tabList, children, onChange, selectedIndex, rightBar } = props;
 
   function renderPanel(child: ReactNode, key: number) {
-    return <Tab.Panel key={key} tabIndex={-1} className="mt-8 md:mt-10 outline-none px-6 box-content">
+    return <Tab.Panel key={key}
+                      tabIndex={-1}
+                      className="mt-8 md:mt-10 outline-none px-6 box-content"
+                      as="div">
       { child }
     </Tab.Panel>;
   }
 
   function renderTab(tab:string, key:number) {
-    return <Tab key={key} tabIndex={-1} className="outline-none">
+    return <Tab key={key} as={Fragment}>
       {({selected}) =>
         <button className={`w-max rounded py-2.5 px-4 text-3.5 leading-3.5 tracking outline-none ${selected ? 'bg-gd-button text-white font-bold' : 'border-outline border-[1px] font-semibold text-black'}`}>
           { tab }
