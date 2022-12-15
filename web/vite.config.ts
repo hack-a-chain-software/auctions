@@ -5,6 +5,11 @@ import NodeGlobalsPolyfillPlugin from "@esbuild-plugins/node-globals-polyfill";
 import VitePluginHtmlEnv from "vite-plugin-html-env";
 
 export default defineConfig({
+  server: {
+    fs: {
+      allow: [".."]
+    }
+  },
   css: {
     preprocessorOptions: {
       less: {
