@@ -7,18 +7,21 @@ import DatePicker from 'react-date-picker';
 import './CreateAuction.styles.less';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import ChooseNFT from '../ChooseNFT';
+import Big from 'big.js';
+import { TokenDataId } from '../../hooks';
 
 type CreateAuctionComponentProps = {
+  creatable: boolean,
   open: boolean,
   onClose: () => void
   openNFTSelector: boolean,
   setOpenNFTSelector: (open: boolean) => void,
   endDate: Date|undefined,
   setEndDate: (date: Date|undefined) => void,
-  description: string,
-  setDescription: (value: string) => void,
-  initialPrice: string|number,
-  setInitialPrice: (value: string|number) => void,
+  minOfferIncrement: Big,
+  setMinOfferIncrement: (value: Big) => void,
+  initialPrice: Big,
+  setInitialPrice: (value: Big) => void,
   initialPriceAvailableCurrencies: string[],
   initialPriceCurrency: string,
   initialPriceCurrencySelector: boolean,
@@ -29,30 +32,31 @@ type CreateAuctionComponentProps = {
   onCreateAuction: () => void,
   inputFail: InputValid,
   setInputFail: (status: InputValid) => void,
-  selectedNFT: string,
-  setSelectedNFT: (nft: string) => void
+  selectedNFT: TokenDataId|null,
+  selectedNFTImage: string,
+  setSelectedNFT: (nft: TokenDataId) => void
 }
 
 function CreateAuctionComponent(props: CreateAuctionComponentProps) {
   const {
     open,
     onClose,
+    creatable,
     endDate,
     setEndDate,
-    description,
-    setDescription,
+    minOfferIncrement,
+    setMinOfferIncrement,
     initialPrice,
     setInitialPrice,
-    initialPriceAvailableCurrencies,
     initialPriceCurrency,
-    initialPriceCurrencySelector,
     setInitialPriceCurrencySelector,
     queryCurrencies,
     onQueryCurrencies,
     setInitialPriceCurrency,
     onCreateAuction,
     inputFail,
-    setInputFail
+    setInputFail,
+    selectedNFTImage,
 } = props;
 
   function renderHeader() {
@@ -82,14 +86,18 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
         nftInput
       }
     } = props;
+    const nft = {
+      creator: selectedNFT?.creator ? selectedNFT.creator : '',
+      collection: selectedNFT?.collection ? selectedNFT.collection : '',
+      name: selectedNFT?.name ? selectedNFT.name : ''
+    };
 
     return <button className="w-full flex flex-col items-center pt-6 pb-14 outline-none"
                 onClick={() => setOpenNFTSelector(true)}>
       { renderNFTSelector() }
       <div className={`w-min h-min rounded-sm ${ nftInput ? 'Fail' : '' }`}>
         { selectedNFT
-            //TODO Add NFT info to load image
-          ? <img src={selectedNFT/*.image*/} alt={selectedNFT/*.name*/} className="hover:transition-all hover:scale-[102%] hover:shadow-button"/>
+          ? <img src={selectedNFTImage} alt={`${nft.collection} - ${nft.name}`} className="hover:transition-all hover:scale-[102%] hover:shadow-button"/>
           : <ChooseNFTSVG className="hover:transition-all hover:scale-[102%] hover:shadow-button"/>
         }
       </div>
@@ -119,18 +127,23 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
     </div>;
   }
 
-  function renderDescriptionInput() {
-    const { descriptionInput } = inputFail;
+  function renderMinOfferIncrementInput() {
+    const { minOfferIncrementInput } = inputFail;
 
-    return <div className="flex flex-col mt-[2.5rem]">
-      <h5 className="font-semibold text-3.5 leading-3.5 tracking mb-2">Description</h5>
-      <textarea value={description}
-                onChange={({target: { value: description }}) => {
-                  setDescription(description);
-                  setInputFail({...inputFail, descriptionInput: description.length < 30});
-                }}
-                className={`bg-input rounded-sm placeholder:text-placeholder outline-none p-4 h-20 ${descriptionInput ? 'Fail' : ''}`} />
-      <span className={ descriptionInput ? 'block Fail-span' : 'hidden'}>Describe your nft auction (min: 30 characters)</span>
+    return <div className="flex flex-col mt-8">
+      <h5 className="font-semibold text-3.5 leading-3.5 tracking mb-2">Minimum increment price</h5>
+      <div className={`relative bg-input rounded-sm flex ${ minOfferIncrementInput ? 'Fail' : '' }`}>
+        <input type="number"
+               value={Number(minOfferIncrement.lte(0)) ? '' : minOfferIncrement.toFixed(2) }
+               onChange={({ target: { value: price } }) => {
+                 setMinOfferIncrement(new Big(price));
+                 setInputFail({...inputFail, minOfferIncrementInput: new Big(price).lte(0)});
+               }}
+               min={0}
+               step={0.01}
+               className="Price"/>
+      </div>
+      <span className={ minOfferIncrementInput ? 'block Fail-span' : 'hidden'}>Please type a valid price, bigger than 0</span>
     </div>;
   }
 
@@ -164,7 +177,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
               <Combobox.Options className="List" static>
                 { queryCurrencies.map(value => (
                   <Combobox.Option className="Item" key={ value } value={ value }>
-                    { ({ selected, active }) => <div>
+                    { () => <div>
                       { value }
                     </div> }
                   </Combobox.Option>
@@ -189,9 +202,9 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
       <h5 className="font-semibold text-3.5 leading-3.5 tracking mb-2">Initial price</h5>
       <div className={`relative bg-input rounded-sm flex ${ priceInput ? 'Fail' : '' }`}>
         <input type="number"
-               value={Number(initialPrice) <= 0 ? '' : initialPrice }
+               value={Number(initialPrice.lte(0)) ? '' : initialPrice.toFixed(2) }
                onChange={({ target: { value: price } }) => {
-                 setInitialPrice(price);
+                 setInitialPrice(new Big(price));
                  setInputFail({...inputFail, priceInput: Number(price) <= 0});
                }}
                min={0}
@@ -205,7 +218,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
 
   function renderFooter() {
     return <div className="inset-0 top-auto flex justify-between items-center mt-9 px-4 sm:px-6 h-[80px] border-t-outline border-t-[1px]">
-      <button className="w-full sm:w-auto font-medium text-3.5 leading-3.5 text-highlight tracking bg-space rounded-md py-[.8125rem] px-[1.1875rem] hover:scale-[102%] hover:shadow-button" onClick={onCreateAuction}>Create auction</button>
+      <button className="w-full sm:w-auto font-medium text-3.5 leading-3.5 text-highlight tracking bg-space rounded-md py-[.8125rem] px-[1.1875rem] hover:scale-[102%] hover:shadow-button disabled:mix-blend-darken" onClick={onCreateAuction} disabled={!creatable}>Create auction</button>
       <button className="hidden sm:block font-medium text-3.5 leading-3.5 text-caption tracking border-[1px] border-outline rounded-md py-[.8125rem] px-[2.34375rem] hover:scale-[102%] hover:shadow-button" onClick={onClose}>Cancel</button>
     </div>
   }
@@ -227,7 +240,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
         { renderImage() }
         <div className="px-4 sm:px-[3.75rem]">
           { renderEndDateInput() }
-          { renderDescriptionInput() }
+          { renderMinOfferIncrementInput() }
           { renderPriceInput() }
         </div>
         { renderFooter() }

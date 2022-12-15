@@ -17,7 +17,8 @@ type MyAuctionsComponentProps = {
   loading: boolean,
   cards: Auction[],
   createPanel: boolean
-  showCreatePanel: (show: boolean) => void
+  showCreatePanel: (show: boolean) => void,
+  canCreateAuction: boolean
 }
 
 function MyAuctionsComponent(props: MyAuctionsComponentProps) {
@@ -30,7 +31,8 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
     loading,
     cards,
     createPanel,
-    showCreatePanel
+    showCreatePanel,
+    canCreateAuction
   } = props;
 
   function renderCard(card: Auction, key: number, created?:boolean) {
@@ -55,7 +57,8 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
 
   function renderCreateAuctionButton() {
     return <button onClick={() => showCreatePanel(true)}
-                   className="fixed sm:relative bottom-4 right-4 sm:inset-auto z-[10] flex gap-2.5 rounded-large sm:rounded items-center justify-center w-10 smaller:w-auto smaller:pr-5 smaller:pl-4 sm:px-4 h-10 bg-button text-3.5 translate-y-[4px] leading-3.5 tracking-tight font-semibold text-white">
+                   disabled={!canCreateAuction}
+                   className="fixed sm:relative disabled:mix-blend-darken bottom-4 right-4 sm:inset-auto z-[10] flex gap-2.5 rounded-large sm:rounded items-center justify-center w-10 smaller:w-auto smaller:pr-5 smaller:pl-4 sm:px-4 h-10 bg-button text-3.5 translate-y-[4px] leading-3.5 tracking-tight font-semibold text-white">
       <PlusIcon className="h-5 w-5 smaller:h-4 smaller:w-4 stroke-white opacity-100"/>
       <span className="hidden smaller:inline">Create Auction</span>
     </button>
