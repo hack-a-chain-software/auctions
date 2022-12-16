@@ -6,6 +6,7 @@ import CardsContainer from '../../components/CardsContainer';
 import CardSkeleton from '../../components/CardSkeleton';
 import CreateAuction from '../../components/CreateAuction';
 import Card from '../../components/Card';
+import { Auction } from 'contract_aptos';
 
 type MyAuctionsComponentProps = {
   indexTabHeader: number,
@@ -13,7 +14,7 @@ type MyAuctionsComponentProps = {
   onSwitchTabMyOffers: (index: number) => void,
   onSwitchTabMyCreated: (index: number) => void,
   loading: boolean,
-  cards: string[],
+  cards: Auction[],
   createPanel: boolean
   showCreatePanel: (show: boolean) => void
 }
@@ -30,8 +31,8 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
     showCreatePanel
   } = props;
 
-  function renderCard(card: string, key: number) {
-    return <Card key={key} card={card}/>;
+  function renderCard(card: Auction, key: number) {
+    return <Card key={key} {...card}/>;
   }
 
   function renderCardSkeleton(ignore: null, key: number) {
