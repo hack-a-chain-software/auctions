@@ -53,6 +53,7 @@ export const useCreateAuction: () => {
       .catch(error => {
         console.error(error);
         message.error('Something went wrong.').then();
+        setLoading(running = false);
         return false;
       });
   }
