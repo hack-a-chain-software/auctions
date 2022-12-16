@@ -446,10 +446,10 @@ function AuctionComponent(props: AuctionProps) {
               )}
             </div>
           </div>
-          {allbids.length > 1
-            ? renderFirstPlaceOfferState()
-            : isWon || closedAuction
+          {isWon || closedAuction
             ? renderOffersWinState()
+            : allbids.length > 1
+            ? renderFirstPlaceOfferState()
             : renderDefautOfferState()}
           <div className="mt-8 w-full max-w-[413px] border-solid border-[1px] rounded-lg border-outline m-auto bg-white md:hidden">
             <div className="flex items-center h-[52px] border-b-[1px]">
