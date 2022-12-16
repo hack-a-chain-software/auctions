@@ -64,13 +64,6 @@ interface TransactionParameters {
     regularArguments: Array<any>
 }
 
-interface AptosClientTransactionParameters {
-    sender: AptosAccount,
-    functionName: string,
-    typeArguments: Array<any>,
-    regularArguments: Array<any>
-}
-
 export class AuctionHouseClient extends AptosClient {
 
     auctionHouseAddress: string
@@ -782,6 +775,7 @@ export class AuctionHouseClient extends AptosClient {
         return resource.data as CoinInfo;
     }
 
+    // UTILITIES
     async performTransaction({
         sender,
         functionName,
