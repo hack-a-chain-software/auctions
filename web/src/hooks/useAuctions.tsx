@@ -2,7 +2,7 @@ import { Auction } from 'contract_aptos';
 import { useEffect, useState } from 'react';
 import { AuctionClient } from '../config/aptosClient';
 
-export const useGetAuctions: () => {
+export const useAuctions: () => {
   auctions: Auction[]
   loading: boolean,
 } = () => {
@@ -19,7 +19,6 @@ export const useGetAuctions: () => {
       .then(amount => AuctionClient.getAllAuctions(0, amount))
       .then(setAuctions)
       .then(() => running = false)
-      .then(() => console.debug(auctions));
     return () => setLoading(false);
   }, []);
 
