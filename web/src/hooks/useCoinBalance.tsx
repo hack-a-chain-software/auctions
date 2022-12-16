@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { CoinInfo } from "contract_aptos";
 import { AuctionClient, coinClient } from "../config/aptosClient";
+import Big from "big.js";
 
-export const useCoinBalance = (user: string | null, coinType: string) => {
+export const useCoinBalance = (user: string, coinType: string) => {
   const [loadingBalance, setLoadingBalance] = useState<boolean>(true);
-  const [balance, setBalance] = useState<bigint>();
+  const [balance, setBalance] = useState<Big>();
   const [coinInfo, setCoinInfo] = useState<CoinInfo>();
 
   useEffect(() => {
     const fetchBalance = async () => {
-      if (!user) {
-        setBalance(BigInt("0"));
-      } else {
-        setBalance(await coinClient.checkBalance(user, { coinType }));
-      }
+      await coinClient
+        .checkBalance(user, { coinType })
+        .then((res) => setBalance(new Big(String(res))))
+        .catch(() => setBalance(new Big("0")));
     };
 
     const fetchCoinInfo = async () => {
