@@ -682,6 +682,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-datetime-picker@^3.4.1":
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/@types/react-datetime-picker/-/react-datetime-picker-3.4.1.tgz#8acbc3e6f4e69fac0f91be4e920c3efdc28f3ed7"
+  integrity sha512-JHqB74+8Zq6cY0PTJ6Wi5Pm6qkNUmooyFfW5SiknSY2xJG1UG8+ljyWTZAvgHvj0XpqcWCHqqYUPiAVagnf9Sg==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-dom@^18.0.9":
   version "18.0.9"
   resolved "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.0.9.tgz"
@@ -749,7 +756,7 @@
     magic-string "^0.26.7"
     react-refresh "^0.14.0"
 
-"@wojtekmaj/date-utils@^1.0.2", "@wojtekmaj/date-utils@^1.0.3":
+"@wojtekmaj/date-utils@^1.0.0", "@wojtekmaj/date-utils@^1.0.2", "@wojtekmaj/date-utils@^1.0.3":
   version "1.0.3"
   resolved "https://registry.npmjs.org/@wojtekmaj/date-utils/-/date-utils-1.0.3.tgz"
   integrity sha512-1VPkkTBk07gMR1fjpBtse4G+oJqpmE+0gUFB0dg3VIL7qJmUVaBoD/vlzMm/jNeOPfvlmerl1lpnsZyBUFIRuw==
@@ -1612,7 +1619,7 @@ gensync@^1.0.0-beta.2:
   resolved "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
 
-get-user-locale@^1.2.0:
+get-user-locale@^1.2.0, get-user-locale@^1.4.0:
   version "1.5.1"
   resolved "https://registry.npmjs.org/get-user-locale/-/get-user-locale-1.5.1.tgz"
   integrity sha512-WiNpoFRcHn1qxP9VabQljzGwkAQDrcpqUtaP0rNBEkFxJdh4f3tik6MfZsMYZc+UgQJdGCxWEjL9wnCUlRQXag==
@@ -2727,6 +2734,16 @@ react-calendar@^4.0.0:
     get-user-locale "^1.2.0"
     prop-types "^15.6.0"
 
+react-clock@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-clock/-/react-clock-4.0.0.tgz#29d087159154d789c6c93048ae47534b7a7b3fbb"
+  integrity sha512-CBevN5B40TDUegSWzXk6bSwXhYzyerL9JGTme8GMAY0zO4FiEhVTGN1uzgC0rn/oSAMJw3M5wSf/OJpp9vcN2Q==
+  dependencies:
+    "@wojtekmaj/date-utils" "^1.0.0"
+    clsx "^1.2.1"
+    get-user-locale "^1.4.0"
+    prop-types "^15.6.0"
+
 react-date-picker@^9.1.0:
   version "9.1.0"
   resolved "https://registry.npmjs.org/react-date-picker/-/react-date-picker-9.1.0.tgz"
@@ -2741,6 +2758,22 @@ react-date-picker@^9.1.0:
     react-calendar "^4.0.0"
     react-fit "^1.4.0"
     update-input-width "^1.2.2"
+
+react-datetime-picker@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-datetime-picker/-/react-datetime-picker-4.1.1.tgz#f29729202af4975f2bf080f61e7795e96116ec39"
+  integrity sha512-e8ANKLcWFL4/TutvggqVfRiDigyelcVdLvWQzOP5cMJ6IxR08Qv2dOncjBWVkwU9vTsDemuHSAGIGqZXtr3aXA==
+  dependencies:
+    "@wojtekmaj/date-utils" "^1.0.3"
+    clsx "^1.2.1"
+    get-user-locale "^1.2.0"
+    make-event-props "^1.1.0"
+    prop-types "^15.6.0"
+    react-calendar "^4.0.0"
+    react-clock "^4.0.0"
+    react-date-picker "^9.1.0"
+    react-fit "^1.4.0"
+    react-time-picker "^5.1.0"
 
 react-dom@^18.2.0:
   version "18.2.0"
@@ -2796,6 +2829,20 @@ react-router@6.4.5, react-router@^6.4.4:
   integrity sha512-1RQJ8bM70YEumHIlNUYc6mFfUDoWa5EgPDenK/fq0bxD8DYpQUi/S6Zoft+9DBrh2xmtg92N5HMAJgGWDhKJ5Q==
   dependencies:
     "@remix-run/router" "1.0.5"
+
+react-time-picker@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/react-time-picker/-/react-time-picker-5.1.0.tgz#9295ff90b7dcd187dd7516775568ad184870f6bc"
+  integrity sha512-NGpy5FM8WYdgCKXE/a85mhf0TunOk+N8ZG6rXBahD0mXeQZ/aBM+iVuKN4ell+QFH8/7F8dhT200ZKatBIphnA==
+  dependencies:
+    "@wojtekmaj/date-utils" "^1.0.0"
+    clsx "^1.2.1"
+    get-user-locale "^1.2.0"
+    make-event-props "^1.1.0"
+    prop-types "^15.6.0"
+    react-clock "^4.0.0"
+    react-fit "^1.4.0"
+    update-input-width "^1.2.2"
 
 react@^18.2.0:
   version "18.2.0"

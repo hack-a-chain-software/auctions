@@ -1,5 +1,5 @@
 .CreateAuction {
-  .react-date-picker {
+  .react-datetime-picker {
     @apply bg-input rounded-sm;
 
     button,
@@ -22,13 +22,35 @@
       &__year,
       &__month,
       &__day,
+      &__hour,
+      &__minute,
+      &__second,
       &__leadingZero {
-        @apply outline-none pointer-events-none text-paragraph text-3 leading-3 font-semibold tracking-tight border-none h-8;
-        margin: 0 -.15rem;
+        @apply outline-none text-paragraph text-3 leading-3 font-semibold tracking-tight border-none h-8;
+      }
+
+      &__input:invalid {
+        @apply bg-transparent;
+      }
+
+      &__minute {
+        width: auto !important;
+      }
+
+      &__input--hasLeadingZero {
+        margin: 0 .05em 0 0;
+      }
+
+      &__leadingZero {
+        margin: 0 -.54em 0 .15em;
+      }
+
+      &__divider {
+        margin: 0 -.08em 0 -.08em;
       }
     }
 
-    &.placeholder .react-date-picker__inputGroup__divider {
+    &.placeholder .react-datetime-picker__inputGroup__divider {
       @apply text-placeholder;
     }
 
@@ -65,6 +87,14 @@
           @apply rounded-full p-3 bg-placeholder text-black aspect-square;
           min-width: 1rem;
         }
+      }
+    }
+
+    &__clock {
+      @apply rounded-md border-line shadow shadow-sw bg-white p-4 w-auto h-auto;
+
+      .react-clock {
+        @apply bg-input rounded-full;
       }
     }
   }
