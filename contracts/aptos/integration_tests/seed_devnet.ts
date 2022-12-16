@@ -46,9 +46,6 @@ export async function testBasicFlow(): Promise<void> {
     console.log("contract address is: " + ownerAccount.address().hex());
 
     console.log("owner private key is: " + ownerAccount.toPrivateKeyObject().privateKeyHex);
-    if (mintAddress != undefined) {
-        // console.log("minting 5 extra NFTs to address: " + mintAddress);
-    }
 
     await faucetClient.fundAccount(moduleAddress.address(), BASE_FUNDS);
     await faucetClient.fundAccount(ownerAccount.address(), BASE_FUNDS);
@@ -81,13 +78,11 @@ export async function testBasicFlow(): Promise<void> {
     await client.waitForTransaction(txnHash, { checkSuccess: true });
 
     // initialize AuctionHouse
-    console.log("A");
     await client.waitForTransaction(
         await auctionHouseClient.initializeAuctionHouse(ownerAccount, false),
         { checkSuccess: true }
     );
 
-    console.log("B");
     // authorize aptosCoin
     await client.waitForTransaction(
         await auctionHouseClient.addAuthorizedCoin(ownerAccount, aptosCoin),
@@ -113,7 +108,6 @@ export async function testBasicFlow(): Promise<void> {
         property_version: tokenPropertyVersion.toString()
     };
 
-    console.log("C");
     // create collection
     await client.waitForTransaction(
         await tokenClient.createCollection(
@@ -125,7 +119,6 @@ export async function testBasicFlow(): Promise<void> {
         { checkSuccess: true }
     );
 
-    console.log("D");
     // Authorize NFT Collection
     await client.waitForTransaction(
         await auctionHouseClient.addAuthorizedCollection(ownerAccount, nftCollection),
@@ -133,12 +126,13 @@ export async function testBasicFlow(): Promise<void> {
     );
 
 
-    // create tokens (NFT) in collection
-    const totalNfts = 40;
+    const minBid = "100000";
+    const minBidIncrease = "50000";
 
-    let promiseArray = [];
+    const totalNfts = 50;
     let counter = 0;
     while (counter < totalNfts) {
+        // create tokens (NFT) in collection
         const tokenName = `Token name #${counter + 1}`;
         await client.waitForTransaction(
             await tokenClient.createToken(
@@ -147,64 +141,39 @@ export async function testBasicFlow(): Promise<void> {
                 tokenName,
                 "Another description here",
                 1,
-                `https://api.therealbirds.com/metadata/${counter + 1}.png`
+                `https://api.therealbirds.com/metadata/${counter + 1}.png`,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                ["Height", "Gender", "Clothes", "Other"],
+                [(counter * 15).toString(), (counter % 2).toString(), (counter ** 7).toString(), (counter % 12).toString()],
+                ["string", "string", "string", "string"]
             ),
             { checkSuccess: true }
         );
 
         // Create auction
-        await client.waitForTransaction(
-            await auctionHouseClient.createAuction(
-                ownerAccount,
-                toMicroseconds(Date.now() + (5 * 60 * 1000)),
-                "100000000",
-                "50000000",
-                nftCollection.creator,
-                nftCollection.collectionName,
-                tokenName,
-                tokenPropertyVersion.toString(),
-                aptosCoin
-            ),
-            { checkSuccess: true }
-        );
-
-        counter += 1;
-    }
-
-    // create NFTs on wallet
-    counter = 0;
-    while (counter < totalNfts) {
-        const tokenName = `Token name #${counter + 1 + totalNfts}`;
-        await client.waitForTransaction(
-            await tokenClient.createToken(
-                ownerAccount,
-                collectionName,
-                tokenName,
-                "Another description here",
-                1,
-                `https://api.therealbirds.com/metadata/${counter + 1 + totalNfts}.png`
-            ),
-            { checkSuccess: true }
-        );
-
-        // Create auction
-        await client.waitForTransaction(
-            await auctionHouseClient.createAuction(
-                ownerAccount,
-                toMicroseconds(Date.now() + (5 * 60 * 1000)),
-                "100000000",
-                "50000000",
-                nftCollection.creator,
-                nftCollection.collectionName,
-                tokenName,
-                tokenPropertyVersion.toString(),
-                aptosCoin
-            ),
-            { checkSuccess: true }
-        );
-
+        if (counter < totalNfts - 10) {
+            await client.waitForTransaction(
+                await auctionHouseClient.createAuction(
+                    ownerAccount,
+                    toMicroseconds(Date.now() + (5 * 60 * 1000)),
+                    minBid,
+                    minBidIncrease,
+                    nftCollection.creator,
+                    nftCollection.collectionName,
+                    tokenName,
+                    tokenPropertyVersion.toString(),
+                    aptosCoin
+                ),
+                { checkSuccess: true }
+            );
+        }
+        
+        // Add bids to auction 7
         if (counter == 7) {
-            let bid = 10000
+            let bid = parseInt(minBid);
             for (const account of bidders) {
                 await client.waitForTransaction(
                     await auctionHouseClient.bid(
@@ -215,12 +184,13 @@ export async function testBasicFlow(): Promise<void> {
                     ),
                     { checkSuccess: true }
                 );
-                bid += 500;
+                bid += parseInt(minBidIncrease);
             }
         }
 
         counter += 1;
     }
+
 }
 
 
