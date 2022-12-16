@@ -31,6 +31,11 @@ module auctionhouse::AuctionHouse {
     const ERROR_AUCTION_NOT_COMPLETE: u64 = 9;
     const ERROR_NOT_CLAIMABLE: u64 = 10;
     const ERROR_ALREADY_CLAIMED: u64 = 11;
+    const ERROR_END_TIME_LESS_THAN_NOW: u64 = 12;
+    const ERROR_MIN_SELLING_PRICE_CANNOT_BE_ZERO: u64 = 13;
+    const ERROR_COIN_NOT_INITIALIZED: u64 = 14;
+    const ERROR_NOT_ENOUGH_COIN_BALANCE: u64 = 15;
+    const ERROR_ACCOUNT_NOT_REGISTERED_IN_COIN: u64 = 16;
 
     // System consts
     
@@ -153,6 +158,7 @@ module auctionhouse::AuctionHouse {
     /// Used to initialize contract to a new account
     public entry fun initialize_auction_house(
         sender: &signer, 
+        owner: address,
         restrict_users: bool
     ) {
         let sender_addr = signer::address_of(sender);
@@ -167,7 +173,7 @@ module auctionhouse::AuctionHouse {
         };
 
         move_to(sender, AuctionHouse {
-            owner: sender_addr,
+            owner,
             auctions: table_vector::new<Auction>(),
             allowed_users,
             nft_allowlist: table_set::new<NftCollection>(),
@@ -195,8 +201,11 @@ module auctionhouse::AuctionHouse {
         let auction_house = borrow_global_mut<AuctionHouse>(auction_house_address);
         let start_time = timestamp::now_microseconds();
 
+        assert!(end_time > start_time, ERROR_END_TIME_LESS_THAN_NOW);
+        assert!(min_selling_price > 0, ERROR_MIN_SELLING_PRICE_CANNOT_BE_ZERO);
+
         // assert that user is authorized to create auctions
-        if (option::is_none<TableSet<address>>(&auction_house.allowed_users)) {
+        if (option::is_some<TableSet<address>>(&auction_house.allowed_users)) {
             assert!(
                 table_set::contains(
                     option::borrow<TableSet<address>>(&auction_house.allowed_users), 
@@ -298,7 +307,11 @@ module auctionhouse::AuctionHouse {
         assert!(is_auction_active(freeze(auction_item)), ERROR_AUCTION_INACTIVE);
 
         // assert bid is greater than current highest bid
-        assert!(bid > auction_item.current_bid, ERROR_INSUFFICIENT_BID);
+        assert!(
+            bid > auction_item.current_bid &&
+            bid >= auction_item.current_bid + auction_item.min_increment, 
+            ERROR_INSUFFICIENT_BID
+        );
 
         // assert sender is providing the correct coin
         assert!(
@@ -312,6 +325,10 @@ module auctionhouse::AuctionHouse {
                 locked_coins: table::new<u64, Coin<CoinType>>()
             });
         };
+
+        // Assert user has enough coins
+        assert!(coin::is_account_registered<CoinType>(sender_addr), ERROR_NOT_ENOUGH_COIN_BALANCE);
+        assert!(coin::balance<CoinType>(sender_addr) >= bid, ERROR_NOT_ENOUGH_COIN_BALANCE);
 
         // create query helper if it doesn't exists
         create_query_helper(sender, sender_addr);
@@ -422,6 +439,11 @@ module auctionhouse::AuctionHouse {
                 ClaimCoinsEvent { id },
             );
             let coins = table::remove(locked_coins, id);
+
+            // assert user is registered in CoinTytpe
+            if (!coin::is_account_registered<CoinType>(sender_addr)) {
+                coin::register<CoinType>(sender);
+            };
             coin::deposit<CoinType>(sender_addr, coins);
         };
         
@@ -512,6 +534,9 @@ module auctionhouse::AuctionHouse {
 
         // assert caller is owner
         assert!(sender_addr == auction_house.owner, ERROR_OWNER_RESTRICTED_FUNCTION);
+
+        // assert coin exists
+        assert!(coin::is_coin_initialized<CoinType>(), ERROR_COIN_NOT_INITIALIZED);
 
         table_set::insert(&mut auction_house.coin_allowlist, type_info::type_of<CoinType>());
     }
