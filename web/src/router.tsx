@@ -12,7 +12,7 @@ function Router() {
       <Routes>
         {
           routes.map(({path, component}) =>
-            <Route path={path} element={component} />
+            <Route path={path} element={component} key={path}/>
           )
         }
       </Routes>
