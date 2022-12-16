@@ -1,11 +1,11 @@
-import { AptosAccount, TokenTypes } from 'aptos';
-import { AuctionClient, tokenClient } from '../config/aptosClient';
+import { AptosAccount, TokenTypes, Types } from 'aptos';
+import { aptosClient, AuctionClient, tokenClient } from '../config/aptosClient';
 import { message } from 'antd';
 import { useState } from 'react';
 
 export const useCreateAuction: () => {
   create: (
-    sender: AptosAccount,
+    signAndSubmitTransaction: (payload: Types.TransactionPayload) => Promise<{ hash: Types.HexEncodedBytes }>,
     endTime: string,
     minSellingPrice: string,
     minIncrement: string,
@@ -22,7 +22,7 @@ export const useCreateAuction: () => {
   let running = false;
 
   function create(
-    sender: AptosAccount,
+    signAndSubmitTransaction: (payload: Types.TransactionPayload) => Promise<{ hash: Types.HexEncodedBytes }>,
     endTime: string,
     minSellingPrice: string,
     minIncrement: string,
@@ -35,7 +35,7 @@ export const useCreateAuction: () => {
     running = true;
     tokenClient.getToken(nft.creator, nft.collection, nft.name)
       .then(token => AuctionClient.createAuction(
-        sender,
+        signAndSubmitTransaction,
         endTime,
         minSellingPrice,
         minIncrement,
