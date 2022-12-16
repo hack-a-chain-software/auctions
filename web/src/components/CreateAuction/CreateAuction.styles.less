@@ -33,7 +33,7 @@
         @apply bg-transparent;
       }
 
-      &__minute {
+      &__minute::placeholder {
         width: auto !important;
       }
 
@@ -47,6 +47,19 @@
 
       &__divider {
         margin: 0 -.08em 0 -.08em;
+      }
+
+      &__amPm {
+        @apply outline-none text-paragraph text-3 leading-3 font-semibold tracking-tight border-none;
+
+        option {
+          @apply outline-none text-paragraph text-3 leading-3 font-semibold tracking-tight border-none p-4;
+        }
+
+        option:focus,
+        option:hover {
+          @apply bg-input;
+        }
       }
     }
 
