@@ -57,7 +57,10 @@ function AuctionComponent(props: AuctionProps) {
     props.auction.lockedTokenId.token_data_id.name
   );
 
-  const { balance, coinInfo } = useCoinBalance(null, props.auction.auctionCoin);
+  const { balance, coinInfo } = useCoinBalance(
+    String(account?.address),
+    props.auction.auctionCoin
+  );
 
   const { nftProperties } = useNftProperties(
     tokenData?.default_properties.data
