@@ -10,6 +10,7 @@ import { useTimer } from "../../hooks/useTimer";
 import { useCoinBalance } from "../../hooks/useCoinBalance";
 import { useState } from "react";
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
+import { formatDecimals } from "../../utils/formatDecimals";
 import CrownIcon16 from "../../assets/svg/CrownIcon16";
 import CrownIcon20 from "../../assets/svg/CrownIcon20";
 import CrownIcon24 from "../../assets/svg/CrownIcon24";
@@ -17,6 +18,7 @@ import PageContainer from "../../components/PageContainer";
 import Countdown, { zeroPad } from "react-countdown";
 import Big from "big.js";
 import "./Auction.styles.less";
+import { useNftProperties } from "../../hooks/useNftProperties";
 
 window.Buffer = window.Buffer || Buffer;
 
@@ -38,19 +40,28 @@ function AuctionComponent(props: AuctionProps) {
   const { account } = useWallet();
   const [closedAuction, setClosedAuction] = useState<boolean>(false);
   const allbids = props.allBids.slice(0).reverse();
+
   const minimumBid =
     Number(props.auction.currentBid) > 0
       ? Number(props.auction.currentBid) + Number(props.auction.minIncrement)
       : props.auction.minSellingPrice;
-  const isWon = false;
 
-  const { tokenData, tokenProperties } = useNftDetails(
+  const isWon =
+    closedAuction && props.auction.currentBidder === account?.address
+      ? true
+      : false;
+
+  const { tokenData } = useNftDetails(
     props.auction.lockedTokenId.token_data_id.creator,
     props.auction.lockedTokenId.token_data_id.collection,
     props.auction.lockedTokenId.token_data_id.name
   );
 
   const { balance, coinInfo } = useCoinBalance(null, props.auction.auctionCoin);
+
+  const { nftProperties } = useNftProperties(
+    tokenData?.default_properties.data
+  );
 
   const rendererDesk = ({ hours, minutes, seconds, days }: CountDownProps) => {
     if (closedAuction) {
@@ -112,13 +123,10 @@ function AuctionComponent(props: AuctionProps) {
               From
             </p>
           </div>
-          {allbids.map(({ bid, account }) => (
-            <div className="flex justify-between  w-full">
+          {allbids.map(({ bid, account }, i) => (
+            <div className="flex justify-between  w-full" key={i}>
               <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                {new Big(Number(bid))
-                  .div(10)
-                  .pow(coinInfo?.decimals || 0)
-                  .toFixed(2)}
+                {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
               </p>
               <p
                 className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
@@ -151,21 +159,15 @@ function AuctionComponent(props: AuctionProps) {
             </p>
           </div>
           {allbids.map(({ bid, account }, i) => (
-            <div className="flex justify-between w-full">
+            <div className="flex justify-between w-full" key={i}>
               {i === 0 ? (
                 <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem] flex gap-5">
-                  {new Big(Number(bid))
-                    .div(10)
-                    .pow(coinInfo?.decimals || 0)
-                    .toFixed(2)}{" "}
+                  {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
                   <CrownIcon24 />
                 </p>
               ) : (
                 <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                  {new Big(Number(bid))
-                    .div(10)
-                    .pow(coinInfo?.decimals || 0)
-                    .toFixed(2)}
+                  {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
                 </p>
               )}
               <p
@@ -199,7 +201,7 @@ function AuctionComponent(props: AuctionProps) {
             </p>
           </div>
           {allbids.map(({ bid, account }, i) => (
-            <div className="flex justify-between w-full">
+            <div className="flex justify-between w-full" key={i}>
               {i === 0 ? (
                 <>
                   <div className="relative mt-1">
@@ -211,7 +213,7 @@ function AuctionComponent(props: AuctionProps) {
                         isWon || closedAuction ? "font-bold" : "font-semibold"
                       } tracking-tight text-success h-[3.75rem]`}
                     >
-                      {bid}
+                      {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
                     </p>
                   </div>
                   <p
@@ -224,7 +226,7 @@ function AuctionComponent(props: AuctionProps) {
               ) : (
                 <>
                   <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                    {bid}
+                    {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
                   </p>
                   <p
                     className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[110px] truncate leading-6"
@@ -262,7 +264,7 @@ function AuctionComponent(props: AuctionProps) {
                 {props.auction?.lockedTokenId.token_data_id.name}
               </h3>
               <p
-                className="text-md font-medium text-black tracking-tight w-[41ch] truncate"
+                className="text-md font-medium text-black tracking-tight w-full truncate"
                 title={props.auction?.lockedTokenId.token_data_id.creator}
               >
                 By{" "}
@@ -290,15 +292,8 @@ function AuctionComponent(props: AuctionProps) {
             <div className="flex justify-between px-6">
               <div className="flex justify-between w-full">
                 <div className="flex flex-col w-full mt-6 gap-4">
-                  {[
-                    { label: "Medium", value: "GIF" },
-                    { label: "Dimensions", value: "200 x 200" },
-                    { label: "File size", value: "20 MB" },
-                    { label: "Contract address", value: "123kj78945454545" },
-                    { label: "Token standard", value: "ERC - 741" },
-                    { label: "Chain", value: "Ethereum" },
-                  ].map(({ label, value }) => (
-                    <div className="flex justify-between">
+                  {nftProperties.map(({ label, value }) => (
+                    <div className="flex justify-between" key={value}>
                       <p className="font-medium text-black text-md">{label}</p>
                       <p className="font-bold text-black text-end text-md max-w-[10ch] truncate">
                         {value}
@@ -310,8 +305,8 @@ function AuctionComponent(props: AuctionProps) {
             </div>
           </div>
         </div>
-        <div className="col-span-2 w-full flex justify-center md:max-w-[761px] md:block xl:pl-0">
-          <div className="hidden md:flex flex-col mb-10 mt-[-8px] md:ml-3 xl:ml-7 w-full">
+        <div className="col-span-2 w-[95%] flex justify-center md:block xl:pl-0 xl:w-[761px]">
+          <div className="hidden md:flex flex-col w-[95%] mb-10 mt-[-8px] md:ml-3 xl:ml-7">
             <div className="flex justify-between mt-[3px]">
               <span className="flex gap-[.6rem] items-center text-xl font-medium tracking-normal pl-1">
                 {props.auction?.lockedTokenId.token_data_id.collection}{" "}
@@ -336,7 +331,7 @@ function AuctionComponent(props: AuctionProps) {
             <h3 className="font-bold text-[28px] tracking-normal pl-1 mt-1">
               {props.auction?.lockedTokenId.token_data_id.name}
             </h3>
-            <p className="text-md font-medium text-black tracking-tight mt-1 ml-1 truncate w-[40ch] xl:w-[70ch]">
+            <p className="text-md font-medium text-black tracking-tight mt-1 ml-1 truncate w-[40ch] lg:w-[70ch]">
               By{" "}
               <strong>
                 {props.auction?.lockedTokenId.token_data_id.creator}
@@ -385,9 +380,10 @@ function AuctionComponent(props: AuctionProps) {
                 </button>
                 <strong className="font-semibold text-sm tracking-tight text-black/70">
                   Your balance:{" "}
-                  {new Big(Number(balance || 0))
-                    .div(Big(10).pow(coinInfo?.decimals || 0))
-                    .toFixed(2)}{" "}
+                  {formatDecimals(
+                    Number(balance) || 0,
+                    coinInfo?.decimals || 0
+                  ).toFixed(2)}{" "}
                   {coinInfo?.symbol}
                 </strong>
                 <Countdown
@@ -402,7 +398,7 @@ function AuctionComponent(props: AuctionProps) {
           </div>
         </div>
         <div
-          className={`row-span-2 col-span-2 w-[95%] mx-auto xl:w-[761px] mt-6 xl:mt-${
+          className={`row-span-2 col-span-2 mx-auto w-[95%] md:max-w-[416px] lg:max-w-[761px] xl:max-w-[761px] mt-6 xl:mt-${
             isWon ? "2rem" : "9"
           } xl:ml-7`}
         >
@@ -423,12 +419,17 @@ function AuctionComponent(props: AuctionProps) {
                     <>
                       <div className="flex justify-between xl:w-[575px]">
                         <p className="flex gap-4 items-center">
-                          {bid}
-                          {account === allbids[0].account && (
-                            <span className="text-white tracking-tight text-md flex items-center justify-center font-medium bg-green-500 rounded-[30px] w-[114px] xl:h-8">
-                              Highest bid
-                            </span>
-                          )}
+                          <>
+                            {formatDecimals(
+                              bid,
+                              coinInfo?.decimals || 0
+                            ).toFixed(2)}
+                            {account === props.auction.currentBidder && (
+                              <span className="text-white tracking-tight text-md flex items-center justify-center font-medium bg-green-500 rounded-[30px] w-[114px] xl:h-8">
+                                Highest bid
+                              </span>
+                            )}
+                          </>
                         </p>
                         <p>{new Date(timestamp).toLocaleDateString()}</p>
                       </div>
@@ -454,16 +455,9 @@ function AuctionComponent(props: AuctionProps) {
               </h3>
             </div>
             <div className="flex justify-between">
-              <div className="flex flex-col w-full px-8 h-[305px] mt-7 gap-4">
-                {[
-                  { label: "Medium", value: "GIF" },
-                  { label: "Dimensions", value: "200 x 200" },
-                  { label: "File size", value: "20 MB" },
-                  { label: "Contract address", value: "123kj78945454545" },
-                  { label: "Token standard", value: "ERC - 741" },
-                  { label: "Chain", value: "Ethereum" },
-                ].map(({ label, value }) => (
-                  <div className="flex justify-between">
+              <div className="flex flex-col w-full px-8 pb-8 mt-7 gap-4">
+                {nftProperties.map(({ label, value }) => (
+                  <div className="flex justify-between" key={value}>
                     <p className="font-medium text-black text-md">{label}</p>
                     <p className="font-bold text-black text-end text-md max-w-[10ch] truncate">
                       {value}

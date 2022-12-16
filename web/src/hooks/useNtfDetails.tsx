@@ -10,20 +10,12 @@ export const useNftDetails = (
 ) => {
   const [loadingNft, setLoadingNft] = useState<boolean>(true);
   const [tokenData, setTokenData] = useState<TokenTypes.TokenData | null>();
-  const [tokenProperties, setTokenProperties] = useState<any>({});
 
   useEffect(() => {
     const fetchTokenData = async () => {
       setTokenData(
         await tokenClient.getTokenData(creator, collectionName, tokenName)
       );
-      const { token_properties } = await tokenClient.getToken(
-        creator,
-        collectionName,
-        tokenName,
-        propertyVersion
-      );
-      setTokenProperties(token_properties);
     };
 
     fetchTokenData();
@@ -31,5 +23,5 @@ export const useNftDetails = (
     return () => setLoadingNft(false);
   }, []);
 
-  return { loadingNft, tokenData, tokenProperties };
+  return { loadingNft, tokenData };
 };
