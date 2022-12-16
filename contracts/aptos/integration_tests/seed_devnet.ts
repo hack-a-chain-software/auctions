@@ -132,6 +132,7 @@ export async function testBasicFlow(): Promise<void> {
     const totalNfts = 50;
     let counter = 0;
     while (counter < totalNfts) {
+        console.log(counter);
         // create tokens (NFT) in collection
         const tokenName = `Token name #${counter + 1}`;
         await client.waitForTransaction(
@@ -147,8 +148,8 @@ export async function testBasicFlow(): Promise<void> {
                 undefined,
                 undefined,
                 ["Height", "Gender", "Clothes", "Other"],
-                [(counter * 15).toString(), (counter % 2).toString(), (counter ** 7).toString(), (counter % 12).toString()],
-                ["string", "string", "string", "string"]
+                ["10", "20", "30", "40"],
+                ["u64", "u64", "u64", "u64"]
             ),
             { checkSuccess: true }
         );
