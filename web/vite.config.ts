@@ -21,8 +21,7 @@ export default defineConfig({
     VitePluginHtmlEnv({
       envPrefixes: "AUCTION_",
     }),
-    react(),
-    reactRefresh(),
+    react({ fastRefresh: false }),
     NodeGlobalsPolyfillPlugin({
       buffer: true,
       process: true,

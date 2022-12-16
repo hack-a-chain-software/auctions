@@ -7,6 +7,9 @@ import "@fontsource/poppins/700.css";
 import Header from "./components/Header";
 import WalletCxt from "./context/WalletProvider";
 import { BrowserRouter as Router } from "react-router-dom";
+import { Buffer } from "buffer";
+
+window.Buffer = window.Buffer || Buffer;
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

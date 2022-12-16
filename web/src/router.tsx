@@ -1,3 +1,5 @@
+import { useWallet } from "@manahippo/aptos-wallet-adapter";
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { routes } from "./routes";
 
@@ -7,10 +9,18 @@ import { routes } from "./routes";
  * And also some business logic to handle near initialization
  */
 function Pages() {
+  const { wallets, connect } = useWallet();
+
+  useEffect(() => {
+    if (wallets) {
+      connect(wallets[1]?.adapter.name);
+    }
+  }, []);
+
   return (
     <Routes>
-      {routes.map(({ path, component }) => (
-        <Route path={path} element={component} key={path} />
+      {routes.map(({ path, component }, idx) => (
+        <Route path={path} element={component} key={idx} />
       ))}
     </Routes>
   );

@@ -7,6 +7,7 @@ import WalletTest from "./pages/wallet_test";
 type Route = {
   path: string;
   component: ReactNode;
+  key?: number;
 };
 
 export const routes = [

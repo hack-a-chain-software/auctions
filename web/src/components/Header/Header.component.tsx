@@ -17,9 +17,18 @@ import { useNavigate } from "react-router";
 
 function Header() {
   const [open, setOpen] = useState<boolean>(false);
-  const [isConnected, setIsConnected] = useState<boolean>(true);
   const { connected, connect, disconnect, wallets } = useWallet();
+  const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    function delayButtonRender() {
+      setTimeout(function () {
+        setLoading(false);
+      }, 100);
+    }
+    delayButtonRender();
+  }, [connected]);
 
   return (
     <header className="bg-white flex flex-col justify-between items-center w-full mb-2 md:h-20 sticky top-0 z-[11] backdrop-blur-sm bg-white/50 xl:px-14 xl:pl-20 xl:py-2">
@@ -85,8 +94,13 @@ function Header() {
                   connected ? disconnect() : connect(wallets[1].adapter.name);
                 }}
               >
-                <WalletIcon className="w-5 text-caption" />{" "}
-                {connected ? "Disconnect" : "Connect wallet"}
+                {" "}
+                {!loading && (
+                  <>
+                    <WalletIcon className="w-5 text-caption" />{" "}
+                    {connected ? "Disconnect" : "Connect wallet"}
+                  </>
+                )}
               </button>
             </li>
           </ul>
@@ -177,7 +191,7 @@ function Header() {
                                   <Popover.Panel className="flex flex-col gap-2 mt-7">
                                     <span
                                       onClick={() =>
-                                        navigate("my-auctions/offers")
+                                        navigate("/my-auctions/offers")
                                       }
                                       className="text-black font-semibold text-sm tracking-tight outline-none cursor-pointer"
                                     >
@@ -185,7 +199,7 @@ function Header() {
                                     </span>
                                     <span
                                       onClick={() =>
-                                        navigate("my-auctions/created")
+                                        navigate("/my-auctions/created")
                                       }
                                       className="text-black font-semibold text-sm tracking-tight outline-none cursor-pointer"
                                     >
