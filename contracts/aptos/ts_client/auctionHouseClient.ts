@@ -2,11 +2,7 @@ import {
     Types,
     TokenTypes,
     AptosClient,
-    AptosAccount,
-    FaucetClient,
-    CoinClient,
-    TokenClient,
-    BCS
+    AptosAccount
 } from 'aptos';
 
 const moduleName = "AuctionHouse";
@@ -80,11 +76,13 @@ export class AuctionHouseClient extends AptosClient {
     /** Initialize new instance of AuctionHouse */
     async initializeAuctionHouse(
         sender: GenericSender,
+        owner: string,
         restrictUsersCreateAuctions: boolean,
     ): Promise<string> {
         const functionName = `${this.contractModule}::initialize_auction_house`;
         const typeArguments: any[] = [];
         const regularArguments = [
+            owner,
             restrictUsersCreateAuctions
         ];
         return await this.performTransaction({
