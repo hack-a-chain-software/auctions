@@ -33,6 +33,9 @@ module auctionhouse::AuctionHouse {
     const ERROR_ALREADY_CLAIMED: u64 = 11;
     const ERROR_END_TIME_LESS_THAN_NOW: u64 = 12;
     const ERROR_MIN_SELLING_PRICE_CANNOT_BE_ZERO: u64 = 13;
+    const ERROR_COIN_NOT_INITIALIZED: u64 = 14;
+    const ERROR_NOT_ENOUGH_COIN_BALANCE: u64 = 15;
+    const ERROR_ACCOUNT_NOT_REGISTERED_IN_COIN: u64 = 16;
 
     // System consts
     
@@ -322,6 +325,10 @@ module auctionhouse::AuctionHouse {
             });
         };
 
+        // Assert user has enough coins
+        assert!(coin::is_account_registered<CoinType>(sender_addr), ERROR_NOT_ENOUGH_COIN_BALANCE);
+        assert!(coin::balance<CoinType>(sender_addr) >= bid, ERROR_NOT_ENOUGH_COIN_BALANCE);
+
         // create query helper if it doesn't exists
         create_query_helper(sender, sender_addr);
         let query_helper = borrow_global_mut<UserQueryHelper>(sender_addr);
@@ -431,6 +438,11 @@ module auctionhouse::AuctionHouse {
                 ClaimCoinsEvent { id },
             );
             let coins = table::remove(locked_coins, id);
+
+            // assert user is registered in CoinTytpe
+            if (!coin::is_account_registered<CoinType>(sender_addr)) {
+                coin::register<CoinType>(sender);
+            };
             coin::deposit<CoinType>(sender_addr, coins);
         };
         
@@ -521,6 +533,9 @@ module auctionhouse::AuctionHouse {
 
         // assert caller is owner
         assert!(sender_addr == auction_house.owner, ERROR_OWNER_RESTRICTED_FUNCTION);
+
+        // assert coin exists
+        assert!(coin::is_coin_initialized<CoinType>(), ERROR_COIN_NOT_INITIALIZED);
 
         table_set::insert(&mut auction_house.coin_allowlist, type_info::type_of<CoinType>());
     }
