@@ -10,11 +10,9 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        {
-          routes.map(({path, component}) =>
-            <Route path={path} element={component} />
-          )
-        }
+        {routes.map(({ path, component }) => (
+          <Route path={path} element={component} key={path} />
+        ))}
       </Routes>
     </BrowserRouter>
   );

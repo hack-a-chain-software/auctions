@@ -1,4 +1,4 @@
-import CrownIcon from "../../assets/svg/CrownIcon";
+import CrownIcon from "../../assets/svg/CrownIcon16";
 import Button from "../Button";
 import Image from "../Image";
 

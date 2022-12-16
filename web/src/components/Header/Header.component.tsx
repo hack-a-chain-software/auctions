@@ -5,14 +5,22 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/solid";
 import { WalletIcon } from "@heroicons/react/24/outline";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition, Popover } from "@headlessui/react";
 import SpaceBitLogo27 from "../../assets/svg/SpaceBitLogo27";
 import SpaceBitLogo38 from "../../assets/svg/SpaceBitLogo38";
+import {
+  MartianWalletAdapter,
+  useWallet,
+} from "@manahippo/aptos-wallet-adapter";
+import { useTestSelector } from "../../context/TestContext";
 
 function Header() {
   const [open, setOpen] = useState<boolean>(false);
-
+  const [isConnected, setIsConnected] = useState<boolean>(true);
+  const { autoConnect, connected, connect, disconnect, wallets } = useWallet();
+  const { number, setNumber } = useTestSelector();
+  console.log(number);
   return (
     <header className="bg-white flex flex-col justify-between items-center w-full mb-2 md:h-20 sticky top-0 z-[11] backdrop-blur-sm bg-white/50 xl:px-14 xl:pl-20 xl:py-2">
       <div className="flex justify-between items-center p-3 pr-7 pl-5 w-full">
@@ -73,8 +81,15 @@ function Header() {
               <button
                 type="button"
                 className="bg-space flex justify-center items-center w-[155px] h-10 gap-2 text-sm font-bold rounded-md text-white tracking-tight"
+                onClick={() => {
+                  connected ? disconnect() : connect(wallets[0].adapter.name);
+                  setNumber((prev: number) => {
+                    return prev + 1;
+                  });
+                }}
               >
-                <WalletIcon className="w-5 text-caption" /> Connect wallet
+                <WalletIcon className="w-5 text-caption" />{" "}
+                {connected ? "Disconnect" : "Connect wallet"}
               </button>
             </li>
           </ul>
