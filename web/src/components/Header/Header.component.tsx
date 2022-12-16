@@ -13,14 +13,14 @@ import {
   MartianWalletAdapter,
   useWallet,
 } from "@manahippo/aptos-wallet-adapter";
-import { useTestSelector } from "../../context/TestContext";
+import { useNavigate } from "react-router";
 
 function Header() {
   const [open, setOpen] = useState<boolean>(false);
   const [isConnected, setIsConnected] = useState<boolean>(true);
-  const { autoConnect, connected, connect, disconnect, wallets } = useWallet();
-  const { number, setNumber } = useTestSelector();
-  console.log(number);
+  const { connected, connect, disconnect, wallets } = useWallet();
+  const navigate = useNavigate();
+
   return (
     <header className="bg-white flex flex-col justify-between items-center w-full mb-2 md:h-20 sticky top-0 z-[11] backdrop-blur-sm bg-white/50 xl:px-14 xl:pl-20 xl:py-2">
       <div className="flex justify-between items-center p-3 pr-7 pl-5 w-full">
@@ -37,12 +37,12 @@ function Header() {
         <nav className="hidden md:flex">
           <ul className="flex gap-11 items-center">
             <li className="pb-1 md:pb-0">
-              <a
-                href="/"
-                className="text-black font-semibold text-sm tracking-tight"
+              <span
+                onClick={() => navigate("/")}
+                className="text-black font-semibold text-sm tracking-tight cursor-pointer"
               >
                 Explore auctions
-              </a>
+              </span>
             </li>
             <Popover as="li" className="relative pr-8">
               <Popover.Button className="text-black font-semibold text-sm flex items-center tracking-tight outline-none gap-3">
@@ -61,18 +61,18 @@ function Header() {
                 leaveTo="transform scale-95 opacity-0"
               >
                 <Popover.Panel className="flex flex-col bg-white items-start justify-center w-[179px] h-[141px] rounded-lg shadow shadow-sw-sm p-3 absolute top-2 right-0">
-                  <a
-                    href="/my-auctions/offers"
-                    className="text-black font-semibold text-sm w-full p-3 border-b-[1px] tracking-tight"
+                  <span
+                    onClick={() => navigate("/my-auctions/offers")}
+                    className="text-black font-semibold text-sm w-full p-3 border-b-[1px] tracking-tight cursor-pointer"
                   >
                     My offers
-                  </a>
-                  <a
-                    href="/my-auctions/created"
-                    className="text-black font-semibold text-sm w-full p-3 tracking-tight"
+                  </span>
+                  <span
+                    onClick={() => navigate("/my-auctions/created")}
+                    className="text-black font-semibold text-sm w-full p-3 tracking-tight cursor-pointer"
                   >
                     Create auction
-                  </a>
+                  </span>
                 </Popover.Panel>
               </Transition>
             </Popover>
@@ -82,10 +82,7 @@ function Header() {
                 type="button"
                 className="bg-space flex justify-center items-center w-[155px] h-10 gap-2 text-sm font-bold rounded-md text-white tracking-tight"
                 onClick={() => {
-                  connected ? disconnect() : connect(wallets[0].adapter.name);
-                  setNumber((prev: number) => {
-                    return prev + 1;
-                  });
+                  connected ? disconnect() : connect(wallets[1].adapter.name);
                 }}
               >
                 <WalletIcon className="w-5 text-caption" />{" "}
@@ -148,12 +145,12 @@ function Header() {
                       <nav>
                         <ul className="flex flex-col gap-3 mt-4 justify-center tracking-tight">
                           <li className="h-[35px] border-b-[2px] w-full px-[1.6rem]">
-                            <a
-                              href="/"
-                              className="text-black font-semibold text-sm"
+                            <span
+                              onClick={() => navigate("/")}
+                              className="text-black font-semibold text-sm cursor-pointer"
                             >
                               Explore auctions
-                            </a>
+                            </span>
                           </li>
                           <Popover
                             as="li"
@@ -178,18 +175,22 @@ function Header() {
                                   leaveTo="transform scale-95 opacity-0"
                                 >
                                   <Popover.Panel className="flex flex-col gap-2 mt-7">
-                                    <a
-                                      href="my-auctions/offers"
-                                      className="text-black font-semibold text-sm trancking-tight outline-none"
+                                    <span
+                                      onClick={() =>
+                                        navigate("my-auctions/offers")
+                                      }
+                                      className="text-black font-semibold text-sm tracking-tight outline-none cursor-pointer"
                                     >
                                       My offers
-                                    </a>
-                                    <a
-                                      href="my-auctions/created"
-                                      className="text-black font-semibold text-sm trancking-tight outline-none"
+                                    </span>
+                                    <span
+                                      onClick={() =>
+                                        navigate("my-auctions/created")
+                                      }
+                                      className="text-black font-semibold text-sm tracking-tight outline-none cursor-pointer"
                                     >
                                       Create auction
-                                    </a>
+                                    </span>
                                   </Popover.Panel>
                                 </Transition>
                               </>
@@ -207,12 +208,12 @@ function Header() {
         <nav className="md:hidden">
           <ul className="flex items-center gap-14">
             <li>
-              <a
-                href="/"
-                className="text-paragraph text-sm font-semibold tracking-normal"
+              <span
+                onClick={() => navigate("/")}
+                className="text-paragraph text-sm font-semibold tracking-normal cursor-pointer"
               >
                 Explore auctions
-              </a>
+              </span>
             </li>
             <li className="mr-[-4px]">
               <button

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { routes } from "./routes";
 
 /**
@@ -6,16 +6,14 @@ import { routes } from "./routes";
  * @description - This is the application router that will have all the app routes!
  * And also some business logic to handle near initialization
  */
-function Router() {
+function Pages() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {routes.map(({ path, component }) => (
-          <Route path={path} element={component} key={path} />
-        ))}
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      {routes.map(({ path, component }) => (
+        <Route path={path} element={component} key={path} />
+      ))}
+    </Routes>
   );
 }
 
-export default Router;
+export default Pages;
