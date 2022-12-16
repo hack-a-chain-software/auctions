@@ -11,13 +11,15 @@ type ChooseNFTProps = {
 };
 
 function ChooseNFT(props: ChooseNFTProps) {
+  const { account } = useWallet();
+  const { list, fetch } = useOnAccountNFTs();
+
   const { openNFTSelector, setOpenNFTSelector, setSelectedNFT } = props;
   const [listOfNFTs, setListOfNFTs] = useState<TokenTypes.TokenDataId[]>([]);
-  const { account } = useWallet();
-  const { list } = useMemo(() => {
+  useEffect(() => {
     if(!account?.address)
-      return { list: [] };
-    return useOnAccountNFTs(account.address);
+      return;
+    fetch(account.address);
   }, [account?.address]);
 
   useEffect(() => {

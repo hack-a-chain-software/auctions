@@ -21,6 +21,7 @@ export const useIsAuthorized: () => {
       .then(setLoading)
       .catch(error => {
         console.error(error);
+        setLoading(running = false);
         return false;
       });
   }

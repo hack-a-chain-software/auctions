@@ -2,17 +2,18 @@ import { TokenTypes } from 'aptos';
 import { aptosClient, AuctionClient } from '../config/aptosClient';
 import { message } from 'antd';
 import { Address } from '@manahippo/aptos-wallet-adapter';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-export const useOnAccountNFTs: (address: Address) => {
+export const useOnAccountNFTs: () => {
   list: TokenTypes.TokenDataId[],
+  fetch: (address: Address) => void,
   loading: boolean
-} = address => {
+} = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<TokenTypes.TokenDataId[]>([]);
   let running = false;
 
-  useEffect(() => {
+  function fetch(address: Address) {
     if(running)
       return;
 
@@ -20,17 +21,16 @@ export const useOnAccountNFTs: (address: Address) => {
     useOnAccountNFTs(address)
       .then(setData)
       .then(() => running = false)
+      .then(setLoading)
       .catch(error => {
         console.error(error);
         message.error("Unable to fetch the NFTs you have.").then();
-        running = false;
+        setLoading(running = false);
         return [];
       });
+  }
 
-    return () => setLoading(false);
-  }, []);
-
-  return { loading, list: data };
+  return { loading, list: data, fetch };
 
   async function useOnAccountNFTs(address: Address) {
     const collections = await AuctionClient.getAuthorizedNftCollections();
