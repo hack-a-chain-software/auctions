@@ -174,9 +174,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
                       } }>
               <Combobox.Input
                 className="Search"
-                value=""
                 placeholder="Search token"
-                displayValue={ () => "" }
                 onChange={ ({ target: { value: currency } }) => onQueryCurrencies(currency) }
               />
               <Combobox.Options className="List" static>
@@ -192,7 +190,10 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
           </Popover.Panel>
         </Transition>
         <Popover.Button className="Button border-l-[1px]"
-                        onClick={() => setInitialPriceCurrencySelector(true)}>
+                        onClick={() => {
+                          onQueryCurrencies('');
+                          setInitialPriceCurrencySelector(true);
+                        }}>
           <ChevronDownIcon className="h-3 w-3"/>
           { initialPriceCurrency?.symbol ? initialPriceCurrency.symbol : '' }
         </Popover.Button>

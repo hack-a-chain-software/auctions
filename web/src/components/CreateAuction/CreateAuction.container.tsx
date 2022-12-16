@@ -49,6 +49,7 @@ function CreateAuction(props: CreateAuctionProps) {
     if(!currencies)
       return;
     setInitialPriceAvailableCurrencies(currencies);
+    setQueryCurrencies(currencies);
     const defaultCurrency = currencies.find(currency => currency.symbol === 'ETH');
     setInitialPriceCurrency(defaultCurrency ? defaultCurrency : currencies[0]);
   }, [currencies]);
