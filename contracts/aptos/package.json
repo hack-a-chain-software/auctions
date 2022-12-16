@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "main": "ts_client/index.ts",
   "scripts": {
-    "seed:devnet": "tsc && node integration_tests/seed_devnet.js",
+    "run:localnet": "aptos node run-local-testnet --with-faucet",
+    "seed:devnet": "tsc && NODE_URL=https://fullnode.devnet.aptoslabs.com/v1 FAUCET_URL=https://faucet.devnet.aptoslabs.com node integration_tests/seed_devnet.js",
+    "seed:localnet": "tsc && NODE_URL=http://127.0.0.1:8080 FAUCET_URL=http://127.0.0.1:8081 node integration_tests/seed_devnet.js",
     "test:integration": "tsc && node integration_tests/index.js"
   },
   "dependencies": {
