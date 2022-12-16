@@ -4,12 +4,12 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { Buffer } from "buffer";
-import { Auction, Bid, CoinInfo } from "contract_aptos";
+import { Auction, Bid } from "contract_aptos";
 import { useNftDetails } from "../../hooks/useNtfDetails";
 import { useTimer } from "../../hooks/useTimer";
 import { useCoinBalance } from "../../hooks/useCoinBalance";
 import { useState } from "react";
-import { TokenTypes } from "aptos";
+import { useWallet } from "@manahippo/aptos-wallet-adapter";
 import CrownIcon16 from "../../assets/svg/CrownIcon16";
 import CrownIcon20 from "../../assets/svg/CrownIcon20";
 import CrownIcon24 from "../../assets/svg/CrownIcon24";
@@ -17,7 +17,6 @@ import PageContainer from "../../components/PageContainer";
 import Countdown, { zeroPad } from "react-countdown";
 import Big from "big.js";
 import "./Auction.styles.less";
-import { useWallet } from "@manahippo/aptos-wallet-adapter";
 
 window.Buffer = window.Buffer || Buffer;
 
@@ -51,7 +50,7 @@ function AuctionComponent(props: AuctionProps) {
     props.auction.lockedTokenId.token_data_id.name
   );
 
-  const { balance, coinInfo } = useCoinBalance("1", props.auction.auctionCoin);
+  const { balance, coinInfo } = useCoinBalance(null, props.auction.auctionCoin);
 
   const rendererDesk = ({ hours, minutes, seconds, days }: CountDownProps) => {
     if (closedAuction) {
@@ -155,11 +154,18 @@ function AuctionComponent(props: AuctionProps) {
             <div className="flex justify-between w-full">
               {i === 0 ? (
                 <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem] flex gap-5">
-                  {new Big(Number(bid)).div(10).pow(coinInfo?.decimals || 0).toFixed(2)} <CrownIcon24 />
+                  {new Big(Number(bid))
+                    .div(10)
+                    .pow(coinInfo?.decimals || 0)
+                    .toFixed(2)}{" "}
+                  <CrownIcon24 />
                 </p>
               ) : (
                 <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                  {new Big(Number(bid)).div(10).pow(coinInfo?.decimals || 0).toFixed(2)}
+                  {new Big(Number(bid))
+                    .div(10)
+                    .pow(coinInfo?.decimals || 0)
+                    .toFixed(2)}
                 </p>
               )}
               <p

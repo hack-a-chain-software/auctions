@@ -7,6 +7,6 @@ export const DEVNET_FAUCET_URL = "https://faucet.devnet.aptoslabs.com"
 export const NODE_URL = DEVNET_NODE_URL
 export const FAUCET_URL = DEVNET_FAUCET_URL
 
-export const MODULE_ADDRESS = "0x7d379536318a349ce8a41ef4aaabc1b7417b2556b5cafb1d4efc5e3018f91cc7";
-export const AUCTION_HOUSE_ADDRESS = "0xbf6802016ba75cda31b28d6c3ec1514aa592d16446b116940fe9566b4c614bc5";
-export const OWNER_PRIVATE_KEY = "0x37b636aabcdf7618eecba1ed8ecbcf3191f2b1abd19090878e4b42d4bf918c50"
+export const MODULE_ADDRESS = "0x25827d5609dd269cb6bccde1595b5eafaa520c5e4d07a0c9f7a87439b4b9f89a";
+export const AUCTION_HOUSE_ADDRESS = "0xbce4edd28b3618de114606d86d793647f4e4ee4ecf951309992dd11894e27549";
+export const OWNER_PRIVATE_KEY = "0x6d39665992f7e4eb3abcdac8d83d8e5a007b033c926a3d2b1935f6464b1d8ef4"
