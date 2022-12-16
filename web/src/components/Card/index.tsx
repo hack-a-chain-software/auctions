@@ -1,3 +1,3 @@
-import Card from "./Card.component";
+import Card from "./Card.container";
 
 export default Card;

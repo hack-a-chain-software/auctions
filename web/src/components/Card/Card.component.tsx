@@ -1,18 +1,47 @@
 import CrownIcon16 from "../../assets/svg/CrownIcon16";
-import Button from "../Button";
-import Image from "../Image";
+import CardButton from "../CardButton";
+import Countdown from 'react-countdown';
 
-type CardProps = {
-  card: string;
+type CardComponentProps = {
+  isClose: boolean,
+  firstPlace: boolean,
+  isWon: boolean,
+  isOwner: boolean,
+  offered: boolean,
+  outbid: boolean,
+  onButtonClick: () => void,
+  isButtonEnabled: boolean,
+  collection: string,
+  name: string,
+  image: string,
+  closedAt: string,
+  closingIn: string,
+  owner: string,
+  bid: string,
+  currency: string,
+  createdAt: string,
 };
 
-function Card({ card }: CardProps) {
-  const isClose = false;
-  const firstPlace = false;
-  const isWon = false;
-  const isOwner = false;
-  const offered = false;
-  const outbid = false;
+function CardComponent(props: CardComponentProps) {
+  const {
+    isClose,
+    firstPlace,
+    isWon,
+    isOwner,
+    offered,
+    outbid,
+    onButtonClick,
+    isButtonEnabled,
+    collection,
+    name,
+    image,
+    closedAt,
+    closingIn,
+    owner,
+    bid,
+    currency,
+    createdAt,
+  } = props;
 
   return (
     <li
@@ -42,20 +71,21 @@ function Card({ card }: CardProps) {
           </span>
         </div>
       )}
-      <Image
-        src="https://nextdrop.s3.amazonaws.com/8287doodles-nft.png"
+      <img
+        src={image}
+        alt={`${collection} - ${name}`}
         className="w-full h-auto rounded-lg md:w-[280px] md:h-[270px] md:max-w-full object-cover md:rounded-md"
       />
       <div className="flex flex-col w-full ml-3 md:gap-[.8rem] md:ml-0">
         <div className="mt-[4px] ml-[1px] md:flex flex-col md:mt-[.7rem]">
           <h3
             className="text-sm break-keep text-paragraph font-medium md:text-base tracking-tight"
-            title="Bored Ape Yatch Club"
+            title={ collection }
           >
-            TRIP GENISIS
+            { collection }
           </h3>
           <p className="text-sm md:text-black font-extrabold md:text-base h-[15px] mt-[-4px] tracking-tight xl:mt-[-8px]">
-            #3040
+            { name }
           </p>
         </div>
         {isWon ? (
@@ -69,8 +99,8 @@ function Card({ card }: CardProps) {
                 {isOwner && isClose
                   ? "Auction ends in:"
                   : isOwner
-                  ? "Auction end date:"
-                  : "Auction ends in:"}
+                    ? "Auction end date:"
+                    : "Auction ends in:"}
               </h3>
               <span
                 className={`${
@@ -80,10 +110,10 @@ function Card({ card }: CardProps) {
                 {isClose && isOwner
                   ? "Closed auction"
                   : isOwner
-                  ? "30/12/2022"
-                  : isClose
-                  ? "Closed auction"
-                  : "2d 3h 10m 03s"}
+                    ? closedAt
+                    : isClose
+                      ? "Closed auction"
+                      : <Countdown date={closingIn}/>}
               </span>
             </div>
             <div className="hidden md:block">
@@ -91,10 +121,10 @@ function Card({ card }: CardProps) {
                 {isOwner && isClose
                   ? "Winner:"
                   : isClose
-                  ? "Winner:"
-                  : isOwner
-                  ? "Minimum hid:"
-                  : "Highest bid:"}
+                    ? "Winner:"
+                    : isOwner
+                      ? "Minimum hid:"
+                      : "Highest bid:"}
               </h3>
               <span
                 className={`${
@@ -102,10 +132,10 @@ function Card({ card }: CardProps) {
                 } font-extrabold text-md block text-end truncate w-28 tracking-tight`}
               >
                 {isOwner && isClose
-                  ? "wallet123g454545"
+                  ? owner
                   : isClose
-                  ? "wallet123g454545"
-                  : "0,5 BTH"}
+                    ? owner
+                    : `${bid} ${currency}`}
               </span>
             </div>
           </div>
@@ -116,7 +146,7 @@ function Card({ card }: CardProps) {
               Created:
             </h3>
             <span className="text-black font-extrabold text-sm tracking-tight md:text-4">
-              01/12/2022
+              { createdAt }
             </span>
           </div>
         )}
@@ -130,21 +160,23 @@ function Card({ card }: CardProps) {
                 outbid ? "text-error" : "text-success"
               } text-sm font-extrabold md:text-4 tracking-tight`}
             >
-              0,54 BTH
+              `${bid} ${currency}`
             </span>
           </div>
         )}
-        <Button
+        <CardButton
           firstPlace={firstPlace}
           isClose={isClose}
           isOwner={isOwner}
           isWon={isWon}
           offered={offered}
           outbid={outbid}
+          onClick={onButtonClick}
+          disabled={!isButtonEnabled}
         />
       </div>
     </li>
   );
 }
 
-export default Card;
+export default CardComponent;
