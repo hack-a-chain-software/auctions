@@ -2,7 +2,7 @@ import { Bid } from "contract_aptos";
 import { useEffect, useState } from "react";
 import { AuctionClient } from "../config/aptosClient";
 
-export const useBid = (auctionId: string, user: string | null) => {
+export const useBid = (auctionId: string, user: string | null | undefined) => {
   const [loadingBid, setLoadingBid] = useState<boolean>(true);
   const [allBids, setAllBids] = useState<Bid[]>([]);
   const [yourBids, setYourBids] = useState<Bid[]>([]);
@@ -13,7 +13,7 @@ export const useBid = (auctionId: string, user: string | null) => {
       setAllBids(data);
     };
 
-    fetchBids();  
+    fetchBids();
 
     if (user)
       setYourBids(() => allBids.filter(({ account }) => account === user));
