@@ -1,6 +1,7 @@
 import MyAuctionsComponent from './MyAuctions.component';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { Auction } from 'contract_aptos';
 
 type MyAuctionsFilter = 'offer-live'|'offer-closed'|'offer-won'|'your-live'|'your-closed';
 
@@ -16,7 +17,7 @@ function MyAuctions(props: MyAuctionsProps) {
   const [createPanel, showCreatePanel] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [filter, setFilter] = useState<MyAuctionsFilter>(initialFilter ? initialFilter : 'offer-live');
-  const [cards, setCards] = useState<string[]>([]);
+  const [cards, setCards] = useState<Auction[]>([]);
 
   useEffect(() => {
     //TODO filter cards to show the desired ones by the filter (the selected tab);
