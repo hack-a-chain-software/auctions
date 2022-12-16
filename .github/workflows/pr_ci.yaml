@@ -8,6 +8,29 @@ on:
   pull_request
 
 jobs:
+  contracts_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Yarn Globally
+        run: npm install -g yarn
+
+      - name: Install Aptos Tooling
+        uses: engineerd/configurator@v0.0.8
+        with:
+          name: "aptos"
+          url: "https://github.com/aptos-labs/aptos-core/releases/download/aptos-cli-v1.0.2/aptos-cli-1.0.2-Ubuntu-x86_64.zip"
+          pathInArchive: "aptos"
+
+      - name: Installing Dependencies
+        working-directory: ./contracts/aptos
+        run: yarn
+
+      - name: Run tests
+        working-directory: ./contracts/aptos
+        run: yarn test:integration
+      
   vercel_preview_deploy:
     runs-on: ubuntu-latest
     steps:
