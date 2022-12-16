@@ -1,6 +1,6 @@
 import CreateAuctionComponent from './CreateAuction.component';
 import { useEffect, useMemo, useState } from 'react';
-import { AptosAccount, TokenTypes } from 'aptos';
+import { TokenTypes } from 'aptos';
 import Big from 'big.js';
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
 import { useAvailableCoins } from '../../hooks/useAvailableCoins';
@@ -41,7 +41,7 @@ function CreateAuction(props: CreateAuctionProps) {
     minOfferIncrementInput: false,
     priceInput: false
   });
-  const { account } = useWallet();
+  const { signAndSubmitTransaction } = useWallet();
   const { coins: currencies } = useAvailableCoins();
   const { create } = useCreateAuction();
 
@@ -92,7 +92,7 @@ function CreateAuction(props: CreateAuctionProps) {
       return;
 
     create(
-      new AptosAccount(undefined, account?.address ? account.address : ''),
+      signAndSubmitTransaction,
       endDate ? endDate.getTime().toString() : '',
       new Big(initialPrice).toString(),
       new Big(minOfferIncrement).toString(),
