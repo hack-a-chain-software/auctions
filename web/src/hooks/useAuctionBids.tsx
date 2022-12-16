@@ -18,7 +18,6 @@ export const useAuctionBids: (id: string) => {
     AuctionClient.getBidsAuction(id)
       .then(setBids)
       .then(() => running = false)
-      .then(() => console.debug(bids));
     return () => setLoading(false);
   }, []);
 
