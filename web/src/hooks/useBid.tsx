@@ -13,7 +13,7 @@ export const useBid = (auctionId: string, user: string | null) => {
       setAllBids(data);
     };
 
-    fetchBids();
+    fetchBids();  
 
     if (user)
       setYourBids(() => allBids.filter(({ account }) => account === user));

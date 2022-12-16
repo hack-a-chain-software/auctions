@@ -4,11 +4,12 @@ import {
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 import { Buffer } from "buffer";
-import { Auction, Bid } from "contract_aptos";
+import { Auction, Bid, CoinInfo } from "contract_aptos";
 import { useNftDetails } from "../../hooks/useNtfDetails";
-import { countDown } from "../../hooks/useTimer";
+import { useTimer } from "../../hooks/useTimer";
 import { useCoinBalance } from "../../hooks/useCoinBalance";
 import { useState } from "react";
+import { TokenTypes } from "aptos";
 import CrownIcon16 from "../../assets/svg/CrownIcon16";
 import CrownIcon20 from "../../assets/svg/CrownIcon20";
 import CrownIcon24 from "../../assets/svg/CrownIcon24";
@@ -16,6 +17,7 @@ import PageContainer from "../../components/PageContainer";
 import Countdown, { zeroPad } from "react-countdown";
 import Big from "big.js";
 import "./Auction.styles.less";
+import { useWallet } from "@manahippo/aptos-wallet-adapter";
 
 window.Buffer = window.Buffer || Buffer;
 
@@ -33,8 +35,14 @@ type CountDownProps = {
 };
 
 function AuctionComponent(props: AuctionProps) {
+  const { endDate } = useTimer(Number(props.auction.endTime));
+  const { account } = useWallet();
   const [closedAuction, setClosedAuction] = useState<boolean>(false);
   const allbids = props.allBids.slice(0).reverse();
+  const minimumBid =
+    Number(props.auction.currentBid) > 0
+      ? Number(props.auction.currentBid) + Number(props.auction.minIncrement)
+      : props.auction.minSellingPrice;
   const isWon = false;
 
   const { tokenData, tokenProperties } = useNftDetails(
@@ -44,8 +52,6 @@ function AuctionComponent(props: AuctionProps) {
   );
 
   const { balance, coinInfo } = useCoinBalance("1", props.auction.auctionCoin);
-
-  const { endDate } = countDown(Number(props.auction.endTime));
 
   const rendererDesk = ({ hours, minutes, seconds, days }: CountDownProps) => {
     if (closedAuction) {
@@ -110,7 +116,10 @@ function AuctionComponent(props: AuctionProps) {
           {allbids.map(({ bid, account }) => (
             <div className="flex justify-between  w-full">
               <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                {bid}
+                {new Big(Number(bid))
+                  .div(10)
+                  .pow(coinInfo?.decimals || 0)
+                  .toFixed(2)}
               </p>
               <p
                 className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
@@ -146,11 +155,11 @@ function AuctionComponent(props: AuctionProps) {
             <div className="flex justify-between w-full">
               {i === 0 ? (
                 <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem] flex gap-5">
-                  {bid} <CrownIcon24 />
+                  {new Big(Number(bid)).div(10).pow(coinInfo?.decimals || 0).toFixed(2)} <CrownIcon24 />
                 </p>
               ) : (
                 <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                  {bid}
+                  {new Big(Number(bid)).div(10).pow(coinInfo?.decimals || 0).toFixed(2)}
                 </p>
               )}
               <p
@@ -341,7 +350,11 @@ function AuctionComponent(props: AuctionProps) {
             ) : (
               <>
                 <p className="w-[173px] p-[.4rem] text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-normal xl:mt-8 xl:h-8">
-                  Minimum bid: 0,3 {coinInfo?.symbol}
+                  Minimum bid:{" "}
+                  {new Big(minimumBid)
+                    .div(Big(10).pow(coinInfo?.decimals || 0))
+                    .toFixed(2)}{" "}
+                  {coinInfo?.symbol}
                 </p>
                 <input
                   type="number"
@@ -366,9 +379,10 @@ function AuctionComponent(props: AuctionProps) {
                 </button>
                 <strong className="font-semibold text-sm tracking-tight text-black/70">
                   Your balance:{" "}
-                  {Big(balance)
-                    .div(Big(10).pow(Big(coinInfo?.decimals)))
-                    .toFixed(2)}
+                  {new Big(Number(balance || 0))
+                    .div(Big(10).pow(coinInfo?.decimals || 0))
+                    .toFixed(2)}{" "}
+                  {coinInfo?.symbol}
                 </strong>
                 <Countdown
                   date={endDate}

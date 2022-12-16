@@ -1,22 +1,16 @@
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
-import { useEffect, useState } from "react";
+import { useCallback } from "react";
 import { AuctionClient } from "../config/aptosClient";
 
 export const useClaimPrize = (id: number) => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const { account } = useWallet();
+  const { signAndSubmitTransaction } = useWallet();
 
-  useEffect(() => {
-    if (!account) return;
-
-    const claimRewards = async () => {
-      await AuctionClient.claimPrize(account.address, id);
-    };
-
-    claimRewards();
-
-    return () => setLoading(false);
+  const claimRewards = useCallback(async () => {
+    await AuctionClient.claimPrize(
+      (payload) => signAndSubmitTransaction(payload),
+      id
+    );
   }, []);
 
-  return { loading };
+  return { claimRewards };
 };

@@ -8,7 +8,7 @@ export const useNftDetails = (
   tokenName: string,
   propertyVersion?: string
 ) => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingNft, setLoadingNft] = useState<boolean>(true);
   const [tokenData, setTokenData] = useState<TokenTypes.TokenData | null>();
   const [tokenProperties, setTokenProperties] = useState<any>({});
 
@@ -28,8 +28,8 @@ export const useNftDetails = (
 
     fetchTokenData();
 
-    return () => setLoading(false);
+    return () => setLoadingNft(false);
   }, []);
 
-  return { loading, tokenData, tokenProperties };
+  return { loadingNft, tokenData, tokenProperties };
 };
