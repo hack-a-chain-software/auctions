@@ -2,7 +2,6 @@ import { ReactNode } from "react";
 import MyAuctions from "./pages/MyAuctions";
 import ExploreAuctions from "./pages/ExploreAuctions";
 import Auction from "./pages/Auction";
-import WalletTest from "./pages/wallet_test";
 
 type Route = {
   path: string;
@@ -17,7 +16,7 @@ export const routes = [
   },
   {
     path: "/auction/:id",
-    component: <Auction />
+    component: <Auction />,
   },
   {
     path: "my-auctions",
@@ -30,9 +29,5 @@ export const routes = [
   {
     path: "my-auctions/created",
     component: <MyAuctions filter="your-live" />,
-  },
-  {
-    path: "/wallet_test",
-    component: <WalletTest />,
   },
 ] as Route[];
