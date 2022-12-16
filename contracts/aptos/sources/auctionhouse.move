@@ -158,6 +158,7 @@ module auctionhouse::AuctionHouse {
     /// Used to initialize contract to a new account
     public entry fun initialize_auction_house(
         sender: &signer, 
+        owner: address,
         restrict_users: bool
     ) {
         let sender_addr = signer::address_of(sender);
@@ -172,7 +173,7 @@ module auctionhouse::AuctionHouse {
         };
 
         move_to(sender, AuctionHouse {
-            owner: sender_addr,
+            owner,
             auctions: table_vector::new<Auction>(),
             allowed_users,
             nft_allowlist: table_set::new<NftCollection>(),
