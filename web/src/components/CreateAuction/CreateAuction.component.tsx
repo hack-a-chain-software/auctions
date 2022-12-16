@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import ChooseNFTSVG from '../../assets/svg/ChooseNFT';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import { InputValid } from './CreateAuction.container';
-import DatePicker from 'react-date-picker';
+import DateTimePicker from 'react-datetime-picker';
 import './CreateAuction.styles.less';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import ChooseNFT from '../ChooseNFT';
@@ -111,10 +111,10 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
 
     return <div className="flex flex-col">
       <h5 className="font-semibold text-3.5 leading-3.5 tracking mb-2">Auction end date</h5>
-      <DatePicker value={endDate}
+      <DateTimePicker value={endDate}
                   calendarIcon={null}
                   clearIcon={null}
-                  format="y/MM/dd"
+                  format="y/MM/dd HH:mm"
                   minDate={new Date()}
                   onChange={(date: Date) => {
                     setEndDate(date);
@@ -123,6 +123,9 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
                   dayPlaceholder="DD"
                   monthPlaceholder="MM"
                   yearPlaceholder="AAAA"
+                  hourPlaceholder="HH"
+                  minutePlaceholder="m"
+                  maxDetail="minute"
                   className={(dateInput ? 'Fail' : '') + (endDate ? '' : ' placeholder')}/>
       <span className={ dateInput ? 'block Fail-span' : 'hidden'}>Please enter a date that is after today.</span>
     </div>;
