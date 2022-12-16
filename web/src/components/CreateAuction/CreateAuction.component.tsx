@@ -114,7 +114,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
       <DateTimePicker value={endDate}
                   calendarIcon={null}
                   clearIcon={null}
-                  format="y/MM/dd HH:mm"
+                  format="y/MM/dd hh:mm a"
                   minDate={new Date()}
                   onChange={(date: Date) => {
                     setEndDate(date);
@@ -124,8 +124,9 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
                   monthPlaceholder="MM"
                   yearPlaceholder="AAAA"
                   hourPlaceholder="HH"
-                  minutePlaceholder="m"
+                  minutePlaceholder="mm"
                   maxDetail="minute"
+                  amPmAriaLabel="Select AM/PM"
                   className={(dateInput ? 'Fail' : '') + (endDate ? '' : ' placeholder')}/>
       <span className={ dateInput ? 'block Fail-span' : 'hidden'}>Please enter a date that is after today.</span>
     </div>;
