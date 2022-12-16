@@ -1,3 +1,3 @@
-import Auction from "./Auction.component";
+import Auction from "./Auction.config";
 
 export default Auction;

@@ -16,8 +16,8 @@ export const routes = [
     component: <ExploreAuctions />,
   },
   {
-    path: "/auction",
-    component: <Auction />,
+    path: "/auction/:id",
+    component: <Auction />
   },
   {
     path: "my-auctions",

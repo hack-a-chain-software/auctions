@@ -1,4 +1,4 @@
-import CrownIcon from "../../assets/svg/CrownIcon16";
+import CrownIcon16 from "../../assets/svg/CrownIcon16";
 import Button from "../Button";
 import Image from "../Image";
 
@@ -22,7 +22,7 @@ function Card({ card }: CardProps) {
     >
       {isWon && (
         <div className="w-20 h-5 md:w-[105px] h-[34px] top-4 right-4 flex justify-center items-center absolute gap-2 bg-white border-solid border-[1px] border-purple-500 rounded-sm z-[1] md:top-[1.93rem] md:right-[1.79rem]">
-          <CrownIcon />
+          <CrownIcon16 />
           <span className="text-transparent bg-clip-text bg-space items-center justify-around font-semibold text-sm tracking-tight">
             Winner
           </span>
