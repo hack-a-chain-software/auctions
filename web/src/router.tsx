@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useWallet } from "@manahippo/aptos-wallet-adapter";
+import { useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import { routes } from "./routes";
 
 /**
@@ -6,18 +8,22 @@ import { routes } from "./routes";
  * @description - This is the application router that will have all the app routes!
  * And also some business logic to handle near initialization
  */
-function Router() {
+function Pages() {
+  const { wallets, connect } = useWallet();
+
+  useEffect(() => {
+    if (wallets) {
+      connect(wallets[1]?.adapter.name);
+    }
+  }, []);
+
   return (
-    <BrowserRouter>
-      <Routes>
-        {
-          routes.map(({path, component}) =>
-            <Route path={path} element={component} key={path}/>
-          )
-        }
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      {routes.map(({ path, component }, idx) => (
+        <Route path={path} element={component} key={idx} />
+      ))}
+    </Routes>
   );
 }
 
-export default Router;
+export default Pages;

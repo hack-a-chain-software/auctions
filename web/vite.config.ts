@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import reactRefresh from "@vitejs/plugin-react-refresh";
 import NodeGlobalsPolyfillPlugin from "@esbuild-plugins/node-globals-polyfill";
-import VitePluginHtmlEnv from 'vite-plugin-html-env';
+import VitePluginHtmlEnv from "vite-plugin-html-env";
 
 export default defineConfig({
   css: {
@@ -11,18 +11,17 @@ export default defineConfig({
         options: {
           lessOptions: {
             strictMath: true,
-            javascriptEnabled: true
-          }
-        }
-      }
+            javascriptEnabled: true,
+          },
+        },
+      },
     },
   },
   plugins: [
     VitePluginHtmlEnv({
-      envPrefixes: 'AUCTION_'
+      envPrefixes: "AUCTION_",
     }),
-    react(),
-    reactRefresh(),
+    react({ fastRefresh: false }),
     NodeGlobalsPolyfillPlugin({
       buffer: true,
       process: true,
@@ -30,9 +29,9 @@ export default defineConfig({
   ],
   esbuild: {},
   define: {
-    global: "window"
+    global: "window",
   },
-  envPrefix: 'AUCTION_',
+  envPrefix: "AUCTION_",
   resolve: {
     alias: {
       util: "util",
