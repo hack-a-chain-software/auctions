@@ -2,12 +2,12 @@ import { GenericSender } from 'contract_aptos';
 import { useState } from 'react';
 import { AuctionClient } from '../config/aptosClient';
 
-export const useClaim: (coin: string, id: number) => {
+export const useClaim: (id: number) => {
   hash: string,
   claimPrize: (func: GenericSender) => void,
   claimCoins: (func: GenericSender) => void,
   loading: boolean,
-} = (coin, id) => {
+} = (id) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [hash, setHash] = useState<string>('');
   let running = false;
@@ -33,7 +33,7 @@ export const useClaim: (coin: string, id: number) => {
       return;
 
     setLoading(running = true);
-    AuctionClient.claimCoins(func, coin, id)
+    AuctionClient.claimCoins(func, id)
       .then(setHash)
       .then(() => running = false)
       .then(setLoading)
