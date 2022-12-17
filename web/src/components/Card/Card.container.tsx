@@ -9,11 +9,9 @@ import { useCoinInfo } from '../../hooks/useCoinInfo';
 import { useTimer } from '../../hooks/useTimer';
 import { formatDecimals } from '../../utils/formatDecimals';
 import { useClaim } from '../../hooks/useClaim';
-import Big from 'big.js';
 
 type CardProps = Auction & {
   created?:boolean
-  explore?:boolean
 }
 
 function Card(props: CardProps) {
@@ -22,12 +20,10 @@ function Card(props: CardProps) {
     creator: author,
     startTime,
     endTime,
-    minSellingPrice,
     currentBid,
     currentBidder,
     auctionCoin,
     coinsClaimed,
-    tokenClaimed,
     lockedTokenId: {
       token_data_id: {
         creator,
@@ -35,10 +31,9 @@ function Card(props: CardProps) {
         name
       }
     },
-    created,
-    explore
+    created
   } = props;
-  const { loading, hash, claimPrize, claimCoins } = useClaim(auctionCoin, id);
+  const { loading, claimPrize, claimCoins } = useClaim(id);
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(true);
   const { account, signAndSubmitTransaction } = useWallet();
   const { data } = useNFTData(creator, collection, name);
@@ -48,18 +43,12 @@ function Card(props: CardProps) {
   const getDate = useTimer;
 
   useEffect(() => {
-    if(hash.length < 10)
-      return;
-    window.location.reload();
-  }, [hash]);
-
-  useEffect(() => {
-    if(created && !live && new Big(currentBid).eq(0) && tokenClaimed)
-      return setIsButtonEnabled(false);
-    if(created && !live && !new Big(currentBid).eq(0) && coinsClaimed)
-      return setIsButtonEnabled(false);
+    if(created && bids.length < 1)
+      return setIsButtonEnabled(isClose && !loading);
+    if(created && !coinsClaimed)
+      return setIsButtonEnabled(isClose && !loading);
     setIsButtonEnabled(!loading);
-  }, [loading]);
+  }, [account, bids, loading]);
 
   const image = useMemo(() => {
     if(!data)
@@ -67,12 +56,24 @@ function Card(props: CardProps) {
     return data.uri;
   }, [data]);
 
-  const live = new Date() < getDate(Number(endTime)).endDate;
+  const isClose = new Date() > getDate(Number(endTime)).endDate;
 
-  const iBided = useMemo(() => {
+  const firstPlace = useMemo(() => {
+    if(!account?.address)
+      return false;
+    return account.address === currentBidder && account.address !== author;
+  }, [account]);
+
+  const isOwner = useMemo(() => {
+    if(!account?.address)
+      return false;
+    return account.address === author;
+  }, [account]);
+
+  const offered = useMemo(() => {
     if(!bids || !account?.address)
       return false;
-    return bids.reduce((iDid: boolean, bid) => account.address === bid.account ? true : iDid, false);
+    return bids.reduce((is: boolean, bid) => account.address === bid.account ? true : is, false);
   }, [bids]);
 
   const { symbol: currency } = useMemo(() => {
@@ -83,57 +84,39 @@ function Card(props: CardProps) {
 
   const bid = useMemo(() => {
     if(!info)
-      return new Big(0);
-    return formatDecimals(currentBid, info.decimals);
+      return '0.000';
+    return formatDecimals(currentBid, info.decimals).toFixed(3);
   }, [info]);
 
-  const myBid = useMemo(() => {
-    if(!info || bids.length === 0)
-      return new Big(0);
-    const myBid = bids.find(bid => bid.account === account?.address);
-    if(!myBid)
-      return new Big(0);
-    return formatDecimals(myBid.bid, info.decimals);
-  }, [info, bids]);
-
   function onButtonClick() {
-    if(created && !live && new Big(currentBid).eq(0) && !tokenClaimed)
+    if(created && isClose && !coinsClaimed && !bids.length)
       return claimPrize(signAndSubmitTransaction);
-    if(created && !live && !new Big(currentBid).eq(0) && !coinsClaimed)
+    if(created && isClose && !coinsClaimed && bids.length)
       return claimCoins(signAndSubmitTransaction);
     navigation(`/auction/${id}`);
   }
 
   const cardComponentProps = {
-    // If auction is closed of live
-    live,
-    // If the auction has no bids
-    noBids: bid.eq(0),
-    // If the logged account won the auction
-    won: !live && !bid.eq(0) && account?.address === currentBidder && !created,
-    // If the logged account made an offer/bid
-    iBided,
-    // If the logged account has the highest offer/bid
-    winning: iBided && account?.address === currentBidder,
-    // If the card is on the created page
+    isClose,
+    firstPlace,
     created: !!created,
-    // If the card is on the explore page
-    explore: !!explore,
-
+    isWon: isClose && firstPlace,
+    isOwner,
+    offered,
+    outbid: !isClose && !firstPlace,
     onButtonClick,
     isButtonEnabled,
     collection,
     name,
     image,
-    bidder: bid.eq(0) ? author : currentBidder,
-    bid: bid.eq(0) ? bid.add(minSellingPrice).toFixed(3) : bid.toFixed(3),
-    myBid: myBid.toFixed(3),
+    closedAt: getDate(Number(endTime)).endDate,
+    closingIn: getDate(Number(endTime)).endDate,
+    owner: author,
+    bid,
+    hasBid: bids.length < 1,
     currency,
     createdAt: getDate(Number(startTime)).endDate,
-    closedAt: getDate(Number(endTime)).endDate
   };
-
-  console.log(name, props);
 
   return <CardComponent { ...cardComponentProps }/>;
 }

@@ -1,31 +1,35 @@
 type ButtonProps = {
-  live: boolean,
-  noBids: boolean,
-  won: boolean,
-  iBided: boolean,
-  created: boolean,
-  explore: boolean,
-  onClick: () => void,
+  created: boolean;
+  isWon: boolean;
+  isClose: boolean;
+  firstPlace: boolean;
+  isOwner: boolean;
+  offered: boolean;
+  outbid: boolean;
+  hasBid: boolean;
+  onClick: () => void
   disabled: boolean
 };
 
 function CardButton({
-  live, // If auction is closed of live
-  noBids, // If the auction has no bids
-  won, // If the logged account won the auction
-  iBided, // If the logged account made an offer/bid
-  created, // If the card is on the created page
-  explore, // If the card is on the explore page
+  created,
+  isWon,
+  isClose,
+  firstPlace,
+  isOwner,
+  offered,
+  outbid,
+  hasBid,
   onClick,
   disabled
 }: ButtonProps) {
-
   function MakeOfferButton() {
     return (
       <button
         onClick={onClick}
         disabled={disabled}
-        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button"
+        className={`hidden md:block w-[265px] h-10 ml-[1px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button
+  `}
       >
         Make offer
       </button>
@@ -37,7 +41,7 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-3 rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button"
+        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-3 rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
       >
         View details
       </button>
@@ -49,19 +53,19 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-[2px] rounded font-medium text-sm leading-2.5 tracking-normal text-white  bg-button"
+        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[2px] rounded font-medium text-sm leading-2.5 tracking-normal text-white  bg-button`}
       >
-        View auction
+        View auctions
       </button>
     );
   }
 
-  function SeeOffersButton() {
+  function SeeOfferButton() {
     return (
       <button
         onClick={onClick}
         disabled={disabled}
-        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button"
+        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
       >
         See offers
       </button>
@@ -73,21 +77,21 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-4 rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-space"
+        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-4 rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-space`}
       >
-        { disabled ? 'Already claimed' : 'Claim rewards' }
+        Claim rewards
       </button>
     );
   }
 
-  function WithdrawOffersButton() {
+  function WithdrawnOffersButton() {
     return (
       <button
         onClick={onClick}
         disabled={disabled}
-        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button"
+        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
       >
-        { disabled ? 'Already claimed' : 'Withdraw offers' }
+        Withdrawn offers
       </button>
     );
   }
@@ -97,44 +101,58 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button"
+        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
       >
-        { disabled ? 'Already claimed' : 'Claim back token' }
+        Claim back token
       </button>
     );
   }
 
-  return <>
-    {/* If user is on the created page */}
-    { created
-      ? (live
-        ? <SeeOffersButton/>
-        : (noBids
-          ? <ClaimBackTokenButton/>
-          : <WithdrawOffersButton/>
-        )
-      )
-      : <></> }
+  if (created && isClose && hasBid) {
+    return <WithdrawnOffersButton />;
+  }
 
-    {/* If user is on the explore page */}
-    { explore
-      ? (live
-        ? ( iBided ? <ViewAuctionButton/> : <MakeOfferButton/>)
-        : <ViewDetailsButton/>
-      )
-      : <></> }
+  if (created && isClose && !hasBid) {
+    return <ClaimBackTokenButton />;
+  }
 
-    {/* If user is on the myOffers page */}
-    { !created && !explore
-      ? (live
-        ? <MakeOfferButton/>
-        : (won
-          ? <ClaimRewardsButton/>
-          : <ViewDetailsButton/>
-        )
-      )
-      : <></> }
-  </>;
+  if (offered && firstPlace) {
+    return <MakeOfferButton />;
+  }
+  if (offered && outbid) {
+    return <MakeOfferButton />;
+  }
+
+  if (offered) {
+    return <ViewAuctionButton />;
+  }
+
+  if (isOwner && isClose) {
+    return <SeeOfferButton />;
+  }
+
+  if (isOwner) {
+    return <SeeOfferButton />;
+  }
+
+  if (isClose) {
+    return <ViewDetailsButton />;
+  }
+
+  if (isWon) {
+    return <ClaimRewardsButton />;
+  }
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[10px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button
+      `}
+    >
+      Make offer
+    </button>
+  );
 }
 
 export default CardButton;
