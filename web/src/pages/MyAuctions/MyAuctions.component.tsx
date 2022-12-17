@@ -31,15 +31,15 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
     showCreatePanel
   } = props;
 
-  function renderCard(card: Auction, key: number) {
-    return <Card key={key} {...card}/>;
+  function renderCard(card: Auction, key: number, created?:boolean) {
+    return <Card key={key} {...card} created={created}/>;
   }
 
   function renderCardSkeleton(ignore: null, key: number) {
     return <CardSkeleton key={key}/>;
   }
 
-  function renderCards(emptyMessage: string) {
+  function renderCards(emptyMessage: string, created?: boolean) {
     if(loading)
       return <CardsContainer>
         { [null, null, null, null].map(renderCardSkeleton) }
@@ -47,7 +47,7 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
     if(!cards.length)
       return <Empty>{ emptyMessage }</Empty>;
     return <CardsContainer>
-      { cards.map(renderCard) }
+      { cards.map((auction, key) => renderCard(auction, key, created)) }
     </CardsContainer>;
   }
 
@@ -75,8 +75,8 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
             rightBar={renderCreateAuctionButton()}
             onChange={onSwitchTabMyCreated}>
         {[
-          renderCards('The open auctions you create will be listed here'),
-          renderCards('The closed auctions you created will be listed here.')
+          renderCards('The open auctions you create will be listed here', true),
+          renderCards('The closed auctions you created will be listed here.', true)
         ]}
       </Tabs>;
   }
