@@ -1,21 +1,25 @@
 type ButtonProps = {
+  created: boolean;
   isWon: boolean;
   isClose: boolean;
   firstPlace: boolean;
   isOwner: boolean;
   offered: boolean;
   outbid: boolean;
+  hasBid: boolean;
   onClick: () => void
   disabled: boolean
 };
 
 function CardButton({
+  created,
   isWon,
   isClose,
   firstPlace,
   isOwner,
   offered,
   outbid,
+  hasBid,
   onClick,
   disabled
 }: ButtonProps) {
@@ -78,6 +82,38 @@ function CardButton({
         Claim rewards
       </button>
     );
+  }
+
+  function WithdrawnOffersButton() {
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
+      >
+        Withdrawn offers
+      </button>
+    );
+  }
+
+  function ClaimBackTokenButton() {
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
+      >
+        Claim back token
+      </button>
+    );
+  }
+
+  if (created && isClose && hasBid) {
+    return <WithdrawnOffersButton />;
+  }
+
+  if (created && isClose && !hasBid) {
+    return <ClaimBackTokenButton />;
   }
 
   if (offered && firstPlace) {
