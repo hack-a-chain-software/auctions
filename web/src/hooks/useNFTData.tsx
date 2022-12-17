@@ -1,31 +1,31 @@
 import { TokenTypes } from 'aptos';
 import { tokenClient } from '../config/aptosClient';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-export const useNFTData: (creator: string, collection: string, name: string) => {
+export const useNFTData: () => {
   data: TokenTypes.TokenData|null,
+  fetch: (creator: string, collection: string, name: string) => void
   loading: boolean
-} = (creator, collection, name) => {
+} = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [data, setData] = useState<TokenTypes.TokenData|null>(null);
   let running = false;
 
-  useEffect(() => {
+  function fetch(creator: string, collection: string, name: string) {
     if(running)
       return;
 
-    running = true;
+    setLoading(running = true);
     tokenClient.getTokenData(creator, collection, name)
       .then(setData)
       .then(() => running = false)
+      .then(setLoading)
       .catch(error => {
         console.error(error);
-        running = false;
+        setLoading(running = false);
         return null;
       });
+  }
 
-    return () => setLoading(false);
-  }, []);
-
-  return { loading, data };
+  return { loading, data, fetch };
 }

@@ -96,7 +96,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
     return <button className="w-full flex flex-col items-center pt-6 pb-14 outline-none"
                 onClick={() => setOpenNFTSelector(true)}>
       { renderNFTSelector() }
-      <div className={`w-min h-min rounded-sm ${ nftInput ? 'Fail' : '' }`}>
+      <div className={`max-w-[165px] min-h-[165px] rounded-sm overflow-hidden ${ nftInput ? 'Fail' : '' }`}>
         { selectedNFT
           ? <img src={selectedNFTImage} alt={`${nft.collection} - ${nft.name}`} className="hover:transition-all hover:scale-[102%] hover:shadow-button"/>
           : <ChooseNFTSVG className="hover:transition-all hover:scale-[102%] hover:shadow-button"/>

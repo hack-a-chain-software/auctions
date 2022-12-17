@@ -1,5 +1,5 @@
 import CreateAuctionComponent from './CreateAuction.component';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TokenTypes } from 'aptos';
 import Big from 'big.js';
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
@@ -43,6 +43,7 @@ function CreateAuction(props: CreateAuctionProps) {
   });
   const { signAndSubmitTransaction } = useWallet();
   const { coins: currencies } = useAvailableCoins();
+  const { data, fetch } = useNFTData();
   const { create } = useCreateAuction();
 
   useEffect(() => {
@@ -54,10 +55,10 @@ function CreateAuction(props: CreateAuctionProps) {
     setInitialPriceCurrency(defaultCurrency ? defaultCurrency : currencies[0]);
   }, [currencies]);
 
-  const { data } = useMemo(() => {
+  useEffect(() => {
     if(!selectedNFT)
-      return { data: null };
-    return useNFTData(selectedNFT.creator, selectedNFT.collection, selectedNFT.name);
+      return;
+    fetch(selectedNFT.creator, selectedNFT.collection, selectedNFT.name);
   }, [selectedNFT]);
 
   useEffect(() => {
@@ -93,7 +94,7 @@ function CreateAuction(props: CreateAuctionProps) {
 
     create(
       signAndSubmitTransaction,
-      endDate ? endDate.getTime().toString() : '',
+      endDate ? endDate.getTime().toString()+'000' : '',
       new Big(initialPrice).toString(),
       new Big(minOfferIncrement).toString(),
       selectedNFT,
