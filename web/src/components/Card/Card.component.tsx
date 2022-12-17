@@ -18,6 +18,7 @@ type CardComponentProps = {
   closingIn: Date,
   owner: string,
   bid: string,
+  hasBid: boolean,
   currency: string,
   createdAt: Date,
   created: boolean
@@ -40,6 +41,7 @@ function CardComponent(props: CardComponentProps) {
     closingIn,
     owner,
     bid,
+    hasBid,
     currency,
     createdAt,
     created
@@ -173,12 +175,14 @@ function CardComponent(props: CardComponentProps) {
           </div>
         )}
         <CardButton
+          created={created}
           firstPlace={firstPlace}
           isClose={isClose}
           isOwner={isOwner}
           isWon={isWon}
           offered={offered}
           outbid={outbid}
+          hasBid={hasBid}
           onClick={onButtonClick}
           disabled={!isButtonEnabled}
         />
