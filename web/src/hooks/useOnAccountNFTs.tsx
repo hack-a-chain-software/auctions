@@ -17,7 +17,7 @@ export const useOnAccountNFTs: () => {
     if(running)
       return;
 
-    running = true;
+    setLoading(running = true);
     useOnAccountNFTs(address)
       .then(setData)
       .then(() => running = false)

@@ -10,7 +10,11 @@ type NFTProps = TokenTypes.TokenDataId & {
 function NFT(props: NFTProps) {
   const { creator, collection, name } = props;
   const [image, setImage] = useState<string>('');
-  const { data } = useNFTData(creator, collection, name);
+  const { data, fetch } = useNFTData();
+
+  useEffect(() => {
+    fetch(creator, collection, name);
+  }, []);
 
   useEffect(() => {
     if(!data)

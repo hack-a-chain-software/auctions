@@ -7,6 +7,7 @@ type ChooseNFTProps = {
   openNFTSelector: boolean;
   setOpenNFTSelector: (open: boolean) => void;
   setSelectedNFT: (nft: TokenTypes.TokenDataId) => void;
+  onSelectNFT: () => void;
   listOfNFTs: TokenTypes.TokenDataId[]
 };
 
@@ -14,6 +15,7 @@ function ChooseNFTComponent({
   openNFTSelector,
   setOpenNFTSelector,
   setSelectedNFT,
+  onSelectNFT,
   listOfNFTs
 }: ChooseNFTProps) {
   return (
@@ -55,7 +57,10 @@ function ChooseNFTComponent({
           >
             Cancel
           </button>
-          <button className="w-[112px] h-[35px] mt-1 bg-button rounded text-highlight text-sm hover:scale-[102%] transition-all">
+          <button
+            className="w-[112px] h-[35px] mt-1 bg-button rounded text-highlight text-sm hover:scale-[102%] transition-all"
+            onClick={onSelectNFT}
+          >
             Add to auction
           </button>
         </footer>
