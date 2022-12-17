@@ -1,5 +1,5 @@
 import { TokenTypes } from 'aptos';
-import { aptosClient, AuctionClient } from '../config/aptosClient';
+import { aptosClient, AuctionClient, tokenClient } from '../config/aptosClient';
 import { message } from 'antd';
 import { Address } from '@manahippo/aptos-wallet-adapter';
 import { useState } from 'react';
@@ -32,32 +32,60 @@ export const useOnAccountNFTs: () => {
 
   return { loading, list: data, fetch };
 
+  //TODO Do some kind of cache to do not need to make 6 requests
+  // for every single NFT AuctionHouse has available
   async function useOnAccountNFTs(address: Address) {
-    const collections = await AuctionClient.getAuthorizedNftCollections();
+    // Get all the authorized collections on AuctionHouse
+    const collections = await AuctionClient.getAuthorizedNftCollections()
 
-    // Get the amount of events (NFTs) the account has
-    const amount = await aptosClient.getAccountResource(
-      address,
-      "0x1::aptos_token::Collections",
+    // Get the amount of events (NFTs) each collection has
+    const counter = await Promise.all(
+      collections.map(
+        collection => aptosClient.getAccountResource(
+          collection.creator,
+          "0x3::token::Collections",
+        ).then(({data}) => (data as {
+          mint_token_events: {
+            counter: number
+          }
+        }).mint_token_events.counter)
+      )
     );
 
-    // Get the list of events (NFTs) the account has
-    const onAccountNFTs = await aptosClient.getEventsByEventHandle(
-      address,
-      "0x1::aptos_token::Collections",
-      "mint_token_events", {
-        start: 0,
-        limit: (amount.data as { counter: number }).counter
-      }
-    );
+    // Fetch all events (NFTs) of all collections on AuctionHouse
+    const events = await Promise.all(
+      collections.map(
+        (collection, key) => {
+          const events = [];
+          // limit of results is 25/request
+          for(let start = 0; start < counter[key]; start += 25) {
+            events.push(aptosClient.getEventsByEventHandle(
+              collections[0].creator,
+              "0x3::token::Collections",
+              "mint_token_events",
+              {
+                start: start,
+                limit: 25
+              }
+            ));
+          }
+          return events;
+        }
+      ).flat()
+    ).then(list => list.flat());
 
-    return onAccountNFTs.filter(event => collections.reduce(
-      (has: boolean, collection) => collection.collectionName === event.data.id.collection
-        ? (collection.creator === event.data.id.creator
-          ? true
-          : has)
-        : has,
-      false
-    )).map(event => event.data.id as TokenTypes.TokenDataId);
+    // Fetch if user is owner of each of the AuctionHouse NFTs
+    const listOfNFTs = await Promise.all(
+      events.map(
+        ({data: { id: nft }}) => tokenClient.getToken(nft.creator, nft.collection, nft.name)
+          .then(token => tokenClient.getTokenForAccount(address, token.id))
+    ));
+
+    // Filter only the AuctionHouse NFTs the user has and return only its TokenDataId
+    return listOfNFTs
+      .filter(nft => nft.amount === '1')
+      .map(
+        ({ id: { token_data_id: token }}) => token
+      )
   }
 }
