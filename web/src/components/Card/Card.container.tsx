@@ -6,8 +6,14 @@ import { useNavigate } from 'react-router';
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
 import { useAuctionBids } from '../../hooks/useAuctionBids';
 import { useCoinInfo } from '../../hooks/useCoinInfo';
+import { useTimer } from '../../hooks/useTimer';
+import { formatDecimals } from '../../utils/formatDecimals';
 
-function Card(props: Auction) {
+type CardProps = Auction & {
+  created?:boolean
+}
+
+function Card(props: CardProps) {
   const {
     id,
     creator: author,
@@ -22,13 +28,15 @@ function Card(props: Auction) {
         collection,
         name
       }
-    }
+    },
+    created
   } = props;
   const { account } = useWallet();
   const { data } = useNFTData(creator, collection, name);
   const { bids } = useAuctionBids(`${id}`);
   const { info } = useCoinInfo(auctionCoin);
   const navigation = useNavigate();
+  const getDate = useTimer;
 
   const image = useMemo(() => {
     if(!data)
@@ -36,22 +44,22 @@ function Card(props: Auction) {
     return data.uri;
   }, [data]);
 
-  const isClose = new Date() > new Date(endTime);
+  const isClose = new Date() > getDate(Number(endTime)).endDate;
 
   const firstPlace = useMemo(() => {
-    if(!account?.address || typeof account.address !== 'string')
+    if(!account?.address)
       return false;
-    return account.address === currentBidder;
+    return account.address === currentBidder && account.address !== author;
   }, [account]);
 
   const isOwner = useMemo(() => {
-    if(!account?.address || typeof account.address !== 'string')
+    if(!account?.address)
       return false;
     return account.address === author;
   }, [account]);
 
   const offered = useMemo(() => {
-    if(!bids || !account?.address || typeof account.address !== 'string')
+    if(!bids || !account?.address)
       return false;
     return bids.reduce((is: boolean, bid) => account.address === bid.account ? true : is, false);
   }, [bids]);
@@ -62,9 +70,16 @@ function Card(props: Auction) {
     return info;
   }, [info]);
 
+  const bid = useMemo(() => {
+    if(!info)
+      return '0.000';
+    return formatDecimals(currentBid, info.decimals).toFixed(3);
+  }, [info]);
+
   const cardComponentProps = {
     isClose,
     firstPlace,
+    created: !!created,
     isWon: isClose && firstPlace,
     isOwner,
     offered,
@@ -74,12 +89,12 @@ function Card(props: Auction) {
     collection,
     name,
     image,
-    closedAt: endTime,
-    closingIn: endTime,
+    closedAt: getDate(Number(endTime)).endDate,
+    closingIn: getDate(Number(endTime)).endDate,
     owner: author,
-    bid: currentBid,
+    bid,
     currency,
-    createdAt: startTime,
+    createdAt: getDate(Number(startTime)).endDate,
   };
 
   return <CardComponent { ...cardComponentProps }/>;

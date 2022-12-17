@@ -14,12 +14,13 @@ type CardComponentProps = {
   collection: string,
   name: string,
   image: string,
-  closedAt: string,
-  closingIn: string,
+  closedAt: Date,
+  closingIn: Date,
   owner: string,
   bid: string,
   currency: string,
-  createdAt: string,
+  createdAt: Date,
+  created: boolean
 };
 
 function CardComponent(props: CardComponentProps) {
@@ -41,12 +42,16 @@ function CardComponent(props: CardComponentProps) {
     bid,
     currency,
     createdAt,
+    created
   } = props;
+
+  const tomorrow = new Date();
+  tomorrow.setDate(new Date().getDate() + 1);
 
   return (
     <li
       className={`rounded-[29px] h-auto shadow-sm shadow-tab/[.15] p-2 md:shadow-none list-none md:w-[302px] ${
-        isOwner || offered ? "md:h-[537px]" : "md:h-[472px]"
+        isOwner && created || offered ? "md:h-[537px]" : "md:h-[472px]"
       } md:p-4 bg-white border-solid border-outline border-[1px] rounded-large flex flex-col items-center relative`}
     >
       {isWon && (
@@ -110,10 +115,13 @@ function CardComponent(props: CardComponentProps) {
                 {isClose && isOwner
                   ? "Closed auction"
                   : isOwner
-                    ? closedAt
+                    ? `${closedAt.getFullYear()}/${closedAt.getMonth()}/${closedAt.getDay()} ${closedAt.getHours()}:${closedAt.getMinutes()}`
                     : isClose
                       ? "Closed auction"
-                      : <Countdown date={closingIn}/>}
+                      : closingIn < tomorrow
+                        ? <Countdown date={closingIn}/>
+                        : `${closingIn.getFullYear()}/${closingIn.getMonth()}/${closingIn.getDay()} ${closingIn.getHours()}:${closingIn.getMinutes()}`
+                }
               </span>
             </div>
             <div className="hidden md:block">
@@ -140,13 +148,13 @@ function CardComponent(props: CardComponentProps) {
             </div>
           </div>
         )}
-        {isOwner && (
+        {isOwner && created && (
           <div className="mb-5 mt-[-2px]">
             <h3 className="text-paragraph font-semibold text-md tracking-tight">
               Created:
             </h3>
             <span className="text-black font-extrabold text-sm tracking-tight md:text-4">
-              { createdAt }
+              { `${createdAt.getFullYear()}/${createdAt.getMonth()}/${createdAt.getDay()} ${createdAt.getHours()}:${createdAt.getMinutes()}` }
             </span>
           </div>
         )}
