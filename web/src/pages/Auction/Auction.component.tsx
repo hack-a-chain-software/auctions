@@ -8,9 +8,13 @@ import { Auction, Bid } from "contract_aptos";
 import { useNftDetails } from "../../hooks/useNtfDetails";
 import { useTimer } from "../../hooks/useTimer";
 import { useCoinBalance } from "../../hooks/useCoinBalance";
-import { useState } from "react";
+import { useNftProperties } from "../../hooks/useNftProperties";
+import { useClaimPrize } from "../../hooks/useClaimPrize";
+import { useRef, useState } from "react";
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
 import { formatDecimals } from "../../utils/formatDecimals";
+import { formatInteger } from "../../utils/formatInteger";
+import { AuctionClient } from "../../config/aptosClient";
 import CrownIcon16 from "../../assets/svg/CrownIcon16";
 import CrownIcon20 from "../../assets/svg/CrownIcon20";
 import CrownIcon24 from "../../assets/svg/CrownIcon24";
@@ -18,14 +22,12 @@ import PageContainer from "../../components/PageContainer";
 import Countdown, { zeroPad } from "react-countdown";
 import Big from "big.js";
 import "./Auction.styles.less";
-import { useNftProperties } from "../../hooks/useNftProperties";
 
 window.Buffer = window.Buffer || Buffer;
 
 type AuctionProps = {
   auction: Auction;
   allBids: Bid[];
-  yourBids: Bid[];
 };
 
 type CountDownProps = {
@@ -37,9 +39,15 @@ type CountDownProps = {
 
 function AuctionComponent(props: AuctionProps) {
   const { endDate } = useTimer(Number(props.auction.endTime));
-  const { account } = useWallet();
+  const { account, signAndSubmitTransaction } = useWallet();
   const [closedAuction, setClosedAuction] = useState<boolean>(false);
+  const [bidInput, setBidInput] = useState<string>("0");
   const allbids = props.allBids.slice(0).reverse();
+  const [bidError, setBidError] = useState<string>("");
+
+  const yourBids = allbids.filter(
+    (bids) => bids.account.slice(2) === String(account?.address).slice(3)
+  );
 
   const minimumBid =
     Number(props.auction.currentBid) > 0
@@ -47,7 +55,8 @@ function AuctionComponent(props: AuctionProps) {
       : props.auction.minSellingPrice;
 
   const isWon =
-    closedAuction && props.auction.currentBidder === account?.address
+    closedAuction &&
+    props.auction.currentBidder.slice(2) === String(account?.address).slice(3)
       ? true
       : false;
 
@@ -65,6 +74,23 @@ function AuctionComponent(props: AuctionProps) {
   const { nftProperties } = useNftProperties(
     tokenData?.default_properties.data
   );
+
+  const makeOffer = async (id: string, bid: string, coinType: string) => {
+    if (bid < minimumBid) {
+      setBidError("This offer is less than the minimum offer");
+    } else if (!balance || Big(bid) > balance) {
+      setBidError("You don't have enough balance");
+    } else {
+      await AuctionClient.bid(
+        (payload) => signAndSubmitTransaction(payload),
+        id,
+        bid,
+        coinType
+      );
+    }
+  };
+
+  const { claimRewards } = useClaimPrize(props.auction.id);
 
   const rendererDesk = ({ hours, minutes, seconds, days }: CountDownProps) => {
     if (closedAuction) {
@@ -119,27 +145,33 @@ function AuctionComponent(props: AuctionProps) {
             <ListBulletIcon className="w-6" /> Offers
           </h3>
         </div>
-        <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
-          <div className="flex justify-between w-full mb-1">
-            <p className="text-md font-medium tracking-tight mb-7">Price</p>
-            <p className="text-md font-medium tracking-tight mb-7 w-[100px]">
-              From
-            </p>
-          </div>
-          {allbids.map(({ bid, account }, i) => (
-            <div className="flex justify-between  w-full" key={i}>
-              <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
-              </p>
-              <p
-                className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
-                title={account}
-              >
-                {account}
+        {allbids.length > 0 ? (
+          <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
+            <div className="flex justify-between w-full mb-1">
+              <p className="text-md font-medium tracking-tight mb-7">Price</p>
+              <p className="text-md font-medium tracking-tight mb-7 w-[100px]">
+                From
               </p>
             </div>
-          ))}
-        </div>
+            {allbids.map(({ bid, account }, i) => (
+              <div className="flex justify-between  w-full" key={i}>
+                <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
+                  {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
+                </p>
+                <p
+                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
+                  title={account}
+                >
+                  {account}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <h3 className="p-[3.4rem] text-center text-paragraph text-xl font-medium tracking-normal xl:mr-3">
+            This auction don't have offer yet
+          </h3>
+        )}
       </div>
     );
   }
@@ -154,34 +186,40 @@ function AuctionComponent(props: AuctionProps) {
             <ListBulletIcon className="w-7" /> Offers
           </h3>
         </div>
-        <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
-          <div className="flex justify-between w-full mb-1">
-            <p className="text-md font-medium tracking-tight mb-7">Price</p>
-            <p className="text-md font-medium tracking-tight mb-7 w-[110px]">
-              From
-            </p>
-          </div>
-          {allbids.map(({ bid, account }, i) => (
-            <div className="flex justify-between w-full" key={i}>
-              {i === 0 ? (
-                <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem] flex gap-5">
-                  {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
-                  <CrownIcon24 />
-                </p>
-              ) : (
-                <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                  {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
-                </p>
-              )}
-              <p
-                className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[110px] truncate leading-6"
-                title={account}
-              >
-                {account}
+        {allbids.length > 0 ? (
+          <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
+            <div className="flex justify-between w-full mb-1">
+              <p className="text-md font-medium tracking-tight mb-7">Price</p>
+              <p className="text-md font-medium tracking-tight mb-7 w-[110px]">
+                From
               </p>
             </div>
-          ))}
-        </div>
+            {allbids.map(({ bid, account }, i) => (
+              <div className="flex justify-between w-full" key={i}>
+                {i === 0 ? (
+                  <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem] flex gap-5">
+                    {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
+                    <CrownIcon24 />
+                  </p>
+                ) : (
+                  <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
+                    {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
+                  </p>
+                )}
+                <p
+                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[110px] truncate leading-6"
+                  title={account}
+                >
+                  {account}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <h3 className="p-[3.4rem] text-center text-paragraph text-xl font-medium tracking-normal xl:mr-3">
+            This auction don't have offer yet
+          </h3>
+        )}
       </div>
     );
   }
@@ -189,59 +227,67 @@ function AuctionComponent(props: AuctionProps) {
   function renderOffersWinState() {
     return (
       <div
-        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto xl:max-w-[761px]`}
+        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto md:max-w-[761px]`}
       >
         <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
           <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
             <ListBulletIcon className="w-7" /> Offers
           </h3>
         </div>
-        <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
-          <div className="flex justify-between w-full mb-1">
-            <p className="text-md font-medium tracking-tight mb-7">Price</p>
-            <p className="text-md font-medium tracking-tight mb-7 w-[110px]">
-              From
-            </p>
-          </div>
-          {allbids.map(({ bid, account }, i) => (
-            <div className="flex justify-between w-full" key={i}>
-              {i === 0 ? (
-                <>
-                  <div className="relative mt-1">
-                    <p className="absolute bottom-16 text-transparent bg-clip-text bg-space max-w-[419px] flex gap-2 text-sm font-semibold items-center">
-                      <CrownIcon16 /> Winner
-                    </p>
+        {allbids.length > 0 ? (
+          <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
+            <div className="flex justify-between w-full mb-1">
+              <p className="text-md font-medium tracking-tight mb-7">Price</p>
+              <p className="text-md font-medium tracking-tight mb-7 w-[110px]">
+                From
+              </p>
+            </div>
+            {allbids.map(({ bid, account }, i) => (
+              <div className="flex justify-between w-full" key={i}>
+                {i === 0 ? (
+                  <>
+                    <div className="relative mt-1">
+                      <p className="absolute bottom-16 text-transparent bg-clip-text bg-space max-w-[419px] flex gap-2 text-sm font-semibold items-center">
+                        <CrownIcon16 /> Winner
+                      </p>
+                      <p
+                        className={`md:text-xl ${
+                          isWon || closedAuction ? "font-bold" : "font-semibold"
+                        } tracking-tight text-success h-[3.75rem]`}
+                      >
+                        {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(
+                          2
+                        )}
+                      </p>
+                    </div>
                     <p
-                      className={`md:text-xl ${
-                        isWon || closedAuction ? "font-bold" : "font-semibold"
-                      } tracking-tight text-success h-[3.75rem]`}
+                      className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-success w-[110px] truncate leading-6"
+                      title={account}
                     >
+                      {account}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
                       {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
                     </p>
-                  </div>
-                  <p
-                    className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-success w-[110px] truncate leading-6"
-                    title={account}
-                  >
-                    {account}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                    {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
-                  </p>
-                  <p
-                    className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[110px] truncate leading-6"
-                    title={account}
-                  >
-                    {account}
-                  </p>
-                </>
-              )}
-            </div>
-          ))}
-        </div>
+                    <p
+                      className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[110px] truncate leading-6"
+                      title={account}
+                    >
+                      {account}
+                    </p>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <h3 className="p-[3.4rem] text-center text-paragraph text-xl font-medium tracking-normal xl:mr-3">
+            This auction don't have offer yet
+          </h3>
+        )}
       </div>
     );
   }
@@ -347,7 +393,10 @@ function AuctionComponent(props: AuctionProps) {
                 <span className="mt-14 pl-5 max-w-[419px] text-success flex justify-center gap-3 py-1 text-xl font-semibold items-center md:justify-start">
                   <CrownIcon20 /> You won!
                 </span>
-                <button className="w-full h-10 ml-5 bg-space mt-4 text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px]">
+                <button
+                  onClick={claimRewards}
+                  className="w-full h-10 ml-5 bg-space mt-4 text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px]"
+                >
                   Claim rewards
                 </button>
               </>
@@ -355,9 +404,9 @@ function AuctionComponent(props: AuctionProps) {
               <>
                 <p className="w-[173px] p-[.4rem] text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-normal xl:mt-8 xl:h-8">
                   Minimum bid:{" "}
-                  {new Big(minimumBid)
-                    .div(Big(10).pow(coinInfo?.decimals || 0))
-                    .toFixed(2)}{" "}
+                  {formatDecimals(minimumBid, coinInfo?.decimals || 0).toFixed(
+                    2
+                  )}{" "}
                   {coinInfo?.symbol}
                 </p>
                 <input
@@ -369,6 +418,7 @@ function AuctionComponent(props: AuctionProps) {
                     closedAuction && "cursor-not-allowed"
                   }`}
                   disabled={closedAuction}
+                  onChange={({ target }) => setBidInput(target.value)}
                 />
                 <button
                   type="button"
@@ -378,9 +428,19 @@ function AuctionComponent(props: AuctionProps) {
                       : "bg-space"
                   } text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px] xl:mt-1`}
                   disabled={closedAuction}
+                  onClick={async () =>
+                    await makeOffer(
+                      String(props.auction.id),
+                      formatInteger(bidInput, coinInfo?.decimals || 0).toFixed(
+                        0
+                      ),
+                      props.auction.auctionCoin
+                    )
+                  }
                 >
                   {closedAuction ? "Auction closed" : "Make offer"}
                 </button>
+                {bidError && <strong className="text-error">{bidError}</strong>}
                 <strong className="font-semibold text-sm tracking-tight text-black/70">
                   Your balance:{" "}
                   {formatDecimals(
@@ -412,13 +472,13 @@ function AuctionComponent(props: AuctionProps) {
               </h3>
             </div>
             <div>
-              {props.yourBids.length > 0 && isWon ? (
+              {yourBids.length > 0 || isWon ? (
                 <div className="p-8 flex flex-col justify-between gap-3 xl:p-5 ml-3">
                   <div className="flex justify-between w-full xl:w-[575px]">
                     <p>Price</p>
                     <p>Date</p>
                   </div>
-                  {props.yourBids.map(({ bid, timestamp, account }) => (
+                  {yourBids.map(({ bid, timestamp, account }) => (
                     <>
                       <div className="flex justify-between xl:w-[575px]">
                         <p className="flex gap-4 items-center">
@@ -434,7 +494,11 @@ function AuctionComponent(props: AuctionProps) {
                             )}
                           </>
                         </p>
-                        <p>{new Date(timestamp).toLocaleDateString()}</p>
+                        <p>
+                          {new Date(
+                            Number(timestamp) / 1000
+                          ).toLocaleDateString()}
+                        </p>
                       </div>
                     </>
                   ))}

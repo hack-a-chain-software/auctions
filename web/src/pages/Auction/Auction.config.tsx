@@ -7,20 +7,15 @@ import AuctionComponent from "./Auction.component";
 
 function Auction() {
   const { id } = useParams<{ id: string }>();
-  const { account } = useWallet();
 
   const { auction, loading } = useAuction(Number(id));
-  const { allBids, yourBids, loadingBid } = useBid(
-    id!,
-    String(account?.address)
-  );
+  const { allBids, loadingBid } = useBid(id!);
 
   if (!auction || loading || loadingBid) return <AuctionSkeleton />;
 
   const auctionProps = {
     auction,
-    allBids,
-    yourBids,
+    allBids
   };
 
   return <AuctionComponent {...auctionProps} />;
