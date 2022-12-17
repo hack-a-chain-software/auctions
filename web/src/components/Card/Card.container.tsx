@@ -1,13 +1,14 @@
 import CardComponent from './Card.component';
 import { Auction } from 'contract_aptos';
 import { useNFTData } from '../../hooks/useNFTData';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
 import { useAuctionBids } from '../../hooks/useAuctionBids';
 import { useCoinInfo } from '../../hooks/useCoinInfo';
 import { useTimer } from '../../hooks/useTimer';
 import { formatDecimals } from '../../utils/formatDecimals';
+import { useClaim } from '../../hooks/useClaim';
 
 type CardProps = Auction & {
   created?:boolean
@@ -22,6 +23,7 @@ function Card(props: CardProps) {
     currentBid,
     currentBidder,
     auctionCoin,
+    coinsClaimed,
     lockedTokenId: {
       token_data_id: {
         creator,
@@ -31,12 +33,22 @@ function Card(props: CardProps) {
     },
     created
   } = props;
-  const { account } = useWallet();
+  const { loading, claimPrize, claimCoins } = useClaim(id);
+  const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(true);
+  const { account, signAndSubmitTransaction } = useWallet();
   const { data } = useNFTData(creator, collection, name);
   const { bids } = useAuctionBids(`${id}`);
   const { info } = useCoinInfo(auctionCoin);
   const navigation = useNavigate();
   const getDate = useTimer;
+
+  useEffect(() => {
+    if(created && bids.length < 1)
+      return setIsButtonEnabled(isClose && !loading);
+    if(created && !coinsClaimed)
+      return setIsButtonEnabled(isClose && !loading);
+    setIsButtonEnabled(!loading);
+  }, [account, bids, loading]);
 
   const image = useMemo(() => {
     if(!data)
@@ -76,6 +88,14 @@ function Card(props: CardProps) {
     return formatDecimals(currentBid, info.decimals).toFixed(3);
   }, [info]);
 
+  function onButtonClick() {
+    if(created && isClose && !coinsClaimed && !bids.length)
+      return claimPrize(signAndSubmitTransaction);
+    if(created && isClose && !coinsClaimed && bids.length)
+      return claimCoins(signAndSubmitTransaction);
+    navigation(`/auction/${id}`);
+  }
+
   const cardComponentProps = {
     isClose,
     firstPlace,
@@ -84,8 +104,8 @@ function Card(props: CardProps) {
     isOwner,
     offered,
     outbid: !isClose && !firstPlace,
-    onButtonClick: () => navigation(`/auction/${id}`),
-    isButtonEnabled: true,
+    onButtonClick,
+    isButtonEnabled,
     collection,
     name,
     image,
@@ -93,6 +113,7 @@ function Card(props: CardProps) {
     closingIn: getDate(Number(endTime)).endDate,
     owner: author,
     bid,
+    hasBid: bids.length < 1,
     currency,
     createdAt: getDate(Number(startTime)).endDate,
   };
