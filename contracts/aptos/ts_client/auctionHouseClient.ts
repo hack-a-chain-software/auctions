@@ -24,6 +24,7 @@ export type Auction = {
     currentBidder: string;
     lockedTokenId: TokenTypes.TokenId;
     coinsClaimed: boolean;
+    tokenClaimed: boolean;
 }
 
 export type Bid = {
@@ -520,6 +521,7 @@ export class AuctionHouseClient extends AptosClient {
                     property_version: auction.locked_token_id.property_version,
                 },
                 coinsClaimed: auction.coins_claimed,
+                tokenClaimed: this.unwrapOption(auction.locked_token) === null,
             }
             returnValue.push(returnAuction);
         }
@@ -640,6 +642,7 @@ export class AuctionHouseClient extends AptosClient {
                     property_version: auction.locked_token_id.property_version,
                 },
                 coinsClaimed: auction.coins_claimed,
+                tokenClaimed: this.unwrapOption(auction.locked_token) === null,
             }
             returnValue.push(returnAuction);
         }
@@ -757,6 +760,7 @@ export class AuctionHouseClient extends AptosClient {
                     property_version: auction.locked_token_id.property_version,
                 },
                 coinsClaimed: auction.coins_claimed,
+                tokenClaimed: this.unwrapOption(auction.locked_token) === null,
             }
             returnValue.push(returnAuction);
         }
@@ -803,6 +807,14 @@ export class AuctionHouseClient extends AptosClient {
             const bcsTxn = await this.signTransaction(sender, rawTxn);
             const pendingTxn = await this.submitTransaction(bcsTxn);
             return pendingTxn.hash;
+        }
+    }
+
+    unwrapOption(optionElem: Array<any>): any {
+        if (optionElem.length > 0) {
+            return optionElem[0]
+        } else {
+            return null;
         }
     }
 
