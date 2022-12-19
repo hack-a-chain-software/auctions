@@ -10,6 +10,7 @@ import { Auction } from 'contract_aptos';
 
 type MyAuctionsComponentProps = {
   indexTabHeader: number,
+  indexTabs: number,
   onSwitchTabHeader: (index: number) => void,
   onSwitchTabMyOffers: (index: number) => void,
   onSwitchTabMyCreated: (index: number) => void,
@@ -22,6 +23,7 @@ type MyAuctionsComponentProps = {
 function MyAuctionsComponent(props: MyAuctionsComponentProps) {
   const {
     indexTabHeader,
+    indexTabs,
     onSwitchTabHeader,
     onSwitchTabMyOffers,
     onSwitchTabMyCreated,
@@ -61,7 +63,8 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
 
   function renderMyOffersPanel() {
     return <Tabs tabList={['Auctions live', 'Closed auctions', 'Auctions won']}
-            onChange={onSwitchTabMyOffers}>
+            onChange={onSwitchTabMyOffers}
+            selectedIndex={indexTabs}>
         {[
           renderCards('The auctions in progress that you birded will appear here'),
           renderCards('When a auctions your birded close without you winning, they will be listed here'),
@@ -73,7 +76,8 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
   function renderMyCreatedPanel() {
     return <Tabs tabList={['Your auctions live', 'Your closed auctions']}
             rightBar={renderCreateAuctionButton()}
-            onChange={onSwitchTabMyCreated}>
+            onChange={onSwitchTabMyCreated}
+            selectedIndex={indexTabs}>
         {[
           renderCards('The open auctions you create will be listed here', true),
           renderCards('The closed auctions you created will be listed here.', true)
