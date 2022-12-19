@@ -1,7 +1,7 @@
 import { AptosAccount, TokenTypes, Types } from 'aptos';
 import { aptosClient, AuctionClient, tokenClient } from '../config/aptosClient';
 import { message } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useCreateAuction: () => {
   create: (
@@ -16,7 +16,7 @@ export const useCreateAuction: () => {
   hash: string|null,
   loading: boolean
 } = () => {
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [hash, setHash] = useState<string|null>(null);
   let running = false;

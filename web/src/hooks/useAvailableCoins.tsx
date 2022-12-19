@@ -5,10 +5,10 @@ import { CoinInfo } from 'contract_aptos';
 
 export const useAvailableCoins: () => {
   loading: boolean,
-  coins: CoinInfo[]
+  coins: (CoinInfo & { type: string })[],
 } = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [coins, setCoins] = useState<CoinInfo[]>([]);
+  const [coins, setCoins] = useState<(CoinInfo & { type: string })[]>([]);
   let running = false;
 
   useEffect(() => {
@@ -17,7 +17,18 @@ export const useAvailableCoins: () => {
 
     running = true;
     AuctionClient.getAuthorizedCoins()
-      .then(coins => Promise.all(coins.map(AuctionClient.getCoinInfo.bind(AuctionClient))))
+      .then(async coins => ({
+        coins: await Promise.all(coins.map(
+          coin => AuctionClient.getCoinInfo(coin))
+        ),
+        types: coins
+      }))
+      .then(({coins, types}) => coins.map(
+          (coinInfo, key) => ({
+            ...coinInfo,
+            type: types[key]
+          })
+        ))
       .then(setCoins)
       .then(() => running = false)
       .catch(error => {
