@@ -22,7 +22,7 @@ function ExploreAuctionsComponent(props: MyAuctionsComponentProps) {
   } = props;
 
   function renderCard(card: Auction, key: number) {
-    return <Card key={key} {...card}/>;
+    return <Card key={key} {...card} explore/>;
   }
 
   function renderCardSkeleton(ignore: null, key: number) {
