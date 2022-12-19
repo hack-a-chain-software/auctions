@@ -10,7 +10,7 @@ export const useCoinBalance = (user: string, coinType: string) => {
 
   useEffect(() => {
     const fetchBalance = async () => {
-      await coinClient
+      coinClient
         .checkBalance(user, { coinType })
         .then((res) => setBalance(new Big(String(res))))
         .catch(() => setBalance(new Big("0")));
@@ -24,7 +24,7 @@ export const useCoinBalance = (user: string, coinType: string) => {
     fetchCoinInfo();
 
     return () => setLoadingBalance(false);
-  }, []);
+  }, [user]);
 
   return { balance, loadingBalance, coinInfo };
 };
