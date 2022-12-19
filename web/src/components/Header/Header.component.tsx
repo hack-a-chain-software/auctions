@@ -71,13 +71,13 @@ function Header() {
               >
                 <Popover.Panel className="flex flex-col bg-white items-start justify-center w-[179px] h-[141px] rounded-lg shadow shadow-sw-sm p-3 absolute top-2 right-0">
                   <span
-                    onClick={() => navigate("/my-auctions/offers")}
+                    onClick={() => navigate("/my-auctions/offer-live")}
                     className="text-black font-semibold text-sm w-full p-3 border-b-[1px] tracking-tight cursor-pointer"
                   >
                     My offers
                   </span>
                   <span
-                    onClick={() => navigate("/my-auctions/created")}
+                    onClick={() => navigate("/my-auctions/your-live")}
                     className="text-black font-semibold text-sm w-full p-3 tracking-tight cursor-pointer"
                   >
                     Create auction
@@ -191,7 +191,7 @@ function Header() {
                                   <Popover.Panel className="flex flex-col gap-2 mt-7">
                                     <span
                                       onClick={() =>
-                                        navigate("/my-auctions/offers")
+                                        navigate("/my-auctions/offer-live")
                                       }
                                       className="text-black font-semibold text-sm tracking-tight outline-none cursor-pointer"
                                     >
@@ -199,7 +199,7 @@ function Header() {
                                     </span>
                                     <span
                                       onClick={() =>
-                                        navigate("/my-auctions/created")
+                                        navigate("/my-auctions/your-live")
                                       }
                                       className="text-black font-semibold text-sm tracking-tight outline-none cursor-pointer"
                                     >

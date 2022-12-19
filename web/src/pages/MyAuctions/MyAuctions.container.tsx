@@ -1,70 +1,142 @@
 import MyAuctionsComponent from './MyAuctions.component';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { Auction } from 'contract_aptos';
+import { useMyAuctions } from '../../hooks/useMyAuctions';
+import { useWallet } from '@manahippo/aptos-wallet-adapter';
+import { useTimer } from '../../hooks/useTimer';
 
 type MyAuctionsFilter = 'offer-live'|'offer-closed'|'offer-won'|'your-live'|'your-closed';
 
-type MyAuctionsProps = {
-  filter?: MyAuctionsFilter
-}
-
-function MyAuctions(props: MyAuctionsProps) {
-  const { filter: initialFilter } = props;
+function MyAuctions() {
+  const { filter: initialFilter } = useParams<{ filter: string }>();
   const navigate = useNavigate();
+  const { account } = useWallet();
+  const { loading: fetchLoading, offers, created, fetchOffers, fetchCreated } = useMyAuctions();
+  const getDate = useTimer;
 
-  const [indexTabHeader, setIndexTabHeader] = useState<number>(initialFilter === 'your-live' ? 1 : 0);
+  const [indexTabHeader, setIndexTabHeader] = useState<number>(0);
+  const [indexTabs, setIndexTabs] = useState<number>(0);
   const [createPanel, showCreatePanel] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [filter, setFilter] = useState<MyAuctionsFilter>(initialFilter ? initialFilter : 'offer-live');
+  const [filter, setFilter] = useState<MyAuctionsFilter>('offer-live');
   const [cards, setCards] = useState<Auction[]>([]);
 
   useEffect(() => {
-    //TODO filter cards to show the desired ones by the filter (the selected tab);
     setCards([]);
-  }, [filter]);
+    switch(initialFilter) {
+      case 'your-live':
+        setIndexTabHeader(1);
+        setIndexTabs(0);
+        setFilter('your-live');
+        break;
+      case 'your-closed':
+        setIndexTabHeader(1);
+        setIndexTabs(1);
+        setFilter('your-closed');
+        break;
+      case 'offer-closed':
+        setIndexTabHeader(0);
+        setIndexTabs(1);
+        setFilter('offer-closed');
+        break;
+      case 'offer-won':
+        setIndexTabHeader(0);
+        setIndexTabs(2);
+        setFilter('offer-won');
+        break;
+      default:
+        setIndexTabHeader(0);
+        setIndexTabs(0);
+        setFilter('offer-live');
+    }
+  }, [initialFilter]);
 
   useEffect(() => {
-    //TODO Add all loading variables to this memo
-    setTimeout(() => setLoading(true), 3000);
-  }, []);
+    setCards([]);
+    if(!account?.address)
+      return setLoading(false);
+
+    switch(filter) {
+      case 'offer-live':
+        if(offers.length === 0)
+          fetchOffers(account.address);
+        else setCards(offers.filter(auction => getDate(Number(auction.endTime)).endDate >= new Date()));
+        break;
+      case 'offer-won':
+        if(offers.length === 0)
+          fetchOffers(account.address);
+        else setCards(offers.filter(
+          auction => getDate(Number(auction.endTime)).endDate < new Date()
+                     && account.address === auction.currentBidder
+        ));
+        break;
+      case 'offer-closed':
+        if(offers.length === 0)
+          fetchOffers(account.address);
+        else setCards(offers.filter(auction => getDate(Number(auction.endTime)).endDate < new Date()));
+        break;
+      case 'your-live':
+        if(created.length === 0)
+          fetchCreated(account.address);
+        else setCards(created.filter(auction => getDate(Number(auction.endTime)).endDate >= new Date()));
+        break;
+      case 'your-closed':
+        if(created.length === 0)
+          fetchCreated(account.address);
+        else setCards(created.filter(auction => getDate(Number(auction.endTime)).endDate < new Date()));
+        break;
+      default:
+        setLoading(false);
+        setCards([]);
+    }
+  }, [filter, offers, created, account?.address]);
+
+  useEffect(() => {
+    if(!account?.address)
+      setLoading(fetchLoading);
+    setLoading(false);
+  }, [fetchLoading]);
 
   function onSwitchTabHeader(tab: number) {
     setIndexTabHeader(tab);
     switch(tab) {
       case 1:
-        navigate('/my-auctions/created');
+        navigate('/my-auctions/your-live');
         break;
       default:
-        navigate('/my-auctions/offers');
+        navigate('/my-auctions/offer-live');
     }
   }
 
   function onSwitchTabMyOffers(tab: number) {
+    setIndexTabs(tab);
     switch(tab) {
       case 1:
-        setFilter('offer-closed');
+        navigate('/my-auctions/offer-closed');
         break;
       case 2:
-        setFilter('offer-won');
+        navigate('/my-auctions/offer-won');
         break;
       default:
-        setFilter('offer-live');
+        navigate('/my-auctions/offer-live');
     }
   }
 
   function onSwitchTabMyCreated(tab: number) {
+    setIndexTabs(tab);
     switch(tab) {
       case 1:
-        setFilter('your-closed');
+        navigate('/my-auctions/your-closed');
         break;
       default:
-        setFilter('your-live');
+        navigate('/my-auctions/your-live');
     }
   }
 
   const myAuctionsComponentProps = {
     indexTabHeader,
+    indexTabs,
     onSwitchTabHeader,
     onSwitchTabMyOffers,
     onSwitchTabMyCreated,
