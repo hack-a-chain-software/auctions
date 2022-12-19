@@ -391,14 +391,17 @@ function AuctionComponent(props: AuctionProps) {
           <div className="flex flex-col mt-9 gap-3 mx-2 w-[95%] max-w-[413px] md:max-w-[761px] md:mx-0 md:ml-3 xl:ml-8 xl:mt-[-5px]">
             {isWon ? (
               <>
-                <span className="mt-14 pl-5 max-w-[419px] text-success flex justify-center gap-3 py-1 text-xl font-semibold items-center md:justify-start">
+                <span className="mt-14 max-w-[419px] text-success flex justify-center gap-3 py-1 text-xl font-semibold items-center md:justify-start xl:pl-5">
                   <CrownIcon20 /> You won!
                 </span>
                 <button
                   onClick={claimRewards}
-                  className="w-full h-10 ml-5 bg-space mt-4 text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px]"
+                  disabled={props.auction.tokenClaimed}
+                  className="w-full h-10 bg-space mt-4 text-white text-md font-semibold tracking-tight rounded max-w-[440px] xl:max-w-[340px] xl:ml-5"
                 >
-                  Claim rewards
+                  {props.auction.tokenClaimed
+                    ? "You already claimed the prize"
+                    : "Claim rewards"}
                 </button>
               </>
             ) : (
