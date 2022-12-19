@@ -57,7 +57,8 @@ function AuctionComponent(props: AuctionProps) {
   const isWon =
     closedAuction &&
     props.auction.currentBidder.slice(-10) ===
-      String(account?.address).slice(-10)
+      String(account?.address).slice(-10) &&
+    Number(props.auction.currentBid) > 0
       ? true
       : false;
 
