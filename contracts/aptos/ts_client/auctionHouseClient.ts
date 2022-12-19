@@ -521,7 +521,7 @@ export class AuctionHouseClient extends AptosClient {
                     property_version: auction.locked_token_id.property_version,
                 },
                 coinsClaimed: auction.coins_claimed,
-                tokenClaimed: this.unwrapOption(auction.locked_token) === null,
+                tokenClaimed: this.unwrapOption(auction.locked_token.vec) === null,
             }
             returnValue.push(returnAuction);
         }
@@ -642,7 +642,7 @@ export class AuctionHouseClient extends AptosClient {
                     property_version: auction.locked_token_id.property_version,
                 },
                 coinsClaimed: auction.coins_claimed,
-                tokenClaimed: this.unwrapOption(auction.locked_token) === null,
+                tokenClaimed: this.unwrapOption(auction.locked_token.vec) === null,
             }
             returnValue.push(returnAuction);
         }
@@ -760,7 +760,7 @@ export class AuctionHouseClient extends AptosClient {
                     property_version: auction.locked_token_id.property_version,
                 },
                 coinsClaimed: auction.coins_claimed,
-                tokenClaimed: this.unwrapOption(auction.locked_token) === null,
+                tokenClaimed: this.unwrapOption(auction.locked_token.vec) === null,
             }
             returnValue.push(returnAuction);
         }
