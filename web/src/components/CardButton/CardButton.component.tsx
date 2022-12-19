@@ -1,28 +1,25 @@
 type ButtonProps = {
-  created: boolean;
-  isWon: boolean;
-  isClose: boolean;
-  firstPlace: boolean;
-  isOwner: boolean;
-  offered: boolean;
-  outbid: boolean;
-  hasBid: boolean;
-  onClick: () => void
+  live: boolean,
+  noBids: boolean,
+  won: boolean,
+  iBided: boolean,
+  created: boolean,
+  explore: boolean,
+  onClick: () => void,
   disabled: boolean
 };
 
 function CardButton({
-  created,
-  isWon,
-  isClose,
-  firstPlace,
-  isOwner,
-  offered,
-  outbid,
-  hasBid,
+  live, // If auction is closed of live
+  noBids, // If the auction has no bids
+  won, // If the logged account won the auction
+  iBided, // If the logged account made an offer/bid
+  created, // If the card is on the created page
+  explore, // If the card is on the explore page
   onClick,
   disabled
 }: ButtonProps) {
+
   function MakeOfferButton() {
     return (
       <button
@@ -55,12 +52,12 @@ function CardButton({
         disabled={disabled}
         className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[2px] rounded font-medium text-sm leading-2.5 tracking-normal text-white  bg-button`}
       >
-        View auctions
+        View auction
       </button>
     );
   }
 
-  function SeeOfferButton() {
+  function SeeOffersButton() {
     return (
       <button
         onClick={onClick}
@@ -84,14 +81,14 @@ function CardButton({
     );
   }
 
-  function WithdrawnOffersButton() {
+  function WithdrawOffersButton() {
     return (
       <button
         onClick={onClick}
         disabled={disabled}
         className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
       >
-        Withdrawn offers
+        Withdraw offers
       </button>
     );
   }
@@ -108,51 +105,37 @@ function CardButton({
     );
   }
 
-  if (created && isClose && hasBid) {
-    return <WithdrawnOffersButton />;
-  }
+  return <>
+    {/* If user is on the created page */}
+    { created
+      ? (live
+        ? <SeeOffersButton/>
+        : (noBids
+          ? <ClaimBackTokenButton/>
+          : <WithdrawOffersButton/>
+        )
+      )
+      : <></> }
 
-  if (created && isClose && !hasBid) {
-    return <ClaimBackTokenButton />;
-  }
+    {/* If user is on the explore page */}
+    { explore
+      ? (live
+        ? ( iBided ? <ViewAuctionButton/> : <MakeOfferButton/>)
+        : <ViewDetailsButton/>
+      )
+      : <></> }
 
-  if (offered && firstPlace) {
-    return <MakeOfferButton />;
-  }
-  if (offered && outbid) {
-    return <MakeOfferButton />;
-  }
-
-  if (offered) {
-    return <ViewAuctionButton />;
-  }
-
-  if (isOwner && isClose) {
-    return <SeeOfferButton />;
-  }
-
-  if (isOwner) {
-    return <SeeOfferButton />;
-  }
-
-  if (isClose) {
-    return <ViewDetailsButton />;
-  }
-
-  if (isWon) {
-    return <ClaimRewardsButton />;
-  }
-
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[10px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button
-      `}
-    >
-      Make offer
-    </button>
-  );
+    {/* If user is on the myOffers page */}
+    { !created && !explore
+      ? (live
+        ? <MakeOfferButton/>
+        : (won
+          ? <ClaimRewardsButton/>
+          : <ViewDetailsButton/>
+        )
+      )
+      : <></> }
+  </>;
 }
 
 export default CardButton;
