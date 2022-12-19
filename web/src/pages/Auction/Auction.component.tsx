@@ -10,7 +10,7 @@ import { useTimer } from "../../hooks/useTimer";
 import { useCoinBalance } from "../../hooks/useCoinBalance";
 import { useNftProperties } from "../../hooks/useNftProperties";
 import { useClaimPrize } from "../../hooks/useClaimPrize";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
 import { formatDecimals } from "../../utils/formatDecimals";
 import { formatInteger } from "../../utils/formatInteger";
@@ -46,7 +46,7 @@ function AuctionComponent(props: AuctionProps) {
   const [bidError, setBidError] = useState<string>("");
 
   const yourBids = allbids.filter(
-    (bids) => bids.account.slice(2) === String(account?.address).slice(3)
+    (bids) => bids.account.slice(-10) === String(account?.address).slice(-10)
   );
 
   const minimumBid =
@@ -56,7 +56,8 @@ function AuctionComponent(props: AuctionProps) {
 
   const isWon =
     closedAuction &&
-    props.auction.currentBidder.slice(2) === String(account?.address).slice(3)
+    props.auction.currentBidder.slice(-10) ===
+      String(account?.address).slice(-10)
       ? true
       : false;
 
@@ -86,7 +87,7 @@ function AuctionComponent(props: AuctionProps) {
         id,
         bid,
         coinType
-      );
+      ).then((res) => (res ? window.location.reload() : false));
     }
   };
 
@@ -149,7 +150,7 @@ function AuctionComponent(props: AuctionProps) {
           <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
             <div className="flex justify-between w-full mb-1">
               <p className="text-md font-medium tracking-tight mb-7">Price</p>
-              <p className="text-md font-medium tracking-tight mb-7 w-[100px]">
+              <p className="text-md font-medium tracking-tight mb-7 w-[140px]">
                 From
               </p>
             </div>
@@ -159,7 +160,7 @@ function AuctionComponent(props: AuctionProps) {
                   {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
                 </p>
                 <p
-                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[100px] truncate leading-6"
+                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[140px] truncate leading-6"
                   title={account}
                 >
                   {account}
@@ -190,7 +191,7 @@ function AuctionComponent(props: AuctionProps) {
           <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
             <div className="flex justify-between w-full mb-1">
               <p className="text-md font-medium tracking-tight mb-7">Price</p>
-              <p className="text-md font-medium tracking-tight mb-7 w-[110px]">
+              <p className="text-md font-medium tracking-tight mb-7 w-[140px]">
                 From
               </p>
             </div>
@@ -207,7 +208,7 @@ function AuctionComponent(props: AuctionProps) {
                   </p>
                 )}
                 <p
-                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[110px] truncate leading-6"
+                  className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[140px] truncate leading-6"
                   title={account}
                 >
                   {account}
@@ -238,7 +239,7 @@ function AuctionComponent(props: AuctionProps) {
           <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
             <div className="flex justify-between w-full mb-1">
               <p className="text-md font-medium tracking-tight mb-7">Price</p>
-              <p className="text-md font-medium tracking-tight mb-7 w-[110px]">
+              <p className="text-md font-medium tracking-tight mb-7 w-[140px]">
                 From
               </p>
             </div>
@@ -261,7 +262,7 @@ function AuctionComponent(props: AuctionProps) {
                       </p>
                     </div>
                     <p
-                      className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-success w-[110px] truncate leading-6"
+                      className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-success w-[140px] truncate leading-6"
                       title={account}
                     >
                       {account}
@@ -273,7 +274,7 @@ function AuctionComponent(props: AuctionProps) {
                       {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
                     </p>
                     <p
-                      className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[110px] truncate leading-6"
+                      className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[140px] truncate leading-6"
                       title={account}
                     >
                       {account}
