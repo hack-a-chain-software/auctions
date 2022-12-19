@@ -405,6 +405,11 @@ module auctionhouse::AuctionHouse {
         // send prize token to sender
         let token = option::extract(&mut auction_item.locked_token);
         token::deposit_token(sender, token);
+
+        // if there are no bids, mark coins_claimed as true
+        if (auction_item.current_bid == 0) {
+            auction_item.coins_claimed = true;
+        };
     }
 
     public entry fun claim_coins<CoinType>(
