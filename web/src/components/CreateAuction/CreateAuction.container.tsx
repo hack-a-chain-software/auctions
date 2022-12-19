@@ -7,6 +7,7 @@ import { useAvailableCoins } from '../../hooks/useAvailableCoins';
 import { useNFTData } from '../../hooks/useNFTData';
 import { useCreateAuction } from '../../hooks/useCreateAuction';
 import { CoinInfo } from 'contract_aptos';
+import { formatInteger } from '../../utils/formatInteger';
 
 export type InputValid = {
   nftInput: boolean,
@@ -31,10 +32,10 @@ function CreateAuction(props: CreateAuctionProps) {
   const [endDate, setEndDate] = useState<Date|undefined>(undefined);
   const [minOfferIncrement, setMinOfferIncrement] = useState<Big>(new Big(0));
   const [initialPrice, setInitialPrice] = useState<Big>(new Big(0));
-  const [initialPriceCurrency, setInitialPriceCurrency] = useState<CoinInfo>();
+  const [initialPriceCurrency, setInitialPriceCurrency] = useState<(CoinInfo & {type: string})>();
   const [initialPriceCurrencySelector, setInitialPriceCurrencySelector] = useState<boolean>(false);
-  const [initialPriceAvailableCurrencies, setInitialPriceAvailableCurrencies] = useState<CoinInfo[]>([]);
-  const [queryCurrencies, setQueryCurrencies] = useState<CoinInfo[]>(initialPriceAvailableCurrencies);
+  const [initialPriceAvailableCurrencies, setInitialPriceAvailableCurrencies] = useState<(CoinInfo & {type: string})[]>([]);
+  const [queryCurrencies, setQueryCurrencies] = useState<(CoinInfo & {type: string})[]>(initialPriceAvailableCurrencies);
   const [inputFail, setInputFail] = useState<InputValid>({
     nftInput: false,
     dateInput: false,
@@ -44,7 +45,7 @@ function CreateAuction(props: CreateAuctionProps) {
   const { signAndSubmitTransaction } = useWallet();
   const { coins: currencies } = useAvailableCoins();
   const { data, fetch } = useNFTData();
-  const { create } = useCreateAuction();
+  const { create, loading: creating } = useCreateAuction();
 
   useEffect(() => {
     if(!currencies)
@@ -54,6 +55,10 @@ function CreateAuction(props: CreateAuctionProps) {
     const defaultCurrency = currencies.find(currency => currency.symbol === 'ETH');
     setInitialPriceCurrency(defaultCurrency ? defaultCurrency : currencies[0]);
   }, [currencies]);
+
+  useEffect(() => {
+    setCreatable(!creating);
+  }, [creating]);
 
   useEffect(() => {
     if(!selectedNFT)
@@ -88,17 +93,16 @@ function CreateAuction(props: CreateAuctionProps) {
     if(inputFail.dateInput || inputFail.nftInput || inputFail.minOfferIncrementInput || inputFail.priceInput)
       return setInputFail({...inputFail});
 
-    setCreatable(false);
     if(!selectedNFT || !initialPriceCurrency)
       return;
 
     create(
       signAndSubmitTransaction,
       endDate ? endDate.getTime().toString()+'000' : '',
-      new Big(initialPrice).toString(),
-      new Big(minOfferIncrement).toString(),
+      formatInteger(initialPrice.toString(), initialPriceCurrency.decimals).toString(),
+      formatInteger(minOfferIncrement.toString(), initialPriceCurrency.decimals).toString(),
       selectedNFT,
-      initialPriceCurrency.name
+      initialPriceCurrency.type
     );
   }
 
