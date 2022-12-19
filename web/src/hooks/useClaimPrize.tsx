@@ -5,12 +5,12 @@ import { AuctionClient } from "../config/aptosClient";
 export const useClaimPrize = (id: number) => {
   const { signAndSubmitTransaction } = useWallet();
 
-  const claimRewards = useCallback(async () => {
-    await AuctionClient.claimPrize(
+  const claimRewards = useCallback(() => {
+    AuctionClient.claimPrize(
       (payload) => signAndSubmitTransaction(payload),
       id
-    );
-  }, []);
+    ).then((res) => res && window.location.reload());
+  }, [signAndSubmitTransaction]);
 
   return { claimRewards };
 };
