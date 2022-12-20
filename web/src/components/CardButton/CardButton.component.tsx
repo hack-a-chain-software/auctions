@@ -25,8 +25,7 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className={`hidden md:block w-[265px] h-10 ml-[1px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button
-  `}
+        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button"
       >
         Make offer
       </button>
@@ -38,7 +37,7 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-3 rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
+        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-3 rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button"
       >
         View details
       </button>
@@ -50,7 +49,7 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[2px] rounded font-medium text-sm leading-2.5 tracking-normal text-white  bg-button`}
+        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-[2px] rounded font-medium text-sm leading-2.5 tracking-normal text-white  bg-button"
       >
         View auction
       </button>
@@ -62,7 +61,7 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
+        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button"
       >
         See offers
       </button>
@@ -74,9 +73,9 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-4 rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-space`}
+        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-4 rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-space"
       >
-        Claim rewards
+        { disabled ? 'Already claimed' : 'Claim rewards' }
       </button>
     );
   }
@@ -86,9 +85,9 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
+        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button"
       >
-        Withdraw offers
+        { disabled ? 'Already claimed' : 'Withdraw offers' }
       </button>
     );
   }
@@ -98,9 +97,9 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className={`hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button`}
+        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-[-6px] rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-button"
       >
-        Claim back token
+        { disabled ? 'Already claimed' : 'Claim back token' }
       </button>
     );
   }

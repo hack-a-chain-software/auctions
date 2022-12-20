@@ -86,6 +86,15 @@ function Card(props: CardProps) {
     return formatDecimals(currentBid, info.decimals);
   }, [info]);
 
+  const myBid = useMemo(() => {
+    if(!info || bids.length === 0)
+      return new Big(0);
+    const myBid = bids.find(bid => bid.account === account?.address);
+    if(!myBid)
+      return new Big(0);
+    return formatDecimals(myBid.bid, info.decimals);
+  }, [info, bids]);
+
   function onButtonClick() {
     if(created && !live && new Big(currentBid).eq(0) && !tokenClaimed)
       return claimPrize(signAndSubmitTransaction);
@@ -100,7 +109,7 @@ function Card(props: CardProps) {
     // If the auction has no bids
     noBids: bid.eq(0),
     // If the logged account won the auction
-    won: !live && !bid.eq(0) && account?.address === currentBidder,
+    won: !live && !bid.eq(0) && account?.address === currentBidder && !created,
     // If the logged account made an offer/bid
     iBided,
     // If the logged account has the highest offer/bid
@@ -117,6 +126,7 @@ function Card(props: CardProps) {
     image,
     bidder: bid.eq(0) ? author : currentBidder,
     bid: bid.toFixed(3),
+    myBid: myBid.toFixed(3),
     currency,
     createdAt: getDate(Number(startTime)).endDate,
     closedAt: getDate(Number(endTime)).endDate
