@@ -151,8 +151,8 @@ function CardComponent(props: CardComponentProps) {
         </div>
       )}
 
-      {/* When the logger account made an offer */}
-      {iBided && (
+      {/* When the logged account made an offer */}
+      { !created && iBided && (
         <div className="my-2 mt-3">
           <h3 className="text-sm text-paragraph font-semibold md:text-4 tracking-tight">
             Your offer:
