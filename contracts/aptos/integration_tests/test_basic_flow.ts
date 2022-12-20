@@ -28,6 +28,8 @@ import { NODE_URL } from "./env";
 const BASE_FUNDS = 500_000_000;
 const aptosCoin = "0x1::aptos_coin::AptosCoin";
 
+const INDEXER_MAINNET = "https://indexer.mainnet.aptoslabs.com/v1/graphql";
+
 export async function testBasicFlow(
     client: AptosClient,
     faucetClient: FaucetClient,
@@ -50,7 +52,13 @@ export async function testBasicFlow(
     await faucetClient.fundAccount(bidder2.address(), BASE_FUNDS);
     await faucetClient.fundAccount(bidder3.address(), BASE_FUNDS);
 
-    const auctionHouseClient = new AuctionHouseClient(NODE_URL, moduleAddress.address().hex(), ownerAccount.address().hex());
+    const auctionHouseClient = new AuctionHouseClient(NODE_URL, INDEXER_MAINNET, moduleAddress.address().hex(), ownerAccount.address().hex());
+
+    console.log(await auctionHouseClient.getNftsInWallet(
+        "0x2c61f085e96df9f58b4fd3af15c7c1ba5c520e69b091f7bd189f9ea4e643fe9d",
+        0,
+        50
+    ))
 
     // deploy module
     sh.exec(`
