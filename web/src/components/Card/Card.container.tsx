@@ -37,7 +37,7 @@ function Card(props: CardProps) {
     created,
     explore
   } = props;
-  const { loading, hash, claimPrize, claimCoins } = useClaim(id);
+  const { loading, hash, claimPrize, claimCoins } = useClaim(auctionCoin, id);
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(true);
   const { account, signAndSubmitTransaction } = useWallet();
   const { data } = useNFTData(creator, collection, name);
