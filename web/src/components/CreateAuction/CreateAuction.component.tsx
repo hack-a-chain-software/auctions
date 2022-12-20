@@ -8,8 +8,7 @@ import './CreateAuction.styles.less';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import ChooseNFT from '../ChooseNFT';
 import Big from 'big.js';
-import { TokenTypes } from 'aptos';
-import { CoinInfo } from 'contract_aptos';
+import { CoinInfo, NftItem } from 'contract_aptos';
 
 type CreateAuctionComponentProps = {
   creatable: boolean,
@@ -33,9 +32,9 @@ type CreateAuctionComponentProps = {
   onCreateAuction: () => void,
   inputFail: InputValid,
   setInputFail: (status: InputValid) => void,
-  selectedNFT: TokenTypes.TokenDataId|null,
+  selectedNFT: NftItem|null,
   selectedNFTImage: string,
-  setSelectedNFT: (nft: TokenTypes.TokenDataId) => void
+  setSelectedNFT: (nft: NftItem) => void
 }
 
 function CreateAuctionComponent(props: CreateAuctionComponentProps) {
@@ -89,7 +88,7 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
     } = props;
     const nft = {
       creator: selectedNFT?.creator ? selectedNFT.creator : '',
-      collection: selectedNFT?.collection ? selectedNFT.collection : '',
+      collection: selectedNFT?.collectionName ? selectedNFT.collectionName : '',
       name: selectedNFT?.name ? selectedNFT.name : ''
     };
 

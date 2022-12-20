@@ -1,14 +1,14 @@
 import { Dialog, RadioGroup } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import NFT from '../NFT';
-import { TokenTypes } from 'aptos';
+import { NftItem } from 'contract_aptos';
 
 type ChooseNFTProps = {
   openNFTSelector: boolean;
   setOpenNFTSelector: (open: boolean) => void;
-  setSelectedNFT: (nft: TokenTypes.TokenDataId) => void;
+  setSelectedNFT: (nft: NftItem) => void;
   onSelectNFT: () => void;
-  listOfNFTs: TokenTypes.TokenDataId[]
+  listOfNFTs: NftItem[];
 };
 
 function ChooseNFTComponent({

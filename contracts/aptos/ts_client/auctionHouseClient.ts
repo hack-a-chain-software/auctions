@@ -2,7 +2,7 @@ import {
     Types,
     TokenTypes,
     AptosClient,
-    AptosAccount
+    AptosAccount, TokenClient
 } from 'aptos';
 
 import { gql, createClient, Client as urqlClient, defaultExchanges } from '@urql/core';
@@ -842,10 +842,65 @@ export class AuctionHouseClient extends AptosClient {
                 }
             );
         } else {
-            return [];
+            const tokenClient = new TokenClient(this);
+
+            // Get all the authorized collections on AuctionHouse
+            const collections = await this.getAuthorizedNftCollections()
+
+            // Get the amount of events (NFTs) each collection has
+            const counter = await Promise.all(
+              collections.map(
+                collection => this.getAccountResource(
+                  collection.creator,
+                  "0x3::token::Collections",
+                ).then(({data}) => (data as {
+                    mint_token_events: {
+                        counter: number
+                    }
+                }).mint_token_events.counter)
+              )
+            );
+
+            // Fetch all events (NFTs) of all collections on AuctionHouse
+            const events = await Promise.all(
+              collections.map(
+                (collection, key) => {
+                    const events = [];
+                    // limit of results is 25/request
+                    for(let start = 0; start < counter[key]; start += 25) {
+                        events.push(this.getEventsByEventHandle(
+                          collections[0].creator,
+                          "0x3::token::Collections",
+                          "mint_token_events",
+                          {
+                              start: start,
+                              limit: 25
+                          }
+                        ));
+                    }
+                    return events;
+                }
+              ).flat()
+            ).then(list => list.flat());
+
+            // Fetch if user is owner of each of the AuctionHouse NFTs
+            const list = await Promise.all(
+              events.map(
+                ({data: { id: nft }}) => tokenClient.getToken(nft.creator, nft.collection, nft.name)
+                  .then(token => tokenClient.getTokenForAccount(user, token.id))
+              )
+            );
+
+            // Filter the NFTs the user is onwer and convert to NftItem
+            return list.filter(nft => nft.amount === '1').map(
+              nft => ({
+                  creator: nft.id.token_data_id.creator,
+                  collectionName: nft.id.token_data_id.collection,
+                  name: nft.id.token_data_id.name,
+                  propertyVersion: Number(nft.id.property_version)
+              } as NftItem)
+            );
         }
-
-
     }
 
     // UTILITIES

@@ -1,7 +1,8 @@
-import { AptosAccount, TokenTypes, Types } from 'aptos';
-import { aptosClient, AuctionClient, tokenClient } from '../config/aptosClient';
+import { Types } from 'aptos';
+import { AuctionClient, tokenClient } from '../config/aptosClient';
 import { message } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { NftItem } from 'contract_aptos';
 
 export const useCreateAuction: () => {
   create: (
@@ -9,7 +10,7 @@ export const useCreateAuction: () => {
     endTime: string,
     minSellingPrice: string,
     minIncrement: string,
-    nft: TokenTypes.TokenDataId,
+    nft: NftItem,
     coinType: string
   ) => void,
   success: boolean,
@@ -26,21 +27,21 @@ export const useCreateAuction: () => {
     endTime: string,
     minSellingPrice: string,
     minIncrement: string,
-    nft: TokenTypes.TokenDataId,
+    nft: NftItem,
     coinType: string
   ) {
     if(running)
       return;
 
     running = true;
-    tokenClient.getToken(nft.creator, nft.collection, nft.name)
+    tokenClient.getToken(nft.creator, nft.collectionName, nft.name)
       .then(token => AuctionClient.createAuction(
         signAndSubmitTransaction,
         endTime,
         minSellingPrice,
         minIncrement,
         nft.creator,
-        nft.collection,
+        nft.collectionName,
         nft.name,
         token.id.property_version,
         coinType

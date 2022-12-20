@@ -6,7 +6,7 @@ import { useWallet } from '@manahippo/aptos-wallet-adapter';
 import { useAvailableCoins } from '../../hooks/useAvailableCoins';
 import { useNFTData } from '../../hooks/useNFTData';
 import { useCreateAuction } from '../../hooks/useCreateAuction';
-import { CoinInfo } from 'contract_aptos';
+import { CoinInfo, NftItem } from 'contract_aptos';
 import { formatInteger } from '../../utils/formatInteger';
 
 export type InputValid = {
@@ -26,7 +26,7 @@ function CreateAuction(props: CreateAuctionProps) {
   const { open, setOpen, onClose } = props;
 
   const [creatable, setCreatable] = useState<boolean>(true);
-  const [selectedNFT, setSelectedNFT] = useState<TokenTypes.TokenDataId|null>(null);
+  const [selectedNFT, setSelectedNFT] = useState<NftItem|null>(null);
   const [selectedNFTData, setSelectedNFTData] = useState<TokenTypes.TokenData|null>(null);
   const [openNFTSelector, setOpenNFTSelector] = useState<boolean>(false);
   const [endDate, setEndDate] = useState<Date|undefined>(undefined);
@@ -63,7 +63,7 @@ function CreateAuction(props: CreateAuctionProps) {
   useEffect(() => {
     if(!selectedNFT)
       return;
-    fetch(selectedNFT.creator, selectedNFT.collection, selectedNFT.name);
+    fetch(selectedNFT.creator, selectedNFT.collectionName, selectedNFT.name);
   }, [selectedNFT]);
 
   useEffect(() => {
