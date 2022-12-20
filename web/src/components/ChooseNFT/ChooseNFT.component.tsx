@@ -1,9 +1,11 @@
 import { Dialog, RadioGroup } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { RefObject } from 'react';
 import NFT from '../NFT';
 import { NftItem } from 'contract_aptos';
 
 type ChooseNFTProps = {
+  listElement: RefObject<HTMLUListElement>;
   openNFTSelector: boolean;
   setOpenNFTSelector: (open: boolean) => void;
   setSelectedNFT: (nft: NftItem) => void;
@@ -12,6 +14,7 @@ type ChooseNFTProps = {
 };
 
 function ChooseNFTComponent({
+  listElement,
   openNFTSelector,
   setOpenNFTSelector,
   setSelectedNFT,
@@ -36,6 +39,7 @@ function ChooseNFTComponent({
         </div>
         <RadioGroup
           as="ul"
+          ref={listElement}
           className="grid grid-cols-auto-fit pt-[1.9rem] px-6 justify-items-center gap-1 h-[323px] max-h-[323px] mb-2 overflow-y-auto"
           onChange={setSelectedNFT}
         >

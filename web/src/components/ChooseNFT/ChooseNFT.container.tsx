@@ -1,9 +1,10 @@
 import ChooseNFTComponent from './ChooseNFT.component';
-import { useEffect, useState } from 'react';
+import { RefObject, useEffect, useState } from 'react';
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
 import { NftItem } from 'contract_aptos';
 import { useOnAccountNFTs } from '../../hooks/useOnAccountNFTs';
 import { message } from 'antd';
+import { useInfinityScroll } from '../../hooks/useInfinityScroll';
 
 type ChooseNFTProps = {
   openNFTSelector: boolean;
@@ -13,21 +14,24 @@ type ChooseNFTProps = {
 
 function ChooseNFT(props: ChooseNFTProps) {
   const { account } = useWallet();
-  const { list, fetch } = useOnAccountNFTs();
+  const { list, fetch, loading } = useOnAccountNFTs();
 
+  const { reference: listElement } = useInfinityScroll(80, fetchNFTs, loading);
   const { openNFTSelector, setOpenNFTSelector, setSelectedNFT: passSelectedNFT } = props;
   const [listOfNFTs, setListOfNFTs] = useState<NftItem[]>([]);
   const [selectedNFT, setSelectedNFT] = useState<NftItem|null>(null);
 
-  useEffect(() => {
-    if(!account?.address)
-      return;
-    fetch(account.address);
-  }, [account?.address]);
+  useEffect(fetchNFTs, [account?.address]);
 
   useEffect(() => {
       setListOfNFTs(list);
   }, [list]);
+
+  function fetchNFTs() {
+    if(!account?.address)
+      return;
+    fetch(account.address, listOfNFTs.length);
+  }
 
   function onSelectNFT() {
     if(!selectedNFT)
@@ -41,7 +45,8 @@ function ChooseNFT(props: ChooseNFTProps) {
     setOpenNFTSelector,
     setSelectedNFT,
     onSelectNFT,
-    listOfNFTs
+    listOfNFTs,
+    listElement: listElement as RefObject<HTMLUListElement>
   };
 
   return <ChooseNFTComponent {...chooseNFTComponentProps}/>;
