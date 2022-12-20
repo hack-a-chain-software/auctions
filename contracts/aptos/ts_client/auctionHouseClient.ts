@@ -167,10 +167,11 @@ export class AuctionHouseClient extends AptosClient {
     /** After auction is over, creator can claim coins bid */
     async claimCoins(
         sender: GenericSender,
+        coinType: string,
         id: number,
     ): Promise<string> {
         const functionName = `${this.contractModule}::claim_coins`;
-        const typeArguments: any[] = [];
+        const typeArguments = [ coinType ];
         const regularArguments = [
             this.auctionHouseAddress,
             id
