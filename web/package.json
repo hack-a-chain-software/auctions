@@ -24,7 +24,7 @@
     "autoprefixer": "^10.4.13",
     "big.js": "^6.2.1",
     "buffer": "^6.0.3",
-    "contract_aptos": "./contracts/aptos/",
+    "contract_aptos": "./contracts/aptos",
     "dotenv": "^16.0.3",
     "postcss": "^8.4.19",
     "postcss-loader": "^7.0.2",
