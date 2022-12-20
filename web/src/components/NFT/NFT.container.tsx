@@ -1,14 +1,14 @@
 import NFTComponent from './NFT.component';
 import { useEffect, useState } from 'react';
-import { TokenTypes } from 'aptos';
 import { useNFTData } from '../../hooks/useNFTData';
+import { NftItem } from 'contract_aptos';
 
-type NFTProps = TokenTypes.TokenDataId & {
+type NFTProps = NftItem & {
   checked?: boolean
 }
 
 function NFT(props: NFTProps) {
-  const { creator, collection, name } = props;
+  const { creator, collectionName: collection, name } = props;
   const [image, setImage] = useState<string>('');
   const { data, fetch } = useNFTData();
 
@@ -25,7 +25,7 @@ function NFT(props: NFTProps) {
   const chooseNFTComponentProps = {
     checked: !!props.checked,
     image,
-    collection: props.collection,
+    collection,
     id: props.name
   };
 

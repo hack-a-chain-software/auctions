@@ -1,14 +1,14 @@
 import ChooseNFTComponent from './ChooseNFT.component';
 import { useEffect, useState } from 'react';
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
-import { TokenTypes } from 'aptos';
+import { NftItem } from 'contract_aptos';
 import { useOnAccountNFTs } from '../../hooks/useOnAccountNFTs';
 import { message } from 'antd';
 
 type ChooseNFTProps = {
   openNFTSelector: boolean;
   setOpenNFTSelector: (open: boolean) => void;
-  setSelectedNFT: (nft: TokenTypes.TokenDataId) => void;
+  setSelectedNFT: (nft: NftItem) => void;
 };
 
 function ChooseNFT(props: ChooseNFTProps) {
@@ -16,8 +16,8 @@ function ChooseNFT(props: ChooseNFTProps) {
   const { list, fetch } = useOnAccountNFTs();
 
   const { openNFTSelector, setOpenNFTSelector, setSelectedNFT: passSelectedNFT } = props;
-  const [listOfNFTs, setListOfNFTs] = useState<TokenTypes.TokenDataId[]>([]);
-  const [selectedNFT, setSelectedNFT] = useState<TokenTypes.TokenDataId|null>(null);
+  const [listOfNFTs, setListOfNFTs] = useState<NftItem[]>([]);
+  const [selectedNFT, setSelectedNFT] = useState<NftItem|null>(null);
 
   useEffect(() => {
     if(!account?.address)

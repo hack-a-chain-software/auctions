@@ -5,6 +5,7 @@ import { Auction } from 'contract_aptos';
 import { useMyAuctions } from '../../hooks/useMyAuctions';
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
 import { useTimer } from '../../hooks/useTimer';
+import { useIsAuthorized } from '../../hooks/useIsAuthorized';
 
 type MyAuctionsFilter = 'offer-live'|'offer-closed'|'offer-won'|'your-live'|'your-closed';
 
@@ -13,14 +14,22 @@ function MyAuctions() {
   const navigate = useNavigate();
   const { account } = useWallet();
   const { loading: fetchLoading, offers, created, fetchOffers, fetchCreated } = useMyAuctions();
+  const { isAuthorized, fetch: fetchIsAuthorized } = useIsAuthorized();
   const getDate = useTimer;
 
+  const [canCreateAuction, setCanCreateAuction] = useState<boolean>(false);
   const [indexTabHeader, setIndexTabHeader] = useState<number>(0);
   const [indexTabs, setIndexTabs] = useState<number>(0);
   const [createPanel, showCreatePanel] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [filter, setFilter] = useState<MyAuctionsFilter>('offer-live');
   const [cards, setCards] = useState<Auction[]>([]);
+
+  useEffect(() => {
+    if(!account?.address)
+      return;
+    fetchIsAuthorized(account.address.toString());
+  }, [account?.address]);
 
   useEffect(() => {
     setCards([]);
@@ -93,6 +102,10 @@ function MyAuctions() {
   }, [filter, offers, created, account?.address]);
 
   useEffect(() => {
+    setCanCreateAuction(isAuthorized);
+  }, [isAuthorized]);
+
+  useEffect(() => {
     if(!account?.address)
       setLoading(fetchLoading);
     setLoading(false);
@@ -143,7 +156,8 @@ function MyAuctions() {
     loading,
     cards,
     createPanel,
-    showCreatePanel
+    showCreatePanel,
+    canCreateAuction
   }
 
   return <MyAuctionsComponent { ...myAuctionsComponentProps }/>;
