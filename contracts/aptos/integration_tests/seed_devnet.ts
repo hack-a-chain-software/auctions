@@ -10,6 +10,7 @@ import {
 import fs from "fs";
 import path from "path";
 import sh from "shelljs";
+import 'isomorphic-unfetch';
 
 import { AuctionHouseClient } from "../ts_client/auctionHouseClient";
 import { FAUCET_URL, NODE_URL } from "./env";
@@ -22,6 +23,7 @@ import { FAUCET_URL, NODE_URL } from "./env";
 */
 const BASE_FUNDS = 500_000_000;
 const aptosCoin = "0x1::aptos_coin::AptosCoin";
+const INDEXER_MAINNET = "https://indexer.mainnet.aptoslabs.com/v1/graphql";
 
 testBasicFlow();
 
@@ -53,7 +55,7 @@ export async function testBasicFlow(): Promise<void> {
     await faucetClient.fundAccount(bidder2.address(), BASE_FUNDS);
     await faucetClient.fundAccount(bidder3.address(), BASE_FUNDS);
 
-    const auctionHouseClient = new AuctionHouseClient(NODE_URL, moduleAddress.address().hex(), ownerAccount.address().hex());
+    const auctionHouseClient = new AuctionHouseClient(NODE_URL, INDEXER_MAINNET, moduleAddress.address().hex(), ownerAccount.address().hex());
 
     // deploy module
     sh.exec(`
