@@ -14,6 +14,7 @@ interface ImportMetaEnv {
   readonly AUCTION_COLOR_BUTTON_GRADIENT: string;
   readonly AUCTION_COLOR_TAB: string;
   readonly AUCTION_COLOR_BUTTON: string;
+  readonly AUCTION_COLOR_DISABLED: string;
   readonly AUCTION_COLOR_HIGHLIGHT: string;
   readonly AUCTION_COLOR_SUCCESS: string;
   readonly AUCTION_COLOR_LINE: string;
