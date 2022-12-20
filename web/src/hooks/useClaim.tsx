@@ -2,17 +2,17 @@ import { GenericSender } from 'contract_aptos';
 import { useState } from 'react';
 import { AuctionClient } from '../config/aptosClient';
 
-export const useClaim: (coin: string, id: number) => {
+export const useClaim: () => {
   hash: string,
-  claimPrize: (func: GenericSender) => void,
-  claimCoins: (func: GenericSender) => void,
+  claimPrize: (func: GenericSender, id: number) => void,
+  claimCoins: (func: GenericSender, coin: string, id: number) => void,
   loading: boolean,
-} = (coin, id) => {
+} = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [hash, setHash] = useState<string>('');
   let running = false;
 
-  function claimPrize(func: GenericSender) {
+  function claimPrize(func: GenericSender, id: number) {
     if(running)
       return;
 
@@ -28,7 +28,7 @@ export const useClaim: (coin: string, id: number) => {
       });
   }
 
-  function claimCoins(func: GenericSender) {
+  function claimCoins(func: GenericSender, coin: string, id: number) {
     if(running)
       return;
 

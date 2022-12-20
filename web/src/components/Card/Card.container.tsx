@@ -22,6 +22,7 @@ function Card(props: CardProps) {
     creator: author,
     startTime,
     endTime,
+    minSellingPrice,
     currentBid,
     currentBidder,
     auctionCoin,
@@ -37,14 +38,22 @@ function Card(props: CardProps) {
     created,
     explore
   } = props;
-  const { loading, hash, claimPrize, claimCoins } = useClaim(auctionCoin, id);
+  const { loading, hash, claimPrize, claimCoins } = useClaim();
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(true);
   const { account, signAndSubmitTransaction } = useWallet();
-  const { data } = useNFTData(creator, collection, name);
+  const { data, fetch, loading: loadingData } = useNFTData();
   const { bids } = useAuctionBids(`${id}`);
-  const { info } = useCoinInfo(auctionCoin);
+  const { info , fetch: fetchCoin } = useCoinInfo();
   const navigation = useNavigate();
   const getDate = useTimer;
+
+  useEffect(() => {
+    fetch(creator, collection, name);
+  }, [creator, collection, name]);
+
+  useEffect(() => {
+    fetchCoin(auctionCoin)
+  }, [auctionCoin]);
 
   useEffect(() => {
     if(hash.length < 10)
@@ -61,12 +70,14 @@ function Card(props: CardProps) {
   }, [loading]);
 
   const image = useMemo(() => {
-    if(!data)
+    if(!data || loadingData)
       return '';
     return data.uri;
-  }, [data]);
+  }, [data, loadingData]);
 
-  const live = new Date() < getDate(Number(endTime)).endDate;
+  const live = useMemo(() => {
+    return new Date() < getDate(Number(endTime)).endDate;
+  }, [endTime]);
 
   const iBided = useMemo(() => {
     if(!bids || !account?.address)
@@ -86,11 +97,26 @@ function Card(props: CardProps) {
     return formatDecimals(currentBid, info.decimals);
   }, [info]);
 
+  const initialPrice = useMemo(() => {
+    if(!info)
+      return new Big(0);
+    return formatDecimals(minSellingPrice, info.decimals);
+  }, [minSellingPrice, info]);
+
+  const myBid = useMemo(() => {
+    if(!info || bids.length === 0)
+      return new Big(0);
+    const myBid = bids.find(bid => bid.account === account?.address);
+    if(!myBid)
+      return new Big(0);
+    return formatDecimals(myBid.bid, info.decimals);
+  }, [info, bids]);
+
   function onButtonClick() {
     if(created && !live && new Big(currentBid).eq(0) && !tokenClaimed)
-      return claimPrize(signAndSubmitTransaction);
+      return claimPrize(signAndSubmitTransaction, id);
     if(created && !live && !new Big(currentBid).eq(0) && !coinsClaimed)
-      return claimCoins(signAndSubmitTransaction);
+      return claimCoins(signAndSubmitTransaction, currency, id);
     navigation(`/auction/${id}`);
   }
 
@@ -100,7 +126,7 @@ function Card(props: CardProps) {
     // If the auction has no bids
     noBids: bid.eq(0),
     // If the logged account won the auction
-    won: !live && !bid.eq(0) && account?.address === currentBidder,
+    won: !live && !bid.eq(0) && account?.address === currentBidder && !created,
     // If the logged account made an offer/bid
     iBided,
     // If the logged account has the highest offer/bid
@@ -116,13 +142,12 @@ function Card(props: CardProps) {
     name,
     image,
     bidder: bid.eq(0) ? author : currentBidder,
-    bid: bid.toFixed(3),
+    bid: bid.eq(0) ? initialPrice.toFixed(3) : bid.toFixed(3),
+    myBid: myBid.toFixed(3),
     currency,
     createdAt: getDate(Number(startTime)).endDate,
     closedAt: getDate(Number(endTime)).endDate
   };
-
-  console.log(name, props);
 
   return <CardComponent { ...cardComponentProps }/>;
 }

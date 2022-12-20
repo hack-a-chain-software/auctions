@@ -18,6 +18,7 @@ type CardComponentProps = {
   closedAt: Date,
   bidder: string,
   bid: string,
+  myBid: string,
   currency: string,
   createdAt: Date
 };
@@ -38,6 +39,7 @@ function CardComponent(props: CardComponentProps) {
     image,
     bidder,
     bid,
+    myBid,
     currency,
     createdAt,
     closedAt
@@ -63,14 +65,14 @@ function CardComponent(props: CardComponentProps) {
             </span>
         </div>
       )}
-      { !explore && live && winning && (
+      { !explore && !created && live && winning && (
         <div className="w-20 h-[19px] top-4 right-[.9rem] md:w-[103px] md:h-[30px] flex justify-center items-center absolute gap-2 bg-space rounded-[30px] z-[1] md:top-[1.93rem] right-[1.9rem]">
             <span className="text-white justify-around font-medium text-3.5 md:text-sm pr-1 tracking-tight">
               Highest bid
             </span>
         </div>
       )}
-      { !explore && live && !winning && (
+      { !explore && !created && live && !winning && (
         <div className="w-20 h-[19px] md:w-[76px] md:h-[30px] flex justify-center items-center absolute gap-2 bg-error rounded-[30px] z-[1] top-[1.3rem] right-4 md:top-[1.93rem] md:right-7">
             <span className="text-white justify-around font-semibold text-sm pr-1 tracking-tight">
               Outbid
@@ -149,14 +151,14 @@ function CardComponent(props: CardComponentProps) {
         </div>
       )}
 
-      {/* When the logger account made an offer */}
-      {iBided && (
+      {/* When the logged account made an offer */}
+      { !created && iBided && live && (
         <div className="my-2 mt-3">
           <h3 className="text-sm text-paragraph font-semibold md:text-4 tracking-tight">
             Your offer:
           </h3>
           <span className={`${ winning ? (explore ? "text-button" : "text-success") : "text-error" } text-sm font-extrabold md:text-4 tracking-tight`}>
-            {bid} {currency}
+            {myBid} {currency}
           </span>
         </div>
       )}
