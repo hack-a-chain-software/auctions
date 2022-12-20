@@ -116,7 +116,7 @@ function Card(props: CardProps) {
     if(created && !live && new Big(currentBid).eq(0) && !tokenClaimed)
       return claimPrize(signAndSubmitTransaction, id);
     if(created && !live && !new Big(currentBid).eq(0) && !coinsClaimed)
-      return claimCoins(signAndSubmitTransaction, currency, id);
+      return claimCoins(signAndSubmitTransaction, auctionCoin, id);
     navigation(`/auction/${id}`);
   }
 
