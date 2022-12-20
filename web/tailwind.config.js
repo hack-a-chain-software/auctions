@@ -13,6 +13,7 @@ module.exports = {
         'sw-lg': envColor('AUCTION_COLOR_SHADOW_LARGE'),
         tab: envColor('AUCTION_COLOR_TAB'),
         button: envColor('AUCTION_COLOR_BUTTON'),
+        disabled: envColor('AUCTION_COLOR_DISABLED'),
         highlight: envColor('AUCTION_COLOR_HIGHLIGHT'),
         success: envColor('AUCTION_COLOR_SUCCESS'),
         line: envColor('AUCTION_COLOR_LINE'),
