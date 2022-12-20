@@ -5,12 +5,21 @@ import {
     AptosAccount
 } from 'aptos';
 
+import { gql, createClient, Client as urqlClient, defaultExchanges } from '@urql/core';
+
 const moduleName = "AuctionHouse";
 
 export type NftCollection = {
     creator: string;
     collectionName: string;
 };
+
+export type NftItem = {
+    creator: string;
+    collectionName: string;
+    name: string;
+    propertyVersion: number;
+}
 
 export type Auction = {
     id: number;
@@ -66,12 +75,22 @@ export class AuctionHouseClient extends AptosClient {
     auctionHouseAddress: string
     contractAddress: string
     contractModule: string
+    graphqlClient: urqlClient | null
 
-    constructor(node_url: string, moduleAddress: string, auctionHouseAddress: string) {
+    constructor(node_url: string, graqphqlUrl: string | null, moduleAddress: string, auctionHouseAddress: string) {
         super(node_url);
         this.auctionHouseAddress = auctionHouseAddress;
         this.contractAddress = moduleAddress;
         this.contractModule = `${moduleAddress}::${moduleName}`;
+        if (graqphqlUrl) {
+            this.graphqlClient = createClient({
+                url: graqphqlUrl,
+                exchanges: defaultExchanges
+            });
+        } else {
+            this.graphqlClient = null;
+        }
+
     }
 
     /** Initialize new instance of AuctionHouse */
@@ -264,7 +283,7 @@ export class AuctionHouseClient extends AptosClient {
         coinType: string
     ): Promise<string> {
         const functionName = `${this.contractModule}::add_authorized_coins`;
-        const typeArguments: any[] = [ coinType ];
+        const typeArguments: any[] = [coinType];
         const regularArguments = [
             this.auctionHouseAddress,
         ];
@@ -281,7 +300,7 @@ export class AuctionHouseClient extends AptosClient {
         coinType: string
     ): Promise<string> {
         const functionName = `${this.contractModule}::remove_authorized_coins`;
-        const typeArguments: any[] = [ coinType ];
+        const typeArguments: any[] = [coinType];
         const regularArguments = [
             this.auctionHouseAddress,
         ];
@@ -778,6 +797,57 @@ export class AuctionHouseClient extends AptosClient {
         return resource.data as CoinInfo;
     }
 
+    /** Returns paginated list of all NFTs owned by wallet
+     *  in testnet and mainnet uses Graphql API, in devnet
+     *  and localnet, uses recurring queries to node REST API
+     */
+    async getNftsInWallet(
+        user: string,
+        start: number,
+        limit: number
+    ): Promise<Array<NftItem>> {
+
+        if (this.graphqlClient) {
+            const query = gql`
+                query CurrentTokens($owner_address: String, $offset: Int, $limit: Int) {
+                    current_token_ownerships(
+                    where: {owner_address: {_eq: $owner_address}, amount: {_gt: "0"}}
+                    order_by: {last_transaction_version: desc}
+                    offset: $offset
+                    limit: $limit
+                    ) {
+                    creator_address
+                    collection_name
+                    name
+                    property_version
+                    amount
+                    }
+                }          
+            `;
+
+            const response = await this.graphqlClient.query(query, {
+                owner_address: user,
+                offset: start,
+                limit: limit
+            }).toPromise();
+
+            return response.data.current_token_ownerships.map(
+                (el: any) => {
+                    return {
+                        creator: el.creator_address,
+                        collectionName: el.collection_name,
+                        name: el.name,
+                        propertyVersion: el.property_version,
+                    }
+                }
+            );
+        } else {
+            return [];
+        }
+
+
+    }
+
     // UTILITIES
     async performTransaction({
         sender,
@@ -804,7 +874,7 @@ export class AuctionHouseClient extends AptosClient {
                     arguments: regularArguments
                 }
             );
-    
+
             const bcsTxn = await this.signTransaction(sender, rawTxn);
             const pendingTxn = await this.submitTransaction(bcsTxn);
             return pendingTxn.hash;

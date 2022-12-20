@@ -6,6 +6,7 @@ import {
     CoinClient, 
     TokenClient
 } from 'aptos';
+import 'isomorphic-unfetch';
 
 import { NODE_URL, FAUCET_URL } from "./env";
 
