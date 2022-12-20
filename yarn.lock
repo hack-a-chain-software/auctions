@@ -1148,7 +1148,7 @@ concat-map@0.0.1:
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
 
 contract_aptos@./contracts/aptos/:
-  version "0.0.2"
+  version "0.0.3"
   dependencies:
     aptos "^1.4.0"
     dotenv "^16.0.3"
