@@ -18,7 +18,7 @@ Then you can instantiate a new auction house by calling:
 ```shell
 aptos move run \
 --function-id '<module_address>::AuctionHouse::initialize_auction_house' \
---args 'address:<owner_address>' 'bool:<whether_only_owner_can_create_auctions>' \
+--args 'address:<owner_address>' 'bool:<whether_only_allowed_users_can_create_auctions>' \
 --profile <owner_profile>
 ```
 
