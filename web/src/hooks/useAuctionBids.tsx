@@ -1,25 +1,30 @@
 import { Bid } from 'contract_aptos';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AuctionClient } from '../config/aptosClient';
 
-export const useAuctionBids: (id: string) => {
-  bids: Bid[]
+export const useAuctionBids: () => {
+  bids: Bid[],
+  fetch: (id: string) => void,
   loading: boolean,
-} = (id) => {
+} = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [bids, setBids] = useState<Bid[]>([]);
   let running = false;
 
-  useEffect(() => {
+  function fetch(id: string) {
     if(running)
       return;
 
-    running = true;
+    setLoading(running = true);
     AuctionClient.getBidsAuction(id)
       .then(setBids)
       .then(() => running = false)
-    return () => setLoading(false);
-  }, []);
+      .then(setLoading)
+      .catch(error => {
+        console.error(error);
+        setLoading(running = false);
+      });
+  }
 
-  return { loading, bids };
+  return { loading, bids, fetch };
 }
