@@ -40,7 +40,7 @@ module auctionhouse::AuctionHouse {
     // System consts
     
     /// Each bid must run for at least 10 minutes before ending the auction
-    const MINIMUM_TIME_AFTER_BID: u64 = 600000000;
+    const MINIMUM_TIME_AFTER_BID: u64 = 100000000;
 
     /// Auction representation to be stored
     struct Auction has store {
@@ -307,11 +307,18 @@ module auctionhouse::AuctionHouse {
         assert!(is_auction_active(freeze(auction_item)), ERROR_AUCTION_INACTIVE);
 
         // assert bid is greater than current highest bid
-        assert!(
-            bid > auction_item.current_bid &&
-            bid >= auction_item.current_bid + auction_item.min_increment, 
-            ERROR_INSUFFICIENT_BID
-        );
+        if (auction_item.current_bid == 0) {
+            assert!(
+                bid >= auction_item.min_selling_price,
+                ERROR_INSUFFICIENT_BID
+            );
+        } else {
+            assert!(
+                bid > auction_item.current_bid &&
+                bid >= auction_item.current_bid + auction_item.min_increment, 
+                ERROR_INSUFFICIENT_BID
+            );
+        };
 
         // assert sender is providing the correct coin
         assert!(
