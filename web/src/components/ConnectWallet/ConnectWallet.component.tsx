@@ -60,9 +60,10 @@ function ConnectWallet({ open, setOpen }: ConnectWalletProps) {
                   {wallets.map(({ adapter }) => (
                     <button
                       key={"wallet-selector-modal-module" + adapter.name}
-                      onClick={() =>
-                        connect(adapter.name).then(() => setOpen(false))
-                      }
+                      onClick={() => {
+                        localStorage.setItem("WalletConnected", adapter.name);
+                        connect(adapter.name).then(() => setOpen(false));
+                      }}
                       className=" outline-none
                     rounded-md h-[78px] px-8 py-[17px] bg-white flex items-center shadow-sm shadow-sw-navbar
                     bg-[linear-gradient(90deg,_#474EFF_0px,_#9747FF_7px,_transparent_7px)] text-paragraph hover:scale-[1.05] transition-all

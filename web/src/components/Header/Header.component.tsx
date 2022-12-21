@@ -90,9 +90,14 @@ function Header() {
                 <button
                   type="button"
                   className="bg-space flex justify-center items-center w-[155px] h-10 gap-2 text-sm font-bold rounded-md text-white tracking-tight"
-                  onClick={() =>
-                    connected ? disconnect() : setShowModal(true)
-                  }
+                  onClick={() => {
+                    if (connected) {
+                      localStorage.removeItem("WalletConnected");
+                      disconnect();
+                    } else {
+                      setShowModal(true);
+                    }
+                  }}
                 >
                   {" "}
                   {!loading && (
@@ -234,7 +239,12 @@ function Header() {
                   type="button"
                   className="bg-space flex items-center w-[150px] h-8 justify-center gap-2 ml-1 text-sm font-bold rounded text-white"
                   onClick={() => {
-                    connected ? disconnect() : setShowModal(true);
+                    if (connected) {
+                      localStorage.removeItem("WalletConnected");
+                      disconnect();
+                    } else {
+                      setShowModal(true);
+                    }
                   }}
                 >
                   {!loading && (
