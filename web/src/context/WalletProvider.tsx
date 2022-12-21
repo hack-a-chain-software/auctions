@@ -17,12 +17,18 @@ import {
   FoxWalletAdapter,
   OpenBlockWalletAdapter,
   useWallet,
+  RiseWalletAdapter,
 } from "@manahippo/aptos-wallet-adapter";
 import { useMemo } from "react";
 
 function WalletCtx({ children }: any) {
   const wallets = useMemo(
-    () => [new MartianWalletAdapter(), new AptosWalletAdapter()],
+    () => [
+      new MartianWalletAdapter(),
+      new AptosWalletAdapter(),
+      new PontemWalletAdapter(),
+      new RiseWalletAdapter()
+    ],
     []
   );
 

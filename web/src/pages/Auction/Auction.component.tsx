@@ -73,6 +73,7 @@ function AuctionComponent(props: AuctionProps) {
     props.auction.auctionCoin
   );
 
+
   const { nftProperties } = useNftProperties(
     tokenData?.default_properties.data
   );

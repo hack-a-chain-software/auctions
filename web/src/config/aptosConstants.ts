@@ -38,4 +38,3 @@ export const NODE_URL = nodeUrl
 export const GRAPHQL_URL = graphqlUrl;
 
 
-
