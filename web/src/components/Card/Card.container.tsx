@@ -65,23 +65,36 @@ function Card(props: CardProps) {
     window.location.reload();
   }, [hash]);
 
+
+  const bid = useMemo(() => {
+    if(!info)
+      return new Big(0);
+    return formatDecimals(currentBid, info.decimals);
+  }, [info]);
+
+  const live = useMemo(() => {
+    return new Date() < getDate(Number(endTime)).endDate;
+  }, [endTime]);
+
+  const won = useMemo(() => {
+    return !live && !bid.eq(0) && account?.address === currentBidder && !created
+  }, [live, bid, currentBidder, created, account?.address]);
+
   useEffect(() => {
     if(created && !live && new Big(currentBid).eq(0) && tokenClaimed)
       return setIsButtonEnabled(false);
     if(created && !live && !new Big(currentBid).eq(0) && coinsClaimed)
       return setIsButtonEnabled(false);
+    if(!created && !explore && won && coinsClaimed)
+      return setIsButtonEnabled(false);
     setIsButtonEnabled(!loading);
-  }, [loading]);
+  }, [loading, won]);
 
   const image = useMemo(() => {
     if(!data || loadingData)
       return '';
     return data.uri;
   }, [data, loadingData]);
-
-  const live = useMemo(() => {
-    return new Date() < getDate(Number(endTime)).endDate;
-  }, [endTime]);
 
   const iBided = useMemo(() => {
     if(!bids || !account?.address)
@@ -95,12 +108,6 @@ function Card(props: CardProps) {
     if(!info)
       return { symbol: '' };
     return info;
-  }, [info]);
-
-  const bid = useMemo(() => {
-    if(!info)
-      return new Big(0);
-    return formatDecimals(currentBid, info.decimals);
   }, [info]);
 
   const initialPrice = useMemo(() => {
@@ -118,10 +125,6 @@ function Card(props: CardProps) {
     return formatDecimals(myBid.bid, info.decimals);
   }, [info, bids, account?.address]);
 
-  const won = useMemo(() => {
-    return !live && !bid.eq(0) && account?.address === currentBidder && !created
-  }, [live, bid, currentBidder, created, account?.address]);
-
   const winning = useMemo(() => {
     return iBided && account?.address === currentBidder;
   }, [account?.address, iBided, currentBidder]);
@@ -131,7 +134,7 @@ function Card(props: CardProps) {
       return claimPrize(signAndSubmitTransaction, id);
     if(created && !live && !new Big(currentBid).eq(0) && !coinsClaimed)
       return claimCoins(signAndSubmitTransaction, auctionCoin, id);
-    if(!created && !explore && won)
+    if(!created && !explore && won && !coinsClaimed)
       return claimCoins(signAndSubmitTransaction, auctionCoin, id);
     navigation(`/auction/${id}`);
   }

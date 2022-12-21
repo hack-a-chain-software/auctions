@@ -73,7 +73,7 @@ function CardButton({
       <button
         onClick={onClick}
         disabled={disabled}
-        className="disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-4 rounded font-medium text-sm leading-3.5 tracking-normal text-white bg-space"
+        className="bg-space disabled:bg-none disabled:bg-disabled hidden md:block w-[265px] h-10 ml-[1px] mt-4 rounded font-medium text-sm leading-3.5 tracking-normal text-white"
       >
         { disabled ? 'Already claimed' : 'Claim rewards' }
       </button>
