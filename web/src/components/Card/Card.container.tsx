@@ -42,7 +42,7 @@ function Card(props: CardProps) {
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(true);
   const { account, signAndSubmitTransaction } = useWallet();
   const { data, fetch, loading: loadingData } = useNFTData();
-  const { bids } = useAuctionBids(`${id}`);
+  const { bids, fetch: fetchBids } = useAuctionBids();
   const { info , fetch: fetchCoin } = useCoinInfo();
   const navigation = useNavigate();
   const getDate = useTimer;
@@ -54,6 +54,10 @@ function Card(props: CardProps) {
   useEffect(() => {
     fetchCoin(auctionCoin)
   }, [auctionCoin]);
+
+  useEffect(() => {
+    fetchBids(`${id}`)
+  }, [id]);
 
   useEffect(() => {
     if(hash.length < 10)
@@ -82,8 +86,10 @@ function Card(props: CardProps) {
   const iBided = useMemo(() => {
     if(!bids || !account?.address)
       return false;
-    return bids.reduce((iDid: boolean, bid) => account.address === bid.account ? true : iDid, false);
-  }, [bids]);
+    return bids.reduce(
+      (iDid: boolean, bid) => account.address?.toString().replace('0x0', '0x') === bid.account ? true : iDid, false
+    );
+  }, [bids, account?.address]);
 
   const { symbol: currency } = useMemo(() => {
     if(!info)
@@ -110,12 +116,22 @@ function Card(props: CardProps) {
     if(!myBid)
       return new Big(0);
     return formatDecimals(myBid.bid, info.decimals);
-  }, [info, bids]);
+  }, [info, bids, account?.address]);
+
+  const won = useMemo(() => {
+    return !live && !bid.eq(0) && account?.address === currentBidder && !created
+  }, [live, bid, currentBidder, created, account?.address]);
+
+  const winning = useMemo(() => {
+    return iBided && account?.address === currentBidder;
+  }, [account?.address, iBided, currentBidder]);
 
   function onButtonClick() {
     if(created && !live && new Big(currentBid).eq(0) && !tokenClaimed)
       return claimPrize(signAndSubmitTransaction, id);
     if(created && !live && !new Big(currentBid).eq(0) && !coinsClaimed)
+      return claimCoins(signAndSubmitTransaction, auctionCoin, id);
+    if(!created && !explore && won)
       return claimCoins(signAndSubmitTransaction, auctionCoin, id);
     navigation(`/auction/${id}`);
   }
@@ -126,11 +142,11 @@ function Card(props: CardProps) {
     // If the auction has no bids
     noBids: bid.eq(0),
     // If the logged account won the auction
-    won: !live && !bid.eq(0) && account?.address === currentBidder && !created,
+    won,
     // If the logged account made an offer/bid
     iBided,
     // If the logged account has the highest offer/bid
-    winning: iBided && account?.address === currentBidder,
+    winning,
     // If the card is on the created page
     created: !!created,
     // If the card is on the explore page
