@@ -1,4 +1,4 @@
-import { useWallet } from "@manahippo/aptos-wallet-adapter";
+import { useWallet, WalletName } from "@manahippo/aptos-wallet-adapter";
 import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { routes } from "./routes";
@@ -12,8 +12,11 @@ function Pages() {
   const { wallets, connect } = useWallet();
 
   useEffect(() => {
-    if (wallets) {
-      connect(wallets[1]?.adapter.name);
+    if (!wallets) return;
+
+    const walletName: any = localStorage.getItem("WalletConnected");
+    if (walletName) {
+      connect(walletName);
     }
   }, []);
 

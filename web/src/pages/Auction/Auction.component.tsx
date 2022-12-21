@@ -45,9 +45,15 @@ function AuctionComponent(props: AuctionProps) {
   const allbids = props.allBids.slice(0).reverse();
   const [bidError, setBidError] = useState<string>("");
 
-  const yourBids = allbids.filter(
-    (bids) => bids.account.slice(-10) === String(account?.address).slice(-10)
-  );
+  const yourBids = allbids
+    .filter(
+      (bids) => bids.account.slice(-10) === String(account?.address).slice(-10)
+    )
+    .sort((a, b) => {
+      if (a.bid < b.bid) return 1;
+      if (a.bid > b.bid) return -1;
+      return 0;
+    });
 
   const minimumBid =
     Number(props.auction.currentBid) > 0
@@ -72,7 +78,6 @@ function AuctionComponent(props: AuctionProps) {
     String(account?.address),
     props.auction.auctionCoin
   );
-
 
   const { nftProperties } = useNftProperties(
     tokenData?.default_properties.data
@@ -484,7 +489,7 @@ function AuctionComponent(props: AuctionProps) {
                     <p>Price</p>
                     <p>Date</p>
                   </div>
-                  {yourBids.map(({ bid, timestamp, account }) => (
+                  {yourBids.map(({ bid, timestamp }, i) => (
                     <>
                       <div className="flex justify-between xl:w-[575px]">
                         <p className="flex gap-4 items-center">
@@ -493,7 +498,7 @@ function AuctionComponent(props: AuctionProps) {
                               bid,
                               coinInfo?.decimals || 0
                             ).toFixed(2)}
-                            {account === props.auction.currentBidder && (
+                            {i === 0 && (
                               <span className="text-white tracking-tight text-md flex items-center justify-center font-medium bg-green-500 rounded-[30px] w-[114px] xl:h-8">
                                 Highest bid
                               </span>
