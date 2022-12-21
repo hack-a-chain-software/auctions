@@ -22,6 +22,7 @@ import PageContainer from "../../components/PageContainer";
 import Countdown, { zeroPad } from "react-countdown";
 import Big from "big.js";
 import "./Auction.styles.less";
+import evaluateTransactionResult from "../../tools/evalTransaction";
 
 window.Buffer = window.Buffer || Buffer;
 
@@ -88,7 +89,12 @@ function AuctionComponent(props: AuctionProps) {
         id,
         bid,
         coinType
-      ).then((res) => (res ? window.location.reload() : false));
+      ).then((res) => {
+        if (res) {
+          evaluateTransactionResult(res);
+        }
+        return false;
+      });
     }
   };
 

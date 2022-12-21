@@ -1,14 +1,14 @@
-import * as dotenv from "dotenv";
-dotenv.config();
+import * as dotenv from "dotenv"
+dotenv.config()
 
-const moduleName = "AuctionHouse";
+const moduleName = "AuctionHouse"
 
-const NODE_URL = throwIfUndefined(process.env.NODE_URL );
-const FAUCET_URL = throwIfUndefined(process.env.FAUCET_URL );
+const NODE_URL = "https://fullnode.devnet.aptoslabs.com/v1"
+const FAUCET_URL = "https://faucet.devnet.aptoslabs.com"
 
 function throwIfUndefined(input: string | undefined) {
-    if (input === undefined) throw "env not set";
-    return input
+	if (input === undefined) throw "env not set"
+	return input
 }
 
-export {moduleName, NODE_URL, FAUCET_URL};
+export { moduleName, NODE_URL, FAUCET_URL }

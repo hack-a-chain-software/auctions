@@ -25,10 +25,9 @@ const BASE_FUNDS = 500_000_000;
 const aptosCoin = "0x1::aptos_coin::AptosCoin";
 const INDEXER_MAINNET = "https://indexer.mainnet.aptoslabs.com/v1/graphql";
 
-testBasicFlow();
+testBasicFlow()
 
 export async function testBasicFlow(): Promise<void> {
-
     const client = new AptosClient(NODE_URL);
     const faucetClient = new FaucetClient(NODE_URL, FAUCET_URL);
     const tokenClient = new TokenClient(client);
@@ -196,7 +195,6 @@ export async function testBasicFlow(): Promise<void> {
 
 }
 
-
 function toMicroseconds(time: number): string {
-    return time.toString() + "000";
+	return time.toString() + "000"
 }

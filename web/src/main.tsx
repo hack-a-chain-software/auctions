@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import WalletCxt from "./context/WalletProvider";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Buffer } from "buffer";
+import "react-toastify/dist/ReactToastify.min.css";
 
 window.Buffer = window.Buffer || Buffer;
 
