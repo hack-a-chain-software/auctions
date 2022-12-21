@@ -70,7 +70,7 @@ function Card(props: CardProps) {
     if(!info)
       return new Big(0);
     return formatDecimals(currentBid, info.decimals);
-  }, [info]);
+  }, [currentBid, info]);
 
   const live = useMemo(() => {
     return new Date() < getDate(Number(endTime)).endDate;
@@ -81,14 +81,14 @@ function Card(props: CardProps) {
   }, [live, bid, currentBidder, created, account?.address]);
 
   useEffect(() => {
-    if(created && !live && new Big(currentBid).eq(0) && tokenClaimed)
+    if(created && !live && bid.eq(0) && tokenClaimed)
       return setIsButtonEnabled(false);
-    if(created && !live && !new Big(currentBid).eq(0) && coinsClaimed)
+    if(created && !live && !bid.eq(0) && coinsClaimed)
       return setIsButtonEnabled(false);
     if(!created && !explore && won && coinsClaimed)
       return setIsButtonEnabled(false);
     setIsButtonEnabled(!loading);
-  }, [loading, won]);
+  }, [loading, won, created, live, bid, tokenClaimed, coinsClaimed]);
 
   const image = useMemo(() => {
     if(!data || loadingData)
@@ -100,8 +100,13 @@ function Card(props: CardProps) {
     if(!bids || !account?.address)
       return false;
     return bids.reduce(
-      (iDid: boolean, bid) => account.address?.toString().replace('0x0', '0x') === bid.account ? true : iDid, false
-    );
+      (iDid: boolean, bid) => account.address?.toString().replace('0x0', '0x') === bid.account
+        ? true
+        : (account.address?.toString() === bid.account
+          ? true
+          : iDid
+        )
+    , false);
   }, [bids, account?.address]);
 
   const { symbol: currency } = useMemo(() => {
