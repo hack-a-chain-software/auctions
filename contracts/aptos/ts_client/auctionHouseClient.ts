@@ -2,8 +2,10 @@ import {
     Types,
     TokenTypes,
     AptosClient,
-    AptosAccount
+    AptosAccount, TokenClient
 } from 'aptos';
+
+import { gql, createClient, Client as urqlClient, defaultExchanges } from '@urql/core';
 
 const moduleName = "AuctionHouse";
 
@@ -11,6 +13,13 @@ export type NftCollection = {
     creator: string;
     collectionName: string;
 };
+
+export type NftItem = {
+    creator: string;
+    collectionName: string;
+    name: string;
+    propertyVersion: number;
+}
 
 export type Auction = {
     id: number;
@@ -66,12 +75,22 @@ export class AuctionHouseClient extends AptosClient {
     auctionHouseAddress: string
     contractAddress: string
     contractModule: string
+    graphqlClient: urqlClient | null
 
-    constructor(node_url: string, moduleAddress: string, auctionHouseAddress: string) {
+    constructor(node_url: string, graqphqlUrl: string | null, moduleAddress: string, auctionHouseAddress: string) {
         super(node_url);
         this.auctionHouseAddress = auctionHouseAddress;
         this.contractAddress = moduleAddress;
         this.contractModule = `${moduleAddress}::${moduleName}`;
+        if (graqphqlUrl) {
+            this.graphqlClient = createClient({
+                url: graqphqlUrl,
+                exchanges: defaultExchanges
+            });
+        } else {
+            this.graphqlClient = null;
+        }
+
     }
 
     /** Initialize new instance of AuctionHouse */
@@ -167,10 +186,11 @@ export class AuctionHouseClient extends AptosClient {
     /** After auction is over, creator can claim coins bid */
     async claimCoins(
         sender: GenericSender,
+        coinType: string,
         id: number,
     ): Promise<string> {
         const functionName = `${this.contractModule}::claim_coins`;
-        const typeArguments: any[] = [];
+        const typeArguments = [ coinType ];
         const regularArguments = [
             this.auctionHouseAddress,
             id
@@ -263,7 +283,7 @@ export class AuctionHouseClient extends AptosClient {
         coinType: string
     ): Promise<string> {
         const functionName = `${this.contractModule}::add_authorized_coins`;
-        const typeArguments: any[] = [ coinType ];
+        const typeArguments: any[] = [coinType];
         const regularArguments = [
             this.auctionHouseAddress,
         ];
@@ -280,7 +300,7 @@ export class AuctionHouseClient extends AptosClient {
         coinType: string
     ): Promise<string> {
         const functionName = `${this.contractModule}::remove_authorized_coins`;
-        const typeArguments: any[] = [ coinType ];
+        const typeArguments: any[] = [coinType];
         const regularArguments = [
             this.auctionHouseAddress,
         ];
@@ -777,6 +797,112 @@ export class AuctionHouseClient extends AptosClient {
         return resource.data as CoinInfo;
     }
 
+    /** Returns paginated list of all NFTs owned by wallet
+     *  in testnet and mainnet uses Graphql API, in devnet
+     *  and localnet, uses recurring queries to node REST API
+     */
+    async getNftsInWallet(
+        user: string,
+        start: number,
+        limit: number
+    ): Promise<Array<NftItem>> {
+
+        if (this.graphqlClient) {
+            const query = gql`
+                query CurrentTokens($owner_address: String, $offset: Int, $limit: Int) {
+                    current_token_ownerships(
+                    where: {owner_address: {_eq: $owner_address}, amount: {_gt: "0"}}
+                    order_by: {last_transaction_version: desc}
+                    offset: $offset
+                    limit: $limit
+                    ) {
+                    creator_address
+                    collection_name
+                    name
+                    property_version
+                    amount
+                    }
+                }          
+            `;
+
+            const response = await this.graphqlClient.query(query, {
+                owner_address: user,
+                offset: start,
+                limit: limit
+            }).toPromise();
+
+            return response.data.current_token_ownerships.map(
+                (el: any) => {
+                    return {
+                        creator: el.creator_address,
+                        collectionName: el.collection_name,
+                        name: el.name,
+                        propertyVersion: el.property_version,
+                    }
+                }
+            );
+        } else {
+            const tokenClient = new TokenClient(this);
+
+            // Get all the authorized collections on AuctionHouse
+            const collections = await this.getAuthorizedNftCollections()
+
+            // Get the amount of events (NFTs) each collection has
+            const counter = await Promise.all(
+              collections.map(
+                collection => this.getAccountResource(
+                  collection.creator,
+                  "0x3::token::Collections",
+                ).then(({data}) => (data as {
+                    mint_token_events: {
+                        counter: number
+                    }
+                }).mint_token_events.counter)
+              )
+            );
+
+            // Fetch all events (NFTs) of all collections on AuctionHouse
+            const events = await Promise.all(
+              collections.map(
+                (collection, key) => {
+                    const events = [];
+                    // limit of results is 25/request
+                    for(let start = 0; start < counter[key]; start += 25) {
+                        events.push(this.getEventsByEventHandle(
+                          collections[0].creator,
+                          "0x3::token::Collections",
+                          "mint_token_events",
+                          {
+                              start: start,
+                              limit: 25
+                          }
+                        ));
+                    }
+                    return events;
+                }
+              ).flat()
+            ).then(list => list.flat());
+
+            // Fetch if user is owner of each of the AuctionHouse NFTs
+            const list = await Promise.all(
+              events.map(
+                ({data: { id: nft }}) => tokenClient.getToken(nft.creator, nft.collection, nft.name)
+                  .then(token => tokenClient.getTokenForAccount(user, token.id))
+              )
+            );
+
+            // Filter the NFTs the user is onwer and convert to NftItem
+            return list.filter(nft => nft.amount === '1').map(
+              nft => ({
+                  creator: nft.id.token_data_id.creator,
+                  collectionName: nft.id.token_data_id.collection,
+                  name: nft.id.token_data_id.name,
+                  propertyVersion: Number(nft.id.property_version)
+              } as NftItem)
+            );
+        }
+    }
+
     // UTILITIES
     async performTransaction({
         sender,
@@ -803,7 +929,7 @@ export class AuctionHouseClient extends AptosClient {
                     arguments: regularArguments
                 }
             );
-    
+
             const bcsTxn = await this.signTransaction(sender, rawTxn);
             const pendingTxn = await this.submitTransaction(bcsTxn);
             return pendingTxn.hash;

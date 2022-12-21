@@ -4,12 +4,13 @@ import ContentHeader from '../../components/ContentHeader';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import CardsContainer from '../../components/CardsContainer';
 import Card from '../../components/Card';
+import { Auction } from 'contract_aptos';
 
 type MyAuctionsComponentProps = {
   loading: boolean,
   search: string,
   setSearch: (search: string) => void
-  cards: string[],
+  cards: Auction[],
 }
 
 function ExploreAuctionsComponent(props: MyAuctionsComponentProps) {
@@ -20,8 +21,9 @@ function ExploreAuctionsComponent(props: MyAuctionsComponentProps) {
     cards,
   } = props;
 
-  function renderCard(card: string, key: number) {
-    return <Card key={key} card={card} />;
+
+  function renderCard(card: Auction, key: number) {
+    return <Card key={key} {...card} explore/>;
   }
 
   function renderCardSkeleton(ignore: null, key: number) {

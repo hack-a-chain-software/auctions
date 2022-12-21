@@ -1,3 +1,3 @@
-import ChooseNFT from "./ChooseNFT.component";
+import ChooseNFT from "./ChooseNFT.container";
 
 export default ChooseNFT;

@@ -4,12 +4,13 @@ export const MAINNET_NODE_URL = "https://fullnode.mainnet.aptoslabs.com/v1";
 export const LOCAL_FAUCET_URL = "http://127.0.0.1:5173/";
 export const DEVNET_FAUCET_URL = "https://faucet.devnet.aptoslabs.com";
 
-export const NODE_URL = DEVNET_NODE_URL;
-export const FAUCET_URL = DEVNET_FAUCET_URL;
+export const TESTNET_GRAPHQL_URL = "";
+export const MAINNET_GRAPHQL_URL = "";
+export const OTHER_NETS_GRAPHQL_URL = null;
 
-export const MODULE_ADDRESS =
-  "0x6ae7b29b45a1b95cbf4dfde813533bfa87dfc41bed186d6b72c9f798ea1860c6";
-export const AUCTION_HOUSE_ADDRESS =
-  "0x0ad356ad526cf90b1ad1f4928816fa9f3bd05431e0cbd979c14a27960f91a27d";
-export const OWNER_PRIVATE_KEY =
-  "0x8a1af3b69e975c37fd8a4db2b4af16762046ef6378300f667243a60935bd3f1d";
+export const NODE_URL = LOCAL_NODE_URL
+export const FAUCET_URL = LOCAL_FAUCET_URL
+export const GRAPHQL_URL = OTHER_NETS_GRAPHQL_URL;
+
+export const MODULE_ADDRESS = "0xaf400dd991f52ea9e587ad905e679711c7c8197fdba592519773ffb5515f27ed";
+export const AUCTION_HOUSE_ADDRESS = "0x41c9d685694f3b349e0a6ed6c0a3311b4002b0cf6d4553e9811f862daed49c9c"

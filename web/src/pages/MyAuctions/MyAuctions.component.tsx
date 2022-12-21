@@ -6,39 +6,44 @@ import CardsContainer from '../../components/CardsContainer';
 import CardSkeleton from '../../components/CardSkeleton';
 import CreateAuction from '../../components/CreateAuction';
 import Card from '../../components/Card';
+import { Auction } from 'contract_aptos';
 
 type MyAuctionsComponentProps = {
   indexTabHeader: number,
+  indexTabs: number,
   onSwitchTabHeader: (index: number) => void,
   onSwitchTabMyOffers: (index: number) => void,
   onSwitchTabMyCreated: (index: number) => void,
   loading: boolean,
-  cards: string[],
+  cards: Auction[],
   createPanel: boolean
-  showCreatePanel: (show: boolean) => void
+  showCreatePanel: (show: boolean) => void,
+  canCreateAuction: boolean
 }
 
 function MyAuctionsComponent(props: MyAuctionsComponentProps) {
   const {
     indexTabHeader,
+    indexTabs,
     onSwitchTabHeader,
     onSwitchTabMyOffers,
     onSwitchTabMyCreated,
     loading,
     cards,
     createPanel,
-    showCreatePanel
+    showCreatePanel,
+    canCreateAuction
   } = props;
 
-  function renderCard(card: string, key: number) {
-    return <Card key={key} card={card}/>;
+  function renderCard(card: Auction, key: number, created?:boolean) {
+    return <Card key={key} {...card} created={created}/>;
   }
 
   function renderCardSkeleton(ignore: null, key: number) {
     return <CardSkeleton key={key}/>;
   }
 
-  function renderCards(emptyMessage: string) {
+  function renderCards(emptyMessage: string, created?: boolean) {
     if(loading)
       return <CardsContainer>
         { [null, null, null, null].map(renderCardSkeleton) }
@@ -46,13 +51,14 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
     if(!cards.length)
       return <Empty>{ emptyMessage }</Empty>;
     return <CardsContainer>
-      { cards.map(renderCard) }
+      { cards.map((auction, key) => renderCard(auction, key, created)) }
     </CardsContainer>;
   }
 
   function renderCreateAuctionButton() {
     return <button onClick={() => showCreatePanel(true)}
-                   className="fixed sm:relative bottom-4 right-4 sm:inset-auto z-[10] flex gap-2.5 rounded-large sm:rounded items-center justify-center w-10 smaller:w-auto smaller:pr-5 smaller:pl-4 sm:px-4 h-10 bg-button text-3.5 translate-y-[4px] leading-3.5 tracking-tight font-semibold text-white">
+                   disabled={!canCreateAuction}
+                   className="fixed sm:relative disabled:mix-blend-darken bottom-4 right-4 sm:inset-auto z-[10] flex gap-2.5 rounded-large sm:rounded items-center justify-center w-10 smaller:w-auto smaller:pr-5 smaller:pl-4 sm:px-4 h-10 bg-button text-3.5 translate-y-[4px] leading-3.5 tracking-tight font-semibold text-white">
       <PlusIcon className="h-5 w-5 smaller:h-4 smaller:w-4 stroke-white opacity-100"/>
       <span className="hidden smaller:inline">Create Auction</span>
     </button>
@@ -60,7 +66,8 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
 
   function renderMyOffersPanel() {
     return <Tabs tabList={['Auctions live', 'Closed auctions', 'Auctions won']}
-            onChange={onSwitchTabMyOffers}>
+            onChange={onSwitchTabMyOffers}
+            selectedIndex={indexTabs}>
         {[
           renderCards('The auctions in progress that you birded will appear here'),
           renderCards('When a auctions your birded close without you winning, they will be listed here'),
@@ -72,10 +79,11 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
   function renderMyCreatedPanel() {
     return <Tabs tabList={['Your auctions live', 'Your closed auctions']}
             rightBar={renderCreateAuctionButton()}
-            onChange={onSwitchTabMyCreated}>
+            onChange={onSwitchTabMyCreated}
+            selectedIndex={indexTabs}>
         {[
-          renderCards('The open auctions you create will be listed here'),
-          renderCards('The closed auctions you created will be listed here.')
+          renderCards('The open auctions you create will be listed here', true),
+          renderCards('The closed auctions you created will be listed here.', true)
         ]}
       </Tabs>;
   }
