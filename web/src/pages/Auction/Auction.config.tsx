@@ -1,4 +1,4 @@
-import { useWallet } from "@manahippo/aptos-wallet-adapter";
+import { useEffect } from "react";
 import { useParams } from "react-router";
 import AuctionSkeleton from "../../components/AuctionSkeleton";
 import { useAuction } from "../../hooks/useAuction";
@@ -8,14 +8,19 @@ import AuctionComponent from "./Auction.component";
 function Auction() {
   const { id } = useParams<{ id: string }>();
 
-  const { auction, loading } = useAuction(Number(id));
-  const { allBids, loadingBid } = useBid(id!);
+  const { auction, loading, fetchAuctions } = useAuction(Number(id));
+  const { allBids, fetchBids } = useBid(id!);
 
-  if (!auction || loading || loadingBid) return <AuctionSkeleton />;
+  useEffect(() => {
+    fetchAuctions();
+    fetchBids();
+  }, []);
+
+  if (!auction || loading) return <AuctionSkeleton />;
 
   const auctionProps = {
     auction,
-    allBids
+    allBids,
   };
 
   return <AuctionComponent {...auctionProps} />;
