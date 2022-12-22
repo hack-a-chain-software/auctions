@@ -26,8 +26,6 @@ export async function seedTestnet(): Promise<void> {
     const client = new AptosClient(NODE_URL);
     const tokenClient = new TokenClient(client);
 
-    console.log(process.argv);
-
     // create and fund base accounts
     const moduleAddress = new AptosAccount(Uint8Array.from(Buffer.from(process.argv[2].slice(2), 'hex')));
     const ownerAccount = new AptosAccount(Uint8Array.from(Buffer.from(process.argv[3].slice(2), 'hex')));
@@ -55,16 +53,16 @@ export async function seedTestnet(): Promise<void> {
         collectionName
     };
 
-    // create collection
-    await client.waitForTransaction(
-        await tokenClient.createCollection(
-            ownerAccount,
-            collectionName,
-            "A random description",
-            "https://something.io"
-        ),
-        { checkSuccess: true }
-    );
+    // // create collection
+    // await client.waitForTransaction(
+    //     await tokenClient.createCollection(
+    //         ownerAccount,
+    //         collectionName,
+    //         "A random description",
+    //         "https://something.io"
+    //     ),
+    //     { checkSuccess: true }
+    // );
 
     // Authorize NFT Collection
     await client.waitForTransaction(
@@ -76,8 +74,8 @@ export async function seedTestnet(): Promise<void> {
     const minBid = "100000000";
     const minBidIncrease = "50000000";
 
-    const totalNfts = 400;
-    let counter = 0;
+    const totalNfts = 30;
+    let counter = 15;
     while (counter < totalNfts) {
         console.log(counter);
         // create tokens (NFT) in collection
@@ -102,11 +100,11 @@ export async function seedTestnet(): Promise<void> {
         );
 
         // Create auction
-        if (counter < 100) {
+        if (counter < 15) {
             await client.waitForTransaction(
                 await auctionHouseClient.createAuction(
                     ownerAccount,
-                    toMicroseconds(Date.now() + (counter + 1) * (30 * 60 * 1000)),
+                    toMicroseconds(Date.now() + (counter + 1) * (90 * 60 * 1000)),
                     minBid,
                     minBidIncrease,
                     nftCollection.creator,
