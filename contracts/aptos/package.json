@@ -2,14 +2,14 @@
   "name": "contract_aptos",
   "private": true,
   "version": "0.0.3",
-  "main": "ts_client/index.ts",
-  "types": "ts_client/index.d.ts",
+  "main": "js_module/ts_client/index.ts",
+  "types": "js_module/ts_client/index.d.ts",
   "scripts": {
     "run:localnet": "aptos node run-local-testnet --with-faucet",
-    "seed:localnet": "tsc && NODE_URL=http://127.0.0.1:8080 FAUCET_URL=http://127.0.0.1:8081 node integration_tests/seed_devnet.js",
-    "seed:devnet": "tsc && NODE_URL=https://fullnode.devnet.aptoslabs.com/v1 FAUCET_URL=https://faucet.devnet.aptoslabs.com node integration_tests/seed_devnet.js",
-    "seed:testnet": "tsc && NODE_URL=https://fullnode.testnet.aptoslabs.com/v1 FAUCET_URL=https://faucet.devnet.aptoslabs.com node integration_tests/seed_testnet_nfts.js",
-    "test:integration": "tsc && NODE_URL=https://fullnode.devnet.aptoslabs.com/v1 FAUCET_URL=https://faucet.devnet.aptoslabs.com node integration_tests/index.js"
+    "seed:localnet": "tsc && NODE_URL=http://127.0.0.1:8080 FAUCET_URL=http://127.0.0.1:8081 node js_module/integration_tests/seed_devnet.js",
+    "seed:devnet": "tsc && NODE_URL=https://fullnode.devnet.aptoslabs.com/v1 FAUCET_URL=https://faucet.devnet.aptoslabs.com node js_module/integration_tests/seed_devnet.js",
+    "seed:testnet": "tsc && NODE_URL=https://fullnode.testnet.aptoslabs.com/v1 FAUCET_URL=https://faucet.devnet.aptoslabs.com node js_module/integration_tests/seed_testnet_nfts.js",
+    "test:integration": "tsc && NODE_URL=https://fullnode.devnet.aptoslabs.com/v1 FAUCET_URL=https://faucet.devnet.aptoslabs.com node js_module/integration_tests/index.js"
   },
   "dependencies": {
     "@urql/core": "^3.1.1",
