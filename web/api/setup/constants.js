@@ -1,6 +1,4 @@
-import { useEnv } from "../hooks/useEnv";
-
-const auctionNetwork = useEnv("AUCTION_NETWORK");
+const auctionNetwork = process.env["AUCTION_NETWORK"];
 
 const LOCAL_NODE_URL = "http://127.0.0.1:8080";
 const DEVNET_NODE_URL = "https://fullnode.devnet.aptoslabs.com/v1";
@@ -11,9 +9,13 @@ const TESTNET_GRAPHQL_URL = "https://indexer-testnet.staging.gcp.aptosdev.com/v1
 const MAINNET_GRAPHQL_URL = "https://indexer.mainnet.aptoslabs.com/v1/graphql";
 const OTHER_NETS_GRAPHQL_URL = null;
 
-export const MODULE_ADDRESS = useEnv("AUCTION_MODULE_ADDRESS");
-export const AUCTION_HOUSE_ADDRESS = useEnv("AUCTION_INSTANCE_ADDRESS")
+export const MODULE_ADDRESS = process.env["AUCTION_MODULE_ADDRESS"];
+export const AUCTION_HOUSE_ADDRESS = process.env["AUCTION_INSTANCE_ADDRESS"];
 
+
+console.log(auctionNetwork);
+console.log(MODULE_ADDRESS);
+console.log(AUCTION_HOUSE_ADDRESS);
 
 
 let nodeUrl;
@@ -36,6 +38,4 @@ if (auctionNetwork === "mainnet") {
 
 export const NODE_URL = nodeUrl
 export const GRAPHQL_URL = graphqlUrl;
-
-
 

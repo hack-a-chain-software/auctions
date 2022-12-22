@@ -4,11 +4,15 @@ import { useAuctions } from '../../hooks/useAuctions';
 import { Auction } from 'contract_aptos';
 
 function ExploreAuctions() {
-  const { loading: fetchLoading, auctions } = useAuctions();
+  const { loading: fetchLoading, auctions, fetch } = useAuctions();
 
   const [loading, setLoading] = useState<boolean>(true);
   const [search, setSearch] = useState<string>('');
   const [cards, setCards] = useState<Auction[]>([]);
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   useEffect(() => {
     if(search === '')

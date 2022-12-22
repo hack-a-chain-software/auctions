@@ -84,7 +84,7 @@ function CardComponent(props: CardComponentProps) {
 
   function renderImage() {
     return <img
-      src={image}
+      src={`https://wsrv.nl/?url=${image}`}
       alt={`${collection} - ${name}`}
       className="w-full h-auto rounded-lg md:w-[280px] md:h-[270px] md:max-w-full object-cover md:rounded-md"
     />;
