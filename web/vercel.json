@@ -1,5 +1,7 @@
 {
-  "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }],
+  "routes": [
+   
+  ],
   "github": {
     "enabled": false,
     "silent": true
