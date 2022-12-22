@@ -4,8 +4,8 @@ const auctionNetwork = useEnv("AUCTION_NETWORK");
 
 const LOCAL_NODE_URL = "http://127.0.0.1:8080";
 const DEVNET_NODE_URL = "https://fullnode.devnet.aptoslabs.com/v1";
-const TESTNET_NODE_URL = "https://rpc.ankr.com/http/aptos_testnet/v1";
-const MAINNET_NODE_URL = "https://rpc.ankr.com/http/aptos/v1";
+const TESTNET_NODE_URL = "https://fullnode.testnet.aptoslabs.com/v1";
+const MAINNET_NODE_URL = "https://fullnode.mainnet.aptoslabs.com/v1";
 
 const TESTNET_GRAPHQL_URL = "https://indexer-testnet.staging.gcp.aptosdev.com/v1/graphql";
 const MAINNET_GRAPHQL_URL = "https://indexer.mainnet.aptoslabs.com/v1/graphql";
