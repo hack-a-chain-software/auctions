@@ -37,7 +37,10 @@ function Header() {
             className="text-black w-6 md:hidden"
             onClick={() => setOpen(true)}
           />
-          <div className="hidden md:flex items-center gap-4 pl-4">
+          <div
+            className="hidden md:flex items-center gap-4 pl-4 cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             <SpaceBitLogo38 />
             <h1 className="uppercase text-black tracking-[.2rem] text-xl font-bold font-['Poppins']">
               Spacebit
