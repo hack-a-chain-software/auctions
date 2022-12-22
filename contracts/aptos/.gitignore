@@ -2,3 +2,5 @@ build
 .aptos
 integration_tests/**.js
 ts_client/**.js
+integration_tests/**.d.ts
+ts_client/**.d.ts

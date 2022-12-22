@@ -62,7 +62,7 @@ export async function testBasicFlow(): Promise<void> {
         aptos move compile --named-addresses auctionhouse=${moduleAddress.address().hex()} --included-artifacts all --save-metadata
     `);
 
-    const modulePath = path.join(__dirname, "..");
+    const modulePath = path.join(__dirname, "../..");
     const packageMetadata = fs.readFileSync(path.join(modulePath, "build", "AuctionHouse", "package-metadata.bcs"));
     const moduleData1 = fs.readFileSync(path.join(modulePath, "build", "AuctionHouse", "bytecode_modules", "table_vector.mv"));
     const moduleData2 = fs.readFileSync(path.join(modulePath, "build", "AuctionHouse", "bytecode_modules", "table_set.mv"));

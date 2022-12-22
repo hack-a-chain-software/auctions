@@ -2,6 +2,7 @@ name: PR test and preview
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+  FORCE_RUNTIME_TAG: canary
   PRODUCTION: false
 
 on: 
@@ -11,7 +12,7 @@ jobs:
   contracts_tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Yarn Globally
         run: npm install -g yarn
@@ -34,7 +35,7 @@ jobs:
   vercel_preview_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install Vercel CLI
         run: npm install --global vercel@canary
