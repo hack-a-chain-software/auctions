@@ -2,7 +2,7 @@
   "name": "contract_aptos",
   "private": true,
   "version": "0.0.3",
-  "main": "ts_client/index.js",
+  "main": "ts_client/index.ts",
   "types": "ts_client/index.d.ts",
   "scripts": {
     "run:localnet": "aptos node run-local-testnet --with-faucet",
