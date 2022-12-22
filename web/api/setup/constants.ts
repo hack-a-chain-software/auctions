@@ -13,6 +13,10 @@ export const MODULE_ADDRESS = process.env["AUCTION_MODULE_ADDRESS"]!;
 export const AUCTION_HOUSE_ADDRESS = process.env["AUCTION_INSTANCE_ADDRESS"]!;
 
 
+console.log(auctionNetwork);
+console.log(MODULE_ADDRESS);
+console.log(AUCTION_HOUSE_ADDRESS);
+
 let nodeUrl;
 let graphqlUrl;
 if (auctionNetwork === "mainnet") {
