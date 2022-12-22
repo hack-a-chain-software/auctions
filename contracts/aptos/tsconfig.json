@@ -25,7 +25,6 @@
 
     /* Modules */
     "module": "CommonJS", 
-                                   /* Specify what module code is generated. */
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
     // "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
     // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
@@ -100,7 +99,7 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   },
   "include": [
-    "ts_client/**.ts",
-    "integration_tests/**.ts"
+    "ts_client/*",
+    "integration_tests/*"
   ]
 }
