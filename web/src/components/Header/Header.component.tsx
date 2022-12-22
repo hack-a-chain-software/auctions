@@ -105,7 +105,7 @@ function Header() {
                   {" "}
                   {!loading && (
                     <>
-                      <WalletIcon className="w-5 text-caption" />{" "}
+                      <WalletIcon className="w-5 text-white" />{" "}
                       {connected ? "Disconnect" : "Connect wallet"}
                     </>
                   )}
@@ -252,7 +252,7 @@ function Header() {
                 >
                   {!loading && (
                     <>
-                      <WalletIcon className="w-5 text-caption" />{" "}
+                      <WalletIcon className="w-5 text-white" />{" "}
                       {connected ? "Disconnect" : "Connect wallet"}
                     </>
                   )}
