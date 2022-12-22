@@ -17,6 +17,7 @@ console.log(auctionNetwork);
 console.log(MODULE_ADDRESS);
 console.log(AUCTION_HOUSE_ADDRESS);
 
+
 let nodeUrl;
 let graphqlUrl;
 if (auctionNetwork === "mainnet") {
