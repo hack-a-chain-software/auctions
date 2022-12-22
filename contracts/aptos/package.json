@@ -2,7 +2,7 @@
   "name": "contract_aptos",
   "private": true,
   "version": "0.0.3",
-  "main": "ts_client/index.ts",
+  "main": "ts_client/index.js",
   "scripts": {
     "run:localnet": "aptos node run-local-testnet --with-faucet",
     "seed:localnet": "tsc && NODE_URL=http://127.0.0.1:8080 FAUCET_URL=http://127.0.0.1:8081 node integration_tests/seed_devnet.js",
