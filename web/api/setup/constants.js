@@ -9,8 +9,8 @@ const TESTNET_GRAPHQL_URL = "https://indexer-testnet.staging.gcp.aptosdev.com/v1
 const MAINNET_GRAPHQL_URL = "https://indexer.mainnet.aptoslabs.com/v1/graphql";
 const OTHER_NETS_GRAPHQL_URL = null;
 
-export const MODULE_ADDRESS = process.env["AUCTION_MODULE_ADDRESS"]!;
-export const AUCTION_HOUSE_ADDRESS = process.env["AUCTION_INSTANCE_ADDRESS"]!;
+export const MODULE_ADDRESS = process.env["AUCTION_MODULE_ADDRESS"];
+export const AUCTION_HOUSE_ADDRESS = process.env["AUCTION_INSTANCE_ADDRESS"];
 
 
 console.log(auctionNetwork);

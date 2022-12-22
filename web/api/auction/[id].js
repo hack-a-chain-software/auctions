@@ -1,8 +1,7 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import contractAptos from "contract_aptos"
 import { NODE_URL, MODULE_ADDRESS, AUCTION_HOUSE_ADDRESS, GRAPHQL_URL } from "../setup/constants"
 
-export default async function handler(request: VercelRequest, response: VercelResponse) {
+export default async function handler(request, response) {
     response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate');
     const { id } = request.query;
     const client = new contractAptos.AuctionHouseClient(NODE_URL, GRAPHQL_URL, MODULE_ADDRESS, AUCTION_HOUSE_ADDRESS);
