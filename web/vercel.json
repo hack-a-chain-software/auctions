@@ -5,5 +5,10 @@
   "github": {
     "enabled": false,
     "silent": true
+  },
+  "build": {
+    "env": {
+      "FORCE_BUILDER_TAG": "canary"
+    }
   }
 }
