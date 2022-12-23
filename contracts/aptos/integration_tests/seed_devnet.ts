@@ -1,6 +1,5 @@
 import {
     AptosClient,
-    CoinClient,
     FaucetClient,
     TokenClient,
     AptosAccount,
@@ -41,8 +40,6 @@ export async function testBasicFlow(): Promise<void> {
     const bidder3 = new AptosAccount();
 
     const bidders = [bidder1, bidder2, bidder3];
-
-    const mintAddress = process.argv[1];
 
     console.log("module address is: " + moduleAddress.address().hex());
     console.log("contract address is: " + ownerAccount.address().hex());
@@ -131,7 +128,7 @@ export async function testBasicFlow(): Promise<void> {
     const minBid = "100000";
     const minBidIncrease = "50000";
 
-    const totalNfts = 50;
+    const totalNfts = 20;
     let counter = 0;
     while (counter < totalNfts) {
         console.log(counter);
