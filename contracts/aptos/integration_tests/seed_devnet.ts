@@ -158,7 +158,7 @@ export async function testBasicFlow(): Promise<void> {
             await client.waitForTransaction(
                 await auctionHouseClient.createAuction(
                     ownerAccount,
-                    toMicroseconds(Date.now() + (5 * 60 * 1000)),
+                    toMicroseconds(Date.now() + (counter + 1) * (60 * 60 * 1000)),
                     minBid,
                     minBidIncrease,
                     nftCollection.creator,
