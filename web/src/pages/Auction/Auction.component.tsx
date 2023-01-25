@@ -164,7 +164,7 @@ function AuctionComponent(props: AuctionProps) {
             {allbids.map(({ bid, account }, i) => (
               <div className="flex justify-between  w-full" key={i}>
                 <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
-                  {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
+                  {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(3)}
                 </p>
                 <p
                   className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[140px] truncate leading-6"
@@ -416,7 +416,7 @@ function AuctionComponent(props: AuctionProps) {
                 <p className="w-[173px] p-[.4rem] text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-normal xl:mt-8 xl:h-8">
                   Minimum bid:{" "}
                   {formatDecimals(minimumBid, coinInfo?.decimals || 0).toFixed(
-                    2
+                    3
                   )}{" "}
                   {coinInfo?.symbol}
                 </p>
@@ -457,7 +457,7 @@ function AuctionComponent(props: AuctionProps) {
                   {formatDecimals(
                     Number(balance) || 0,
                     coinInfo?.decimals || 0
-                  ).toFixed(2)}{" "}
+                  ).toFixed(3)}{" "}
                   {coinInfo?.symbol}
                 </strong>
                 <Countdown
@@ -497,7 +497,7 @@ function AuctionComponent(props: AuctionProps) {
                             {formatDecimals(
                               bid,
                               coinInfo?.decimals || 0
-                            ).toFixed(2)}
+                            ).toFixed(3)}
                             {i === 0 && (
                               <span className="text-white tracking-tight text-md flex items-center justify-center font-medium bg-green-500 rounded-[30px] w-[114px] xl:h-8">
                                 Highest bid
