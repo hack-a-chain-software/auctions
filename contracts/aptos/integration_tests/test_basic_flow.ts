@@ -56,6 +56,8 @@ export async function testBasicFlow(
 
     console.log(await auctionHouseClient.getNftsInWallet(
         "0x2c61f085e96df9f58b4fd3af15c7c1ba5c520e69b091f7bd189f9ea4e643fe9d",
+        "0x2c61f085e96df9f58b4fd3af15c7c1ba5c520e69b091f7bd189f9ea4e643fe9d",
+        "collectionName",
         0,
         50
     ))
