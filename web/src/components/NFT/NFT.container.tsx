@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNFTData } from '../../hooks/useNFTData';
 import { NftItem } from 'contract_aptos';
 
+import axios from "axios";
+
 type NFTProps = NftItem & {
   checked?: boolean
 }
@@ -17,9 +19,20 @@ function NFT(props: NFTProps) {
   }, []);
 
   useEffect(() => {
-    if(!data)
+    if (!data)
       return;
-    setImage(data.uri);
+    axios.get<any>(data.uri)
+      .then(val => {
+        if (val.data.image) {
+          setImage(val.data.image)
+        } else {
+          setImage(data.uri)
+        }
+      })
+      .catch(_ => {
+        setImage(data.uri)
+      });
+
   }, [data]);
 
   const chooseNFTComponentProps = {
@@ -29,7 +42,7 @@ function NFT(props: NFTProps) {
     id: props.name
   };
 
-  return <NFTComponent {...chooseNFTComponentProps}/>;
+  return <NFTComponent {...chooseNFTComponentProps} />;
 }
 
 export default NFT;

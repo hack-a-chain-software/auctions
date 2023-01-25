@@ -39,6 +39,14 @@ aptos move run \
 --profile <owner_profile>
 ```
 
+To authorize an user to create auctions (owner is automatically authorized):
+```shell
+aptos move run \
+--function-id '<module_address>::AuctionHouse::add_authorized_users' \
+--args 'address:<owner_address>' 'address:<user_to_authorize_address>' \
+--profile <owner_profile>
+```
+
 When running on testnet, you can call `seed:testnet <module_private_key> <owner_private_key>` yarn script to generate a new NFT collection, with 500 NFTs, add it to the app and create 100 Auctions, space each by 30 minutes.
 
 When running on mainnet, all setups must be done manually, according to the contract's API below:
