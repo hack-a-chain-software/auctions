@@ -31,6 +31,7 @@ function WalletCtx({ children }: any) {
     ],
     []
   );
+  
 
   return <WalletProvider wallets={wallets}>{children}</WalletProvider>;
 }
