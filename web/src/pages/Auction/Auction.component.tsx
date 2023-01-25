@@ -86,7 +86,7 @@ function AuctionComponent(props: AuctionProps) {
   const makeOffer = async (id: string, bid: string, coinType: string) => {
     if (bid < minimumBid) {
       setBidError("This offer is less than the minimum offer");
-    } else if (!balance || Big(bid) > balance) {
+    } else if (!balance || Big(bid).gt(balance)) {
       setBidError("You don't have enough balance");
     } else {
       await AuctionClient.bid(

@@ -138,13 +138,13 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
       <h5 className="font-semibold text-3.5 leading-3.5 tracking mb-2">Minimum increment price</h5>
       <div className={`relative bg-input rounded-sm flex ${ minOfferIncrementInput ? 'Fail' : '' }`}>
         <input type="number"
-               value={Number(minOfferIncrement.lte(0)) ? '' : minOfferIncrement.toFixed(2) }
+               value={Number(minOfferIncrement.lt(0)) ? '' : minOfferIncrement.toFixed(3) }
                onChange={({ target: { value: price } }) => {
                  setMinOfferIncrement(new Big(price));
                  setInputFail({...inputFail, minOfferIncrementInput: new Big(price).lte(0)});
                }}
                min={0}
-               step={0.01}
+               step={0.001}
                className="Price"/>
       </div>
       <span className={ minOfferIncrementInput ? 'block Fail-span' : 'hidden'}>Please type a valid price, bigger than 0</span>
@@ -207,13 +207,13 @@ function CreateAuctionComponent(props: CreateAuctionComponentProps) {
       <h5 className="font-semibold text-3.5 leading-3.5 tracking mb-2">Initial price</h5>
       <div className={`relative bg-input rounded-sm flex ${ priceInput ? 'Fail' : '' }`}>
         <input type="number"
-               value={Number(initialPrice.lte(0)) ? '' : initialPrice.toFixed(2) }
+               value={Number(initialPrice.lt(0)) ? '' : initialPrice.toFixed(3) }
                onChange={({ target: { value: price } }) => {
                  setInitialPrice(new Big(price));
                  setInputFail({...inputFail, priceInput: Number(price) <= 0});
                }}
                min={0}
-               step={0.01}
+               step={0.001}
                className="Price"/>
         { renderInitialPriceCurrencySelector() }
       </div>
