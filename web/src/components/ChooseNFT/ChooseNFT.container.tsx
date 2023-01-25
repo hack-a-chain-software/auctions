@@ -3,6 +3,7 @@ import { RefObject, useEffect, useState } from 'react';
 import { useWallet } from '@manahippo/aptos-wallet-adapter';
 import { NftItem } from 'contract_aptos';
 import { useOnAccountNFTs } from '../../hooks/useOnAccountNFTs';
+import { useAuthorizedCollections } from "../../hooks/useAuthorizedCollections";
 import { message } from 'antd';
 import { useInfinityScroll } from '../../hooks/useInfinityScroll';
 
@@ -19,22 +20,27 @@ function ChooseNFT(props: ChooseNFTProps) {
   const { reference: listElement } = useInfinityScroll(80, fetchNFTs, loading);
   const { openNFTSelector, setOpenNFTSelector, setSelectedNFT: passSelectedNFT } = props;
   const [listOfNFTs, setListOfNFTs] = useState<NftItem[]>([]);
-  const [selectedNFT, setSelectedNFT] = useState<NftItem|null>(null);
+  const [selectedNFT, setSelectedNFT] = useState<NftItem | null>(null);
 
   useEffect(fetchNFTs, [account?.address]);
 
   useEffect(() => {
-      setListOfNFTs(list);
+    setListOfNFTs(list);
   }, [list]);
 
   function fetchNFTs() {
-    if(!account?.address)
+    if (!account?.address)
       return;
-    fetch(account.address, listOfNFTs.length);
+    useAuthorizedCollections().collections.then(all => {
+      fetch(account?.address!, all, listOfNFTs.length);
+    }
+
+    )
+
   }
 
   function onSelectNFT() {
-    if(!selectedNFT)
+    if (!selectedNFT)
       return message.warning("You need to select one NFT.");
     passSelectedNFT(selectedNFT);
     setOpenNFTSelector(false);
@@ -49,7 +55,7 @@ function ChooseNFT(props: ChooseNFTProps) {
     listElement: listElement as RefObject<HTMLUListElement>
   };
 
-  return <ChooseNFTComponent {...chooseNFTComponentProps}/>;
+  return <ChooseNFTComponent {...chooseNFTComponentProps} />;
 }
 
 export default ChooseNFT;

@@ -803,15 +803,27 @@ export class AuctionHouseClient extends AptosClient {
      */
     async getNftsInWallet(
         user: string,
+        creator: string,
+        collection: string,
         start: number,
         limit: number
     ): Promise<Array<NftItem>> {
 
         if (this.graphqlClient) {
             const query = gql`
-                query CurrentTokens($owner_address: String, $offset: Int, $limit: Int) {
+                query CurrentTokens(
+                    $owner_address: String, 
+                    $creator_address: String,
+                    $collection_name: String,
+                    $offset: Int, 
+                    $limit: Int) {
                     current_token_ownerships(
-                    where: {owner_address: {_eq: $owner_address}, amount: {_gt: "0"}}
+                    where: {
+                        owner_address: {_eq: $owner_address}, 
+                        creator_address: {_eq: $creator_address},
+                        collection_name: {_eq: $collection_name},
+                        amount: {_gt: "0"}
+                    }
                     order_by: {last_transaction_version: desc}
                     offset: $offset
                     limit: $limit
@@ -827,6 +839,8 @@ export class AuctionHouseClient extends AptosClient {
 
             const response = await this.graphqlClient.query(query, {
                 owner_address: user,
+                creator_address: creator,
+                collection_name: collection,
                 offset: start,
                 limit: limit
             }).toPromise();
