@@ -13,7 +13,7 @@ function MyAuctions() {
   const { filter: initialFilter } = useParams<{ filter: string }>();
   const navigate = useNavigate();
   const { account } = useWallet();
-  const { loading: fetchLoading, offers, created, fetchOffers, fetchCreated } = useMyAuctions();
+  const { loading: fetchLoading, offers, created, error, fetchOffers, fetchCreated } = useMyAuctions();
   const { isAuthorized, fetch: fetchIsAuthorized } = useIsAuthorized();
   const getDate = useTimer;
 
@@ -65,6 +65,9 @@ function MyAuctions() {
     setCards([]);
     if(!account?.address)
       return setLoading(false);
+
+      console.log(error);
+    if (error) return;
 
     switch(filter) {
       case 'offer-live':

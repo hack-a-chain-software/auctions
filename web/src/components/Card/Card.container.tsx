@@ -10,6 +10,7 @@ import { useTimer } from '../../hooks/useTimer';
 import { formatDecimals } from '../../utils/formatDecimals';
 import { useClaim } from '../../hooks/useClaim';
 import Big from 'big.js';
+import axios from "axios";
 
 type CardProps = Auction & {
   created?:boolean
@@ -46,6 +47,7 @@ function Card(props: CardProps) {
   const { info , fetch: fetchCoin } = useCoinInfo();
   const navigation = useNavigate();
   const getDate = useTimer;
+  const [ image, setImage ] = useState<string>('');
 
   useEffect(() => {
     fetch(creator, collection, name);
@@ -90,11 +92,28 @@ function Card(props: CardProps) {
     setIsButtonEnabled(!loading);
   }, [loading, won, created, live, bid, tokenClaimed, coinsClaimed]);
 
-  const image = useMemo(() => {
-    if(!data || loadingData)
-      return '';
-    return data.uri;
-  }, [data, loadingData]);
+  // const image = useMemo(() => {
+  //   if(!data || loadingData)
+  //     return '';
+  //   return data.uri;
+  // }, [data, loadingData]);
+
+  useEffect(() => {
+    if (!data)
+      return;
+    axios.get<any>(data.uri)
+      .then(val => {
+        if (val.data.image) {
+          setImage(val.data.image)
+        } else {
+          setImage(data.uri)
+        }
+      })
+      .catch(_ => {
+        setImage(data.uri)
+      });
+
+  }, [data]);
 
   const iBided = useMemo(() => {
     if(!bids || !account?.address)
