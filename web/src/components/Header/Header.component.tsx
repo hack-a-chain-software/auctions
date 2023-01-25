@@ -9,9 +9,10 @@ import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition, Popover } from "@headlessui/react";
 import { useNavigate } from "react-router";
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
-import SpaceBitLogo27 from "../../assets/svg/SpaceBitLogo27";
-import SpaceBitLogo38 from "../../assets/svg/SpaceBitLogo38";
+import Logo27 from "../../assets/svg/Logo27";
+import Logo38 from "../../assets/svg/Logo38";
 import ConnectWallet from "../ConnectWallet";
+import { useEnv } from "../../hooks/useEnv";
 
 function Header() {
   const [open, setOpen] = useState<boolean>(false);
@@ -41,9 +42,9 @@ function Header() {
             className="hidden md:flex items-center gap-4 pl-4 cursor-pointer"
             onClick={() => navigate("/")}
           >
-            <SpaceBitLogo38 />
+            <Logo38 />
             <h1 className="uppercase text-black tracking-[.2rem] text-xl font-bold font-['Poppins']">
-              Spacebit
+              {useEnv("AUCTION_HEADER_TITLE")}
             </h1>
           </div>
           <nav className="hidden md:flex">
@@ -162,7 +163,7 @@ function Header() {
                               aria-hidden="true"
                             />
                           </button>
-                          <SpaceBitLogo27 />
+                          <Logo27 />
                         </div>
                         <nav>
                           <ul className="flex flex-col gap-3 mt-4 justify-center tracking-tight">

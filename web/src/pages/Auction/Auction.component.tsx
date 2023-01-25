@@ -10,7 +10,7 @@ import { useTimer } from "../../hooks/useTimer";
 import { useCoinBalance } from "../../hooks/useCoinBalance";
 import { useNftProperties } from "../../hooks/useNftProperties";
 import { useClaimPrize } from "../../hooks/useClaimPrize";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useWallet } from "@manahippo/aptos-wallet-adapter";
 import { formatDecimals } from "../../utils/formatDecimals";
 import { formatInteger } from "../../utils/formatInteger";
@@ -22,6 +22,8 @@ import PageContainer from "../../components/PageContainer";
 import Countdown, { zeroPad } from "react-countdown";
 import Big from "big.js";
 import "./Auction.styles.less";
+
+import axios from "axios";
 
 window.Buffer = window.Buffer || Buffer;
 
@@ -44,6 +46,7 @@ function AuctionComponent(props: AuctionProps) {
   const [bidInput, setBidInput] = useState<string>("0");
   const allbids = props.allBids.slice(0).reverse();
   const [bidError, setBidError] = useState<string>("");
+  const [image, setImage] = useState<string>('');
 
   const yourBids = allbids
     .filter(
@@ -300,6 +303,21 @@ function AuctionComponent(props: AuctionProps) {
     );
   }
 
+  useEffect(() => {
+    axios.get<any>(tokenData!?.uri)
+      .then(val => {
+        if (val.data.image) {
+          setImage(val.data.image)
+        } else {
+          setImage(tokenData!?.uri)
+        }
+      })
+      .catch(_ => {
+        setImage(tokenData!?.uri)
+      });
+
+  }, [tokenData]);
+
   return (
     <PageContainer>
       <div className="flex gap-1 items-center w-[95%] max-w-[413px] mx-auto mt-[1.1rem] md:ml-6 md:px-2 xl:px-0 xl:mx-[-5px] mb-[.4rem]">
@@ -311,7 +329,7 @@ function AuctionComponent(props: AuctionProps) {
       <section className="Auction flex flex-col mt-10 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-20 md:items-start mx-auto md:mt-6 xl:w-full">
         <div className="row-span-3 flex flex-col w-full items-center md:items-start md:max-w-[419px] xl:w-[410px]">
           <div className="w-[95%] max-w-[419px] md:w-full relative">
-            <img src={tokenData?.uri} alt="" className="w-full rounded-sm" />
+            <img src={image} alt="" className="w-full rounded-sm" />
             <div className="absolute bottom-3 w-[95%] mx-[.6rem] bg-white/70 rounded-lg p-4 md:hidden">
               <span className="flex gap-4 items-center text-md font-medium tracking-tight">
                 {props.auction?.lockedTokenId.token_data_id.collection}{" "}
