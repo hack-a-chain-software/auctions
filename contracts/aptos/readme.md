@@ -22,6 +22,23 @@ aptos move run \
 --profile <owner_profile>
 ```
 
+To add an NFT collection:
+```shell
+aptos move run \
+--function-id '<module_address>::AuctionHouse::add_authorized_nft_collections' \
+--args 'address:<owner_address>'  'address:<nft_collection_creator_address>' 'string:<nft_collection_name>' \
+--profile <owner_profile>
+```
+
+To add a Coin to be used in bidding (must add at leat one):
+```shell
+aptos move run \
+--function-id '<module_address>::AuctionHouse::add_authorized_coins' \
+--type-args '<coin_type>' \
+--args 'address:<owner_address>' \
+--profile <owner_profile>
+```
+
 When running on testnet, you can call `seed:testnet <module_private_key> <owner_private_key>` yarn script to generate a new NFT collection, with 500 NFTs, add it to the app and create 100 Auctions, space each by 30 minutes.
 
 When running on mainnet, all setups must be done manually, according to the contract's API below:
