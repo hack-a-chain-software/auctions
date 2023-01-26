@@ -47,6 +47,8 @@ function AuctionComponent(props: AuctionProps) {
   const allbids = props.allBids.slice(0).reverse();
   const [bidError, setBidError] = useState<string>("");
   const [image, setImage] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [attributes, setAttributes] = useState<any[]>([]);
 
   const yourBids = allbids
     .filter(
@@ -311,10 +313,22 @@ function AuctionComponent(props: AuctionProps) {
         } else {
           setImage(tokenData!?.uri)
         }
+        if (val.data.description) {
+          setDescription(val.data.description)
+        } else {
+          setDescription(tokenData!?.description)
+        }
+        if (val.data.attributes) {
+          setAttributes(val.data.attributes)
+        } else {
+          setAttributes(nftProperties)
+        }
       })
       .catch(_ => {
         setImage(tokenData!?.uri)
       });
+    
+
 
   }, [tokenData]);
 
@@ -355,7 +369,7 @@ function AuctionComponent(props: AuctionProps) {
               Description
             </h3>
             <p className="w-full text-paragraph font-medium leading-4 mt-3">
-              {tokenData?.description}
+              {description}
             </p>
           </div>
           <div className="hidden md:block mt-[4.3rem] w-full max-w-[421px] border-solid border-[1px] rounded-lg border-outline bg-white pb-14">
@@ -367,9 +381,9 @@ function AuctionComponent(props: AuctionProps) {
             <div className="flex justify-between px-6">
               <div className="flex justify-between w-full">
                 <div className="flex flex-col w-full mt-6 gap-4">
-                  {nftProperties.map(({ label, value }) => (
+                  {attributes.map(({ label, trait_type, value }) => (
                     <div className="flex justify-between" key={value}>
-                      <p className="font-medium text-black text-md">{label}</p>
+                      <p className="font-medium text-black text-md">{label || trait_type}</p>
                       <p className="font-bold text-black text-end text-md max-w-[10ch] truncate">
                         {value}
                       </p>
