@@ -20,7 +20,7 @@ jobs:
         uses: engineerd/configurator@v0.0.8
         with:
           name: "aptos"
-          url: "https://github.com/aptos-labs/aptos-core/releases/download/aptos-cli-v1.0.2/aptos-cli-1.0.2-Ubuntu-x86_64.zip"
+          url: "https://github.com/aptos-labs/aptos-core/releases/download/aptos-cli-v1.0.4/aptos-cli-1.0.4-Ubuntu-x86_64.zip"
           pathInArchive: "aptos"
 
       - name: Installing Dependencies
