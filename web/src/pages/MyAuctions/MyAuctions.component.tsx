@@ -69,9 +69,9 @@ function MyAuctionsComponent(props: MyAuctionsComponentProps) {
             onChange={onSwitchTabMyOffers}
             selectedIndex={indexTabs}>
         {[
-          renderCards('The auctions in progress that you birded will appear here'),
-          renderCards('When a auctions your birded close without you winning, they will be listed here'),
-          renderCards('When you win a auction, it will appear here')
+          renderCards('The auctions in progress that you bid will appear here'),
+          renderCards('When an auction you bid closes without you winning, they will be listed here'),
+          renderCards('When you win an auction, it will appear here')
         ]}
       </Tabs>;
   }

@@ -37,7 +37,7 @@ function ExploreAuctionsComponent(props: MyAuctionsComponentProps) {
     if(search.length && !cards.length)
       return <Empty>There are no results for that :(</Empty>;
     if(!cards.length)
-      return <Empty>Looks Like no one is doing an auction, you can be one!</Empty>;
+      return <Empty>Looks like no one is doing an auction, you can be the first!</Empty>;
     return <CardsContainer>
       { cards.map(renderCard) }
     </CardsContainer>;
