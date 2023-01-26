@@ -46,8 +46,8 @@ function AuctionComponent(props: AuctionProps) {
   const [bidInput, setBidInput] = useState<string>("0");
   const allbids = props.allBids.slice(0).reverse();
   const [bidError, setBidError] = useState<string>("");
-  const [image, setImage] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [image, setImage] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [attributes, setAttributes] = useState<any[]>([]);
 
   const yourBids = allbids
@@ -151,7 +151,7 @@ function AuctionComponent(props: AuctionProps) {
   function renderDefautOfferState() {
     return (
       <div
-        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto md:max-w-[761px]`}
+        className={`mb-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto md:max-w-[761px]`}
       >
         <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
           <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
@@ -192,7 +192,7 @@ function AuctionComponent(props: AuctionProps) {
   function renderFirstPlaceOfferState() {
     return (
       <div
-        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto md:max-w-[761px]`}
+        className={`mb-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto md:max-w-[761px]`}
       >
         <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
           <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
@@ -240,7 +240,7 @@ function AuctionComponent(props: AuctionProps) {
   function renderOffersWinState() {
     return (
       <div
-        className={`mt-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto md:max-w-[761px]`}
+        className={`mb-8 max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto md:max-w-[761px]`}
       >
         <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
           <h3 className="px-4 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
@@ -306,30 +306,28 @@ function AuctionComponent(props: AuctionProps) {
   }
 
   useEffect(() => {
-    axios.get<any>(tokenData!?.uri)
-      .then(val => {
+    axios
+      .get<any>(tokenData!?.uri)
+      .then((val) => {
         if (val.data.image) {
-          setImage(val.data.image)
+          setImage(val.data.image);
         } else {
-          setImage(tokenData!?.uri)
+          setImage(tokenData!?.uri);
         }
         if (val.data.description) {
-          setDescription(val.data.description)
+          setDescription(val.data.description);
         } else {
-          setDescription(tokenData!?.description)
+          setDescription(tokenData!?.description);
         }
         if (val.data.attributes) {
-          setAttributes(val.data.attributes)
+          setAttributes(val.data.attributes);
         } else {
-          setAttributes(nftProperties)
+          setAttributes(nftProperties);
         }
       })
-      .catch(_ => {
-        setImage(tokenData!?.uri)
+      .catch((_) => {
+        setImage(tokenData!?.uri);
       });
-    
-
-
   }, [tokenData]);
 
   return (
@@ -383,7 +381,9 @@ function AuctionComponent(props: AuctionProps) {
                 <div className="flex flex-col w-full mt-6 gap-4">
                   {attributes.map(({ label, trait_type, value }) => (
                     <div className="flex justify-between" key={value}>
-                      <p className="font-medium text-black text-md">{label || trait_type}</p>
+                      <p className="font-medium text-black text-md">
+                        {label || trait_type}
+                      </p>
                       <p className="font-bold text-black text-end text-md max-w-[10ch] truncate">
                         {value}
                       </p>
@@ -445,13 +445,16 @@ function AuctionComponent(props: AuctionProps) {
               </>
             ) : (
               <>
-                <p className="w-[173px] p-[.4rem] text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-normal xl:mt-8 xl:h-8">
-                  Minimum bid:{" "}
-                  {formatDecimals(minimumBid, coinInfo?.decimals || 0).toFixed(
-                    3
-                  )}{" "}
-                  {coinInfo?.symbol}
-                </p>
+                <div>
+                  <p className="inline p-[.6rem] text-center rounded-[50px] text-white font-medium text-sm bg-paragraph tracking-normal xl:mt-8 xl:h-8">
+                    Minimum bid:{" "}
+                    {formatDecimals(
+                      minimumBid,
+                      coinInfo?.decimals || 0
+                    ).toFixed(3)}{" "}
+                    {coinInfo?.symbol}
+                  </p>
+                </div>
                 <input
                   type="number"
                   min={0}
@@ -508,6 +511,11 @@ function AuctionComponent(props: AuctionProps) {
             isWon ? "2rem" : "9"
           } xl:ml-7`}
         >
+          {isWon || closedAuction
+            ? renderOffersWinState()
+            : allbids.length > 1
+            ? renderFirstPlaceOfferState()
+            : renderDefautOfferState()}
           <div className="mt-2 w-full max-w-[413px] border-solid border-[1px] rounded-lg border-outline bg-white mx-auto md:max-w-[761px] xl:mt-[-5px]">
             <div className="flex items-center h-[52px] border-b-[1px] xl:h-[55px]">
               <h3 className="px-8 flex items-center gap-2 font-semibold text-black tracking-tight text-md xl:px-6">
@@ -553,11 +561,7 @@ function AuctionComponent(props: AuctionProps) {
               )}
             </div>
           </div>
-          {isWon || closedAuction
-            ? renderOffersWinState()
-            : allbids.length > 1
-            ? renderFirstPlaceOfferState()
-            : renderDefautOfferState()}
+
           <div className="mt-8 w-full max-w-[413px] border-solid border-[1px] rounded-lg border-outline m-auto bg-white md:hidden">
             <div className="flex items-center h-[52px] border-b-[1px]">
               <h3 className="px-8 text-md font-semibold text-black tracking-tight">
