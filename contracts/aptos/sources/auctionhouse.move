@@ -40,7 +40,7 @@ module auctionhouse::AuctionHouse {
     // System consts
     
     /// Each bid must run for at least 10 minutes before ending the auction
-    const MINIMUM_TIME_AFTER_BID: u64 = 100000000;
+    const MINIMUM_TIME_AFTER_BID: u64 = 300000000;
 
     /// Auction representation to be stored
     struct Auction has store {

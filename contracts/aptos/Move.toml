@@ -1,10 +1,10 @@
 [package]
 name = "AuctionHouse"
-version = "0.0.2"
+version = "0.0.3"
 
 [dependencies]
-AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-framework", rev="main" }
-AptosToken = { git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-token", rev="main" }
+AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-framework", rev="120ff1cd8a3bb39c1c68cc70c112fd0e8e117955" }
+AptosToken = { git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-token", rev="120ff1cd8a3bb39c1c68cc70c112fd0e8e117955" }
 
 [addresses]
 std = "0x1"
