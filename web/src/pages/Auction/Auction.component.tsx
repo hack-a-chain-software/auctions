@@ -159,7 +159,7 @@ function AuctionComponent(props: AuctionProps) {
           </h3>
         </div>
         {allbids.length > 0 ? (
-          <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
+          <div className="p-6 flex flex-col justify-between max-h-[500px] overflow-y-auto scroll-bar mb-[1rem] xl:pr-[10rem]">
             <div className="flex justify-between w-full mb-1">
               <p className="text-md font-medium tracking-tight mb-7">Price</p>
               <p className="text-md font-medium tracking-tight mb-7 w-[140px]">
@@ -200,7 +200,7 @@ function AuctionComponent(props: AuctionProps) {
           </h3>
         </div>
         {allbids.length > 0 ? (
-          <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
+          <div className="p-6 flex flex-col justify-between max-h-[500px] overflow-y-auto scroll-bar mb-[1rem] xl:pr-[10rem]">
             <div className="flex justify-between w-full mb-1">
               <p className="text-md font-medium tracking-tight mb-7">Price</p>
               <p className="text-md font-medium tracking-tight mb-7 w-[140px]">
@@ -248,7 +248,7 @@ function AuctionComponent(props: AuctionProps) {
           </h3>
         </div>
         {allbids.length > 0 ? (
-          <div className="p-6 flex flex-col justify-between xl:w-[575px] xl:pr-0">
+          <div className="p-6 flex flex-col justify-between max-h-[500px] overflow-y-auto scroll-bar mb-[1rem] xl:pr-[10rem]">
             <div className="flex justify-between w-full mb-1">
               <p className="text-md font-medium tracking-tight mb-7">Price</p>
               <p className="text-md font-medium tracking-tight mb-7 w-[140px]">
@@ -285,10 +285,7 @@ function AuctionComponent(props: AuctionProps) {
                     <p className="md:text-xl font-semibold tracking-tight text-black h-[3.75rem]">
                       {formatDecimals(bid, coinInfo?.decimals || 0).toFixed(2)}
                     </p>
-                    <p
-                      className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[140px] truncate leading-6"
-                      title={account}
-                    >
+                    <p className="md:text-xl font-semibold h-[3.75rem] tracking-tight text-black w-[140px] truncate leading-6">
                       {account}
                     </p>
                   </>
