@@ -38,6 +38,11 @@ module.exports = {
         space: useEnv('AUCTION_COLOR_GRADIENT'),
         'gd-button': useEnv('AUCTION_COLOR_BUTTON_GRADIENT')
       },
+      backgroundSize: {
+        'auto': 'auto',
+        'cover': 'cover',
+        'contain': 'contain',
+      },
       backdropBlur: {
         cover: useEnv('AUCTION_BACKGROUND_BLUR'),
       },
