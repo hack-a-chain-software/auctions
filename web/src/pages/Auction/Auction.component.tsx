@@ -335,7 +335,7 @@ function AuctionComponent(props: AuctionProps) {
       <div className="flex gap-1 items-center w-[95%] max-w-[413px] mx-auto mt-[1.1rem] md:ml-6 md:px-2 xl:px-0 xl:mx-[-5px] mb-[.4rem]">
         <ChevronLeftIcon className="w-[15px] h-5" />
         <a href="/" className="text-black font-semibold text-sm tracking-tight">
-          Back to all acutions
+          Back to all auctions
         </a>
       </div>
       <section className="Auction flex flex-col mt-10 items-center m-auto w-[95%] md:grid grid-rows-3 grid-flow-col md:gap-4 xl:gap-20 md:items-start mx-auto md:mt-6 xl:w-full">
