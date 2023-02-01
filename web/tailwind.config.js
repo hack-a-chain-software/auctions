@@ -1,42 +1,42 @@
-const env = require('dotenv').config({ path: `./.env` }).parsed;
+const env = require("dotenv").config({ path: `./.env` }).parsed;
 
 module.exports = {
-  content: ['./src/**/*.{html,js,jsx,ts,tsx}'],
+  content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        'sw-navbar': envColor('AUCTION_COLOR_SHADOW_NAVBAR'),
-        'sw-tab': envColor('AUCTION_COLOR_SHADOW_TAB'),
-        'sw-sm': envColor('AUCTION_COLOR_SHADOW_SMALLER'),
-        'sw-md': envColor('AUCTION_COLOR_SHADOW_SMALL'),
-        'sw': envColor('AUCTION_COLOR_SHADOW_MEDIUM'),
-        'sw-lg': envColor('AUCTION_COLOR_SHADOW_LARGE'),
-        tab: envColor('AUCTION_COLOR_TAB'),
-        button: envColor('AUCTION_COLOR_BUTTON'),
-        disabled: envColor('AUCTION_COLOR_DISABLED'),
-        highlight: envColor('AUCTION_COLOR_HIGHLIGHT'),
-        success: envColor('AUCTION_COLOR_SUCCESS'),
-        line: envColor('AUCTION_COLOR_LINE'),
-        error: envColor('AUCTION_COLOR_ERROR'),
-        paragraph: envColor('AUCTION_COLOR_PARAGRAPH'),
-        title: envColor('AUCTION_COLOR_TITLE'),
-        text: envColor('AUCTION_COLOR_TEXT'),
-        caption: envColor('AUCTION_COLOR_CAPTION'),
-        outline: envColor('AUCTION_COLOR_OUTLINE'),
-        skeleton: envColor('AUCTION_COLOR_SKELETON'),
-        bid: envColor('AUCTION_COLOR_BID'),
-        input: envColor('AUCTION_COLOR_INPUT'),
-        placeholder: envColor('AUCTION_COLOR_PLACEHOLDER'),
-        'search-token': envColor('AUCTION_COLOR_SEARCH_TOKEN'),
+        "sw-navbar": envColor("AUCTION_COLOR_SHADOW_NAVBAR"),
+        "sw-tab": envColor("AUCTION_COLOR_SHADOW_TAB"),
+        "sw-sm": envColor("AUCTION_COLOR_SHADOW_SMALLER"),
+        "sw-md": envColor("AUCTION_COLOR_SHADOW_SMALL"),
+        sw: envColor("AUCTION_COLOR_SHADOW_MEDIUM"),
+        "sw-lg": envColor("AUCTION_COLOR_SHADOW_LARGE"),
+        tab: envColor("AUCTION_COLOR_TAB"),
+        button: envColor("AUCTION_COLOR_BUTTON"),
+        disabled: envColor("AUCTION_COLOR_DISABLED"),
+        highlight: envColor("AUCTION_COLOR_HIGHLIGHT"),
+        success: envColor("AUCTION_COLOR_SUCCESS"),
+        line: envColor("AUCTION_COLOR_LINE"),
+        error: envColor("AUCTION_COLOR_ERROR"),
+        paragraph: envColor("AUCTION_COLOR_PARAGRAPH"),
+        title: envColor("AUCTION_COLOR_TITLE"),
+        text: envColor("AUCTION_COLOR_TEXT"),
+        caption: envColor("AUCTION_COLOR_CAPTION"),
+        outline: envColor("AUCTION_COLOR_OUTLINE"),
+        skeleton: envColor("AUCTION_COLOR_SKELETON"),
+        bid: envColor("AUCTION_COLOR_BID"),
+        input: envColor("AUCTION_COLOR_INPUT"),
+        placeholder: envColor("AUCTION_COLOR_PLACEHOLDER"),
+        "search-token": envColor("AUCTION_COLOR_SEARCH_TOKEN"),
       },
       backgroundColor: {
-        color: envColor('AUCTION_BACKGROUND_COLOR'),
-        shield: envColor('AUCTION_BACKGROUND_COVER'),
+        color: envColor("AUCTION_BACKGROUND_COLOR"),
+        shield: envColor("AUCTION_BACKGROUND_COVER"),
       },
       backgroundImage: {
-        image: useEnv('AUCTION_BACKGROUND_IMAGE'),
-        space: useEnv('AUCTION_COLOR_GRADIENT'),
-        'gd-button': useEnv('AUCTION_COLOR_BUTTON_GRADIENT')
+        image: useEnv("AUCTION_BACKGROUND_IMAGE"),
+        space: useEnv("AUCTION_COLOR_GRADIENT"),
+        "gd-button": useEnv("AUCTION_COLOR_BUTTON_GRADIENT"),
       },
       backgroundSize: {
         'auto': 'auto',
@@ -44,32 +44,35 @@ module.exports = {
         'contain': 'contain',
       },
       backdropBlur: {
-        cover: useEnv('AUCTION_BACKGROUND_BLUR'),
+        cover: useEnv("AUCTION_BACKGROUND_BLUR"),
       },
       lineHeight: {
-        3.5: '.875rem',
-        4.5: '1.125rem',
+        3.5: ".875rem",
+        4.5: "1.125rem",
       },
       letterSpacing: {
-        tighter: '-.06rem',
-        tight: '-.04rem',
-        DEFAULT: '-.027rem',
-        normal: '0',
+        tighter: "-.06rem",
+        tight: "-.04rem",
+        DEFAULT: "-.027rem",
+        normal: "0",
       },
       fontSize: {
-        title: ['1.25rem', {
-          lineHeight: '1em',
-          letterSpacing: '.2em',
-          fontWeight: '700',
-          fontFamily: ['Poppins', 'sans-serif'],
-          fontcolor: envColor('AUCTION_COLOR_TITLE'),
-        }],
-        3: '.75rem',
-        3.5: '.875rem',
-        4: '1rem',
-        4.5: '1.125rem',
-        5: '1.25rem',
-        6: '1.5rem',
+        title: [
+          "1.25rem",
+          {
+            lineHeight: "1em",
+            letterSpacing: ".2em",
+            fontWeight: "700",
+            fontFamily: ["Poppins", "sans-serif"],
+            fontcolor: envColor("AUCTION_COLOR_TITLE"),
+          },
+        ],
+        3: ".75rem",
+        3.5: ".875rem",
+        4: "1rem",
+        4.5: "1.125rem",
+        5: "1.25rem",
+        6: "1.5rem",
       },
       fontWeight: {
         semibold: 600,
@@ -77,16 +80,16 @@ module.exports = {
         bolder: 800,
       },
       spacing: {
-        4.5: '1.125rem',
-        17: '4.25rem',
+        4.5: "1.125rem",
+        17: "4.25rem",
       },
       borderRadius: {
         none: 0,
-        sm: '.625rem', // 10px
-        DEFAULT: '.75rem', // 12px
-        md: '.9375rem', // 15px
-        lg: '1.25rem', // 20px
-        large: '1.5rem', // 24px
+        sm: ".625rem", // 10px
+        DEFAULT: ".75rem", // 12px
+        md: ".9375rem", // 15px
+        lg: "1.25rem", // 20px
+        large: "1.5rem", // 24px
       },
       boxShadow: {
         navbar: `0px 4px 15px #000`,
@@ -97,31 +100,29 @@ module.exports = {
         lg: `0px 4px 30px #000`,
       },
       animation: {
-        'skeleton-body': 'shimmer 5s infinite linear',
-        'skeleton-img': 'shimmer 2s infinite linear',
-        'skeleton-text': 'shimmer 1.5s infinite linear',
+        "skeleton-body": "shimmer 5s infinite linear",
+        "skeleton-img": "shimmer 2s infinite linear",
+        "skeleton-text": "shimmer 1.5s infinite linear",
       },
       keyframes: {
         shimmer: {
-          '0%': {
-            mask: 'linear-gradient(-60deg,#000 30%,#0009,#000 70%) right/600% 100%',
+          "0%": {
+            mask: "linear-gradient(-60deg,#000 30%,#0009,#000 70%) right/600% 100%",
           },
-          '100%': {
-            mask: 'linear-gradient(-60deg,#000 30%,#0009,#000 70%) left/600% 100%',
+          "100%": {
+            mask: "linear-gradient(-60deg,#000 30%,#0009,#000 70%) left/600% 100%",
           },
-        }
+        },
       },
       screens: {
-        smaller: '360px'
+        smaller: "360px",
       },
       gridTemplateColumns: {
-        'auto-fit': 'repeat(auto-fit, minmax(10rem, 1fr))',
+        "auto-fit": "repeat(auto-fit, minmax(10rem, 1fr))",
       },
     },
   },
-  plugins: [
-    require('tailwind-scrollbar-hide')
-  ],
+  plugins: [require("tailwind-scrollbar-hide"), require("tailwind-scrollbar")],
 };
 
 function hexToRgb(hex) {
@@ -139,18 +140,22 @@ function hexToRgb(hex) {
 
 function colorParse(color) {
   return ({ opacityValue: opacity }) => {
-    if(typeof color === 'object')
-      return `rgba(${color.r},${color.g},${color.b},${color.a ? color.a/255 : opacity ? opacity : 1})`;
-    if(color.startsWith('rgba'))
-      return color;
-    else if(color.startsWith('rgb'))
-      return color.replaceAll('rgb', 'rgba')
-          .replaceAll(')', `,${opacity ? opacity : 1})`)
-    else if(color.startsWith('#')) {
+    if (typeof color === "object")
+      return `rgba(${color.r},${color.g},${color.b},${
+        color.a ? color.a / 255 : opacity ? opacity : 1
+      })`;
+    if (color.startsWith("rgba")) return color;
+    else if (color.startsWith("rgb"))
+      return color
+        .replaceAll("rgb", "rgba")
+        .replaceAll(")", `,${opacity ? opacity : 1})`);
+    else if (color.startsWith("#")) {
       color = hexToRgb(color);
-      return `rgba(${color.r},${color.g},${color.b},${color.a ? color.a/255 : opacity ? opacity : 1})`;
+      return `rgba(${color.r},${color.g},${color.b},${
+        color.a ? color.a / 255 : opacity ? opacity : 1
+      })`;
     }
-    return 'transparent';
+    return "transparent";
   };
 }
 
