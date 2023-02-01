@@ -117,7 +117,7 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwind-scrollbar-hide"), require("tailwind-scrollbar")],
+  plugins: [require("tailwind-scrollbar-hide")],
 };
 
 function hexToRgb(hex) {
