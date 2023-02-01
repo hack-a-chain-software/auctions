@@ -43,6 +43,11 @@ module.exports = {
         'cover': 'cover',
         'contain': 'contain',
       },
+      backgroundSize: {
+        'auto': 'auto',
+        'cover': 'cover',
+        'contain': 'contain',
+      },
       backdropBlur: {
         cover: useEnv("AUCTION_BACKGROUND_BLUR"),
       },
